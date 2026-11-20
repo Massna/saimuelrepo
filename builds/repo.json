@@ -3,7 +3,5 @@
   "iconUrl": "https://raw.githubusercontent.com/saimuelbr/sweettheartt/refs/heads/main/RepoIcon.png",
   "description": "saimuelbr repository",
   "manifestVersion": 1,
-  "pluginLists": [
-    "https://raw.githubusercontent.com/saimuelbr/saimuelrepo/refs/heads/main/builds/plugins.json"
-  ]
+  "pluginLists": ["https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/plugins.json"]
 }
