@@ -10,5 +10,3 @@
 .cxx
 local.properties
 .vscodetest.txt
-.*py
-src/
