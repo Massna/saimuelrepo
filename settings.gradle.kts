@@ -23,5 +23,5 @@ rootProject.name = "CloudstreamPlugins"
 File(rootDir, ".").listFiles()?.filter {
     it.isDirectory && File(it, "build.gradle.kts").exists()
 }?.forEach {
-    include(":${'$'}{it.name}")
+    include(":" + it.name)
 }

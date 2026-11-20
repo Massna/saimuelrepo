@@ -74,7 +74,7 @@ public final class AnimesCloud extends MainAPI {
     private static final Mutex locker = MutexKt.Mutex$default(false, 1, (Object) null);
 
     @NotNull
-    private String mainUrl = "https://animesdrive.online";
+    private String mainUrl = "https://animesdrive.cloud/";
 
     @NotNull
     private String name = "AnimesCloud";
@@ -850,7 +850,7 @@ public final class AnimesCloud extends MainAPI {
                 if (elementSelectFirst != null || (strText3 = elementSelectFirst.text()) == null || (title = StringsKt.trim(strText3).toString()) == null) {
                     title = "";
                 }
-                scoreValue = StringsKt.toDoubleOrNull(document.select("b#repimdb strong").text());
+                scoreValue = StringsKt.toDoubleOrNull(document.select("div.custom_fields:contains(Pontuação) span.valor strong").text());
                 it = document.select("div.custom_fields").iterator();
                 do {
                     if (it.hasNext()) {
@@ -885,7 +885,7 @@ public final class AnimesCloud extends MainAPI {
                         }
                     }
                     actors = (List) destination$iv$iv;
-                    if (!StringsKt.contains$default(url2, "/filme/", false, 2, (Object) null) || document.select("div#episodes").isEmpty()) {
+                    if (!StringsKt.contains$default(url2, "/filme/", false, 2, (Object) null) || document.select("div#seasons").isEmpty()) {
                         z = true;
                     } else {
                         z = false;
@@ -897,7 +897,7 @@ public final class AnimesCloud extends MainAPI {
                         tvType = TvType.Anime;
                     }
                     type = tvType;
-                    elementSelectFirst2 = document.selectFirst("div.wp-content p:nth-child(2)");
+                    elementSelectFirst2 = document.selectFirst("div.wp-content p:first-child");
                     if (elementSelectFirst2 != null || (strText2 = elementSelectFirst2.text()) == null || (string = StringsKt.trim(strText2).toString()) == null) {
                         elementSelectFirst3 = document.selectFirst("div.wp-content");
                         if (elementSelectFirst3 != null || (strText = elementSelectFirst3.text()) == null) {
@@ -966,7 +966,7 @@ public final class AnimesCloud extends MainAPI {
                     tvType = TvType.Anime;
                 }
                 type = tvType;
-                elementSelectFirst2 = document.selectFirst("div.wp-content p:nth-child(2)");
+                elementSelectFirst2 = document.selectFirst("div.wp-content p:first-child");
                 if (elementSelectFirst2 != null) {
                     elementSelectFirst3 = document.selectFirst("div.wp-content");
                     if (elementSelectFirst3 != null) {
@@ -1022,7 +1022,7 @@ public final class AnimesCloud extends MainAPI {
                 } else {
                     title = "";
                 }
-                scoreValue = StringsKt.toDoubleOrNull(document.select("b#repimdb strong").text());
+                scoreValue = StringsKt.toDoubleOrNull(document.select("div.custom_fields:contains(Pontuação) span.valor strong").text());
                 it = document.select("div.custom_fields").iterator();
                 do {
                     if (it.hasNext()) {
@@ -1062,7 +1062,7 @@ public final class AnimesCloud extends MainAPI {
                         tvType = TvType.Anime;
                     }
                     type = tvType;
-                    elementSelectFirst2 = document.selectFirst("div.wp-content p:nth-child(2)");
+                    elementSelectFirst2 = document.selectFirst("div.wp-content p:first-child");
                     if (elementSelectFirst2 != null) {
                         elementSelectFirst3 = document.selectFirst("div.wp-content");
                         if (elementSelectFirst3 != null) {
@@ -1137,7 +1137,7 @@ public final class AnimesCloud extends MainAPI {
                     tvType = TvType.Anime;
                 }
                 type = tvType;
-                elementSelectFirst2 = document.selectFirst("div.wp-content p:nth-child(2)");
+                elementSelectFirst2 = document.selectFirst("div.wp-content p:first-child");
                 if (elementSelectFirst2 != null) {
                     elementSelectFirst3 = document.selectFirst("div.wp-content");
                     if (elementSelectFirst3 != null) {
@@ -1309,15 +1309,15 @@ public final class AnimesCloud extends MainAPI {
     }
 
     private final Map<DubStatus, List<Episode>> loadEpisodesFromPage(Document document, String baseUrl) {
-        Elements elements = document.select("div#episodes ul.episodios li");
+        Elements elements = document.select("div#seasons div.episode-card");
         Iterable $this$map$iv = (Iterable) elements;
         Collection destination$iv$iv = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv, 10));
         for (Object item$iv$iv : $this$map$iv) {
             final Element episodeElement = (Element) item$iv$iv;
-            String episodeUrl = MainAPIKt.fixUrl(this, episodeElement.select("div.episodiotitle a").attr("href"));
-            String numText = episodeElement.select("div.numerando").text();
+            String episodeUrl = MainAPIKt.fixUrl(this, episodeElement.select("h3.episode-title a").attr("href"));
+            String numText = episodeElement.select("a.episode-mini-number").text();
             Elements elements2 = elements;
-            final MatchResult match = Regex.find$default(new Regex("(\\d+)\\s*-\\s*(\\d+)"), numText, 0, 2, (Object) null);
+            final MatchResult match = Regex.find$default(new Regex("^(\\d+\\s*-\\s*)?(\\d+)$"), numText, 0, 2, (Object) null);
             destination$iv$iv.add(MainAPIKt.newEpisode(this, episodeUrl, new Function1() { // from class: com.AnimesCloud.AnimesCloud$$ExternalSyntheticLambda1
                 public final Object invoke(Object obj) {
                     return AnimesCloud.loadEpisodesFromPage$lambda$15$lambda$14(episodeElement, match, (Episode) obj);
@@ -1337,7 +1337,7 @@ public final class AnimesCloud extends MainAPI {
         Integer intOrNull2;
         List groupValues2;
         String str2;
-        $this$newEpisode.setName(StringsKt.trim($episodeElement.select("div.episodiotitle a").text()).toString());
+        $this$newEpisode.setName(StringsKt.trim($episodeElement.select("h3.episode-title a").text()).toString());
         Integer num = 1;
         if ($match == null || (groupValues2 = $match.getGroupValues()) == null || (str2 = (String) groupValues2.get(2)) == null || (intOrNull = StringsKt.toIntOrNull(str2)) == null) {
             intOrNull = num;

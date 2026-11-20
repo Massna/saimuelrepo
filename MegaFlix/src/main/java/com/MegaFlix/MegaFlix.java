@@ -72,10 +72,10 @@ public final class MegaFlix extends MainAPI {
     private final Set<TvType> supportedTypes = SetsKt.setOf(new TvType[]{TvType.Movie, TvType.TvSeries});
 
     @NotNull
-    private String mainUrl = "https://megaflix.lat";
+    private String mainUrl = "https://megaflix.lol";
 
     @NotNull
-    private final List<MainPageData> mainPage = MainAPIKt.mainPageOf(new Pair[]{TuplesKt.to("/genero/acao", "Ação"), TuplesKt.to("/genero/animacao", "Animação"), TuplesKt.to("/genero/comedia", "Comédia"), TuplesKt.to("/genero/crime", "Crime"), TuplesKt.to("/genero/documentario", "Documentário"), TuplesKt.to("/genero/drama", "Drama"), TuplesKt.to("/genero/familia", "Família"), TuplesKt.to("/genero/fantasia", "Fantasia"), TuplesKt.to("/genero/faroeste", "Faroeste"), TuplesKt.to("/genero/guerra", "Guerra"), TuplesKt.to("/genero/misterio", "Mistério"), TuplesKt.to("/genero/sci-fi", "Sci-fi"), TuplesKt.to("/genero/thiller", "Thriller")});
+    private final List<MainPageData> mainPage = MainAPIKt.mainPageOf(new Pair[]{TuplesKt.to("/category/acao/page", "Ação"), TuplesKt.to("/category/animacao/page", "Animação"), TuplesKt.to("/category/comedia/page", "Comédia"), TuplesKt.to("/category/crime/page", "Crime"), TuplesKt.to("/category/documentario/page", "Documentário"), TuplesKt.to("/category/drama/page", "Drama"), TuplesKt.to("/category/familia/page", "Família"), TuplesKt.to("/category/fantasia/page", "Fantasia"), TuplesKt.to("/category/faroeste/page", "Faroeste"), TuplesKt.to("/category/guerra/page", "Guerra"), TuplesKt.to("/category/misterio/page", "Mistério"), TuplesKt.to("/category/ficcao-cientifica/page", "Sci-fi"), TuplesKt.to("/category/thriller/page", "Thriller")});
 
     /* JADX INFO: renamed from: com.MegaFlix.MegaFlix$getMainPage$1, reason: invalid class name */
     /* JADX INFO: compiled from: MegaFlix.kt */
@@ -287,25 +287,25 @@ public final class MegaFlix extends MainAPI {
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
         Document soup = ((NiceResponse) $result).getDocument();
-        Iterable $this$forEach$iv$iv$iv = soup.select("div.col-lg-2 > a");
+        Iterable $this$forEach$iv$iv$iv = soup.select("ul.post-lst li");
         int $i$f$mapNotNull2 = 0;
         Collection destination$iv$iv = new ArrayList();
         for (Object element$iv$iv : $this$forEach$iv$iv$iv) {
             Element item = (Element) element$iv$iv;
-            Element elementSelectFirst = item.selectFirst("h3.title");
+            Element elementSelectFirst = item.selectFirst("header.entry-header h2.entry-title");
             String str = "";
             String title = (elementSelectFirst == null || (strText = elementSelectFirst.text()) == null) ? "" : strText;
-            Element elementSelectFirst2 = item.selectFirst("a");
+            Element elementSelectFirst2 = item.selectFirst("a.lnk-blk");
             if (elementSelectFirst2 == null || (strAttr = elementSelectFirst2.attr("href")) == null) {
                 strAttr = "";
             }
             String link = strAttr;
-            String it = item.select("picture img").attr("data-src");
+            String it = item.select("div.post-thumbnail figure img").attr("src");
             if (!(it.length() > 0)) {
                 it = null;
             }
             if (it == null) {
-                String it2 = item.select("img").attr("data-src");
+                String it2 = item.select("img").attr("src");
                 if (!(it2.length() > 0)) {
                     it2 = null;
                 }
@@ -390,7 +390,7 @@ public final class MegaFlix extends MainAPI {
             case 0:
                 ResultKt.throwOnFailure($result);
                 Requests app = MainActivityKt.getApp();
-                String str = getMainUrl() + "/procurar/" + query;
+                String str = getMainUrl() + "/?s=" + query;
                 c00021.L$0 = this;
                 c00021.label = 1;
                 $result = Requests.get$default(app, str, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00021, 4094, (Object) null);
@@ -408,19 +408,19 @@ public final class MegaFlix extends MainAPI {
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
         Document soup = ((NiceResponse) $result).getDocument();
-        Iterable $this$forEach$iv$iv$iv = soup.select("div.col-lg-2 > a");
+        Iterable $this$forEach$iv$iv$iv = soup.select("ul.post-lst li");
         Collection destination$iv$iv = new ArrayList();
         for (Object element$iv$iv : $this$forEach$iv$iv$iv) {
             Element it = (Element) element$iv$iv;
-            Element elementSelectFirst = it.selectFirst("h3.title");
+            Element elementSelectFirst = it.selectFirst("header.entry-header h2.entry-title");
             String str2 = "";
             String title = (elementSelectFirst == null || (strText = elementSelectFirst.text()) == null) ? "" : strText;
-            Element elementSelectFirst2 = it.selectFirst("a");
+            Element elementSelectFirst2 = it.selectFirst("a.lnk-blk");
             if (elementSelectFirst2 == null || (strAttr = elementSelectFirst2.attr("href")) == null) {
                 strAttr = "";
             }
             String link = strAttr;
-            Element elementSelectFirst3 = it.selectFirst("img");
+            Element elementSelectFirst3 = it.selectFirst("div.post-thumbnail figure img");
             if (elementSelectFirst3 != null && (strAttr2 = elementSelectFirst3.attr("src")) != null) {
                 str2 = strAttr2;
             }

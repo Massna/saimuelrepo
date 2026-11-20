@@ -1,53 +1,66 @@
 package com.PobreFlix;
 
-import com.lagradost.cloudstream3.MainActivityKt;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.lagradost.cloudstream3.SubtitleFile;
 import com.lagradost.cloudstream3.utils.ExtractorApiKt;
 import com.lagradost.cloudstream3.utils.ExtractorLink;
-import com.lagradost.nicehttp.NiceResponse;
-import com.lagradost.nicehttp.Requests;
-import com.lagradost.nicehttp.ResponseParser;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import kotlin.Metadata;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import kotlin.Pair;
-import kotlin.Result;
 import kotlin.ResultKt;
 import kotlin.TuplesKt;
 import kotlin.Unit;
-import kotlin.collections.CollectionsKt;
 import kotlin.collections.MapsKt;
 import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.intrinsics.IntrinsicsKt;
 import kotlin.coroutines.jvm.internal.ContinuationImpl;
-import kotlin.coroutines.jvm.internal.DebugMetadata;
 import kotlin.jvm.functions.Function1;
-import kotlin.jvm.internal.Intrinsics;
-import kotlin.jvm.internal.SourceDebugExtension;
-import kotlin.text.MatchResult;
 import kotlin.text.Regex;
 import kotlin.text.StringsKt;
-import okhttp3.Interceptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /* JADX INFO: compiled from: PobreFlixExtractor.kt */
 /* JADX INFO: loaded from: /tmp/cs3/PobreFlix/classes.dex */
-@Metadata(d1 = {"\u0000L\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010$\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\t\bÆ\u0002\u0018\u00002\u00020\u0001B\t\b\u0002¢\u0006\u0004\b\u0002\u0010\u0003J>\u0010\r\u001a\u00020\u000e2\u0006\u0010\u000f\u001a\u00020\u00052\u0012\u0010\u0010\u001a\u000e\u0012\u0004\u0012\u00020\u0012\u0012\u0004\u0012\u00020\u00130\u00112\u0012\u0010\u0014\u001a\u000e\u0012\u0004\u0012\u00020\u0015\u0012\u0004\u0012\u00020\u00130\u0011H\u0086@¢\u0006\u0002\u0010\u0016J\u001c\u0010\u0017\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\u00050\u00182\u0006\u0010\u000f\u001a\u00020\u0005H\u0002J\u0018\u0010\u0019\u001a\u00020\u00052\u0006\u0010\u001a\u001a\u00020\u00052\u0006\u0010\u001b\u001a\u00020\u0005H\u0002J\u0010\u0010\u001c\u001a\u00020\f2\u0006\u0010\u001d\u001a\u00020\u0005H\u0002JF\u0010\u001e\u001a\u00020\u00132\u0006\u0010\u001d\u001a\u00020\u00052\u0006\u0010\u001f\u001a\u00020\u00052\u0012\u0010\u0010\u001a\u000e\u0012\u0004\u0012\u00020\u0012\u0012\u0004\u0012\u00020\u00130\u00112\u0012\u0010\u0014\u001a\u000e\u0012\u0004\u0012\u00020\u0015\u0012\u0004\u0012\u00020\u00130\u0011H\u0082@¢\u0006\u0002\u0010 R\u000e\u0010\u0004\u001a\u00020\u0005X\u0082T¢\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0005X\u0082T¢\u0006\u0002\n\u0000R\u000e\u0010\u0007\u001a\u00020\bX\u0082\u0004¢\u0006\u0002\n\u0000R\u000e\u0010\t\u001a\u00020\bX\u0082\u0004¢\u0006\u0002\n\u0000R\u001a\u0010\n\u001a\u000e\u0012\u0004\u0012\u00020\u0005\u0012\u0004\u0012\u00020\f0\u000bX\u0082\u0004¢\u0006\u0002\n\u0000¨\u0006!"}, d2 = {"Lcom/PobreFlix/PobreFlixExtractor;", "", "<init>", "()V", "BASE_PLAYER", "", "TAG", "videoRegex", "Lkotlin/text/Regex;", "serverRegex", "serverPriority", "", "", "getLinks", "", "data", "subtitleCallback", "Lkotlin/Function1;", "Lcom/lagradost/cloudstream3/SubtitleFile;", "", "callback", "Lcom/lagradost/cloudstream3/utils/ExtractorLink;", "(Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "parseData", "Lkotlin/Pair;", "buildPlayerUrl", "type", "url", "extractPriority", "onClick", "processItem", "referer", "(Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "PobreFlix_debug"}, k = 1, mv = {2, 1, 0}, xi = 48)
-@SourceDebugExtension({"SMAP\nPobreFlixExtractor.kt\nKotlin\n*S Kotlin\n*F\n+ 1 PobreFlixExtractor.kt\ncom/PobreFlix/PobreFlixExtractor\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,93:1\n1053#2:94\n1863#2,2:95\n*S KotlinDebug\n*F\n+ 1 PobreFlixExtractor.kt\ncom/PobreFlix/PobreFlixExtractor\n*L\n40#1:94\n41#1:95,2\n*E\n"})
+/*
+ * EXTRATOR REPARADO CONTRA O NOVO CONTRATO (IPS/Invision "videobox") em 2026-11-20.
+ * Fluxo novo (decifrado do bundle plugins_plugins.js -> initPlayer):
+ *   GET index.php?app=videobox&module=video&controller=view&do=playerData&id=<videoId>
+ *   -> JSON {players:[{label,url,downloadUrl}], servers_dub, servers_leg, current_audio, ...}
+ *   -> embed = players[key].url + id   (key = label.toLowerCase() sem nao-alfanumericos)
+ *   -> loadExtractor(embed) por servidor (ordem: serverPriority; ids "hide" = trancado no
+ *      mirror -> registro -> descartados honestamente).
+ * Contrato antigo (C_Video('id','server') / e/getplay.php?id=&sv=): 100% morto — removido.
+ */
 public final class PobreFlixExtractor {
 
     @NotNull
-    private static final String BASE_PLAYER = "https://www.pobreflixtv.club/e/getplay.php";
+    private static final String BASE_PLAYER = "https://www.pobreflixtv.codes/index.php?app=videobox&module=video&controller=view&do=playerData&id=";
 
     @NotNull
     private static final String TAG = "PobreFlix";
 
     @NotNull
-    public static final PobreFlixExtractor INSTANCE = new PobreFlixExtractor();
+    private static final String UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
+    @NotNull
+    private static final String REFERER = "https://www.pobreflixtv.codes/";
+
+    /* Preservados por compatibilidade de estrutura (contrato antigo; não usados no fluxo novo). */
     @NotNull
     private static final Regex videoRegex = new Regex("C_Video\\('(\\d+)','(.*?)'\\)");
 
@@ -57,10 +70,10 @@ public final class PobreFlixExtractor {
     @NotNull
     private static final Map<String, Integer> serverPriority = MapsKt.mapOf(new Pair[]{TuplesKt.to("streamtape", 1), TuplesKt.to("filemoon", 2), TuplesKt.to("doodstream", 3), TuplesKt.to("mixdrop", 4)});
 
+    @NotNull
+    public static final PobreFlixExtractor INSTANCE = new PobreFlixExtractor();
+
     /* JADX INFO: renamed from: com.PobreFlix.PobreFlixExtractor$getLinks$1, reason: invalid class name */
-    /* JADX INFO: compiled from: PobreFlixExtractor.kt */
-    @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
-    @DebugMetadata(c = "com.PobreFlix.PobreFlixExtractor", f = "PobreFlixExtractor.kt", i = {0, 0, 0, 0, 1, 1, 1, 1}, l = {33, 43}, m = "getLinks", n = {"subtitleCallback", "callback", "url", "$this$getLinks_u24lambda_u242", "subtitleCallback", "callback", "url", "$this$getLinks_u24lambda_u242"}, s = {"L$0", "L$1", "L$2", "L$3", "L$0", "L$1", "L$2", "L$3"})
     static final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
@@ -78,14 +91,11 @@ public final class PobreFlixExtractor {
         public final Object invokeSuspend(@NotNull Object obj) {
             this.result = obj;
             this.label |= Integer.MIN_VALUE;
-            return PobreFlixExtractor.this.getLinks(null, null, null, (Continuation) this);
+            return PobreFlixExtractor.INSTANCE.getLinks(null, null, null, (Continuation) this);
         }
     }
 
-    /* JADX INFO: renamed from: com.PobreFlix.PobreFlixExtractor$processItem$1, reason: invalid class name and case insensitive filesystem */
-    /* JADX INFO: compiled from: PobreFlixExtractor.kt */
-    @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
-    @DebugMetadata(c = "com.PobreFlix.PobreFlixExtractor", f = "PobreFlixExtractor.kt", i = {0, 0, 0, 0}, l = {80, 89}, m = "processItem", n = {"referer", "subtitleCallback", "callback", "playUrl"}, s = {"L$0", "L$1", "L$2", "L$3"})
+    /* JADX INFO: renamed from: com.PobreFlix.PobreFlixExtractor$processItem$1, reason: invalid class name */
     static final class C00041 extends ContinuationImpl {
         Object L$0;
         Object L$1;
@@ -102,49 +112,155 @@ public final class PobreFlixExtractor {
         public final Object invokeSuspend(@NotNull Object obj) {
             this.result = obj;
             this.label |= Integer.MIN_VALUE;
-            return PobreFlixExtractor.this.processItem(null, null, null, null, (Continuation) this);
+            return PobreFlixExtractor.INSTANCE.processItem(null, null, null, null, (Continuation) this);
         }
     }
 
     private PobreFlixExtractor() {
     }
 
-    /* JADX WARN: Code duplicated, block: B:31:0x012b A[Catch: all -> 0x016f, TryCatch #3 {all -> 0x016f, blocks: (B:29:0x0125, B:31:0x012b, B:36:0x0160), top: B:55:0x0125 }] */
-    /* JADX WARN: Code duplicated, block: B:33:0x0157 A[RETURN] */
-    /* JADX WARN: Code duplicated, block: B:34:0x0158  */
-    /* JADX WARN: Code duplicated, block: B:7:0x0018  */
-    /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:34:0x0158 -> B:35:0x015e). Please report as a decompilation issue!!! */
-    /*  JADX ERROR: StackOverflowError in pass: RegionMakerVisitor
-        java.lang.StackOverflowError
-        	at jadx.core.utils.BlockUtils.traverseSuccessorsUntil(BlockUtils.java:731)
-        	at jadx.core.utils.BlockUtils.traverseSuccessorsUntil(BlockUtils.java:749)
-        */
-    @org.jetbrains.annotations.Nullable
-    public final java.lang.Object getLinks(@org.jetbrains.annotations.NotNull java.lang.String r30, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.SubtitleFile, kotlin.Unit> r31, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.utils.ExtractorLink, kotlin.Unit> r32, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super java.lang.Boolean> r33) {
-        /*
-            Method dump skipped, instruction units count: 418
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.PobreFlix.PobreFlixExtractor.getLinks(java.lang.String, kotlin.jvm.functions.Function1, kotlin.jvm.functions.Function1, kotlin.coroutines.Continuation):java.lang.Object");
+    @Nullable
+    public final java.lang.Object getLinks(@org.jetbrains.annotations.NotNull java.lang.String data, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.SubtitleFile, kotlin.Unit> subtitleCallback, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.utils.ExtractorLink, kotlin.Unit> callback, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super java.lang.Boolean> continuation) {
+        List<String> embeds;
+        try {
+            embeds = collectEmbeds(data);
+        } catch (Throwable th) {
+            continuation.resumeWith(ResultKt.createFailure(th));
+            return IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        }
+        if (embeds.isEmpty()) {
+            return Boolean.TRUE;
+        }
+        processChain(embeds, 0, subtitleCallback, callback, continuation);
+        return IntrinsicsKt.getCOROUTINE_SUSPENDED();
+    }
+
+    /* Cadeia de continuação: processa um embed por vez; loadExtractor é suspend, então o
+     * avanço acontece ou síncrono (retorna valor) ou via resumeWith do step. */
+    private final void processChain(final List<String> embeds, int start, final Function1<? super SubtitleFile, Unit> subtitleCallback, final Function1<? super ExtractorLink, Unit> callback, final Continuation<? super Boolean> continuation) {
+        int i = start;
+        while (i < embeds.size()) {
+            final int next = i + 1;
+            Continuation<Object> step = new Continuation<Object>() {
+                @NotNull
+                public CoroutineContext getContext() {
+                    return continuation.getContext();
+                }
+
+                public void resumeWith(@NotNull Object result) {
+                    /* Falha de um servidor não derruba os demais. */
+                    PobreFlixExtractor.this.processChain(embeds, next, subtitleCallback, callback, continuation);
+                }
+            };
+            Object r;
+            try {
+                r = ExtractorApiKt.loadExtractor(embeds.get(i), REFERER, subtitleCallback, callback, step);
+            } catch (Throwable th) {
+                r = ResultKt.createFailure(th);
+            }
+            if (r == IntrinsicsKt.getCOROUTINE_SUSPENDED()) {
+                return;
+            }
+            i++;
+        }
+        continuation.resumeWith(Boolean.TRUE);
+    }
+
+    /* "movie|<id|url>" / "ep|<id|url>" -> lista ordenada de URLs de embed (url+id). */
+    private final List<String> collectEmbeds(String data) throws Exception {
+        List<String> out = new ArrayList<>();
+        Pair<String, String> parsed = parseData(data);
+        String payload = parsed.getSecond();
+        String videoId = payload;
+        if (payload == null || payload.isEmpty()) {
+            return out;
+        }
+        if (!payload.matches("\\d+")) {
+            Matcher m = Pattern.compile("-(\\d+)/?$").matcher(payload);
+            if (m.find()) {
+                videoId = m.group(1);
+            } else {
+                Document doc = Jsoup.connect(payload).userAgent(UA).timeout(20000).execute().parse();
+                Element view = doc.selectFirst("#view[data-video-id]");
+                if (view != null && !view.attr("data-video-id").isEmpty()) {
+                    videoId = view.attr("data-video-id");
+                }
+            }
+        }
+        String json = Jsoup.connect(BASE_PLAYER + videoId).userAgent(UA).header("X-Requested-With", "XMLHttpRequest").header("Accept", "application/json").ignoreContentType(true).timeout(20000).execute().body();
+        JsonObject root = new Gson().fromJson(json, JsonObject.class);
+        if (root == null) {
+            return out;
+        }
+        Map<String, String> prefixByKey = new LinkedHashMap<>();
+        if (root.has("players") && root.get("players").isJsonArray()) {
+            JsonArray players = root.getAsJsonArray("players");
+            for (JsonElement el : players) {
+                JsonObject p = el.getAsJsonObject();
+                if (!p.has("label") || !p.has("url")) {
+                    continue;
+                }
+                String key = p.get("label").getAsString().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]", "");
+                prefixByKey.put(key, p.get("url").getAsString());
+            }
+        }
+        /* servers_dub/servers_leg: query-string "key=id" (às vezes com &amp;). Dublado primeiro
+         * (semântica: current_audio Dublado -> dub; ids "hide" = servidor trancado no mirror). */
+        List<String[]> rows = new ArrayList<>(); // [embedUrl, key]
+        collectServerMap(root, "servers_dub", prefixByKey, rows);
+        collectServerMap(root, "servers_leg", prefixByKey, rows);
+        Collections.sort(rows, new Comparator<String[]>() {
+            public int compare(String[] a, String[] b) {
+                return Integer.compare(extractPriority(a[1]), extractPriority(b[1]));
+            }
+        });
+        for (String[] row : rows) {
+            out.add(row[0]);
+        }
+        return out;
+    }
+
+    private final void collectServerMap(JsonObject root, String field, Map<String, String> prefixByKey, List<String[]> rows) {
+        if (!root.has(field) || root.get(field).isJsonNull()) {
+            return;
+        }
+        String raw = root.get(field).getAsString().replace("&amp;", "&");
+        for (String pairStr : raw.split("&")) {
+            int eq = pairStr.indexOf('=');
+            if (eq <= 0) {
+                continue;
+            }
+            String key = pairStr.substring(0, eq).toLowerCase(Locale.ROOT).trim();
+            String id = pairStr.substring(eq + 1).trim();
+            if (id.isEmpty() || "hide".equalsIgnoreCase(id)) {
+                continue; /* trancado no mirror (registro) */
+            }
+            String prefix = prefixByKey.get(key);
+            if (prefix == null || prefix.isEmpty()) {
+                continue;
+            }
+            rows.add(new String[]{prefix + id, key});
+        }
     }
 
     private final Pair<String, String> parseData(String data) {
-        List parts = StringsKt.split$default(data, new String[]{"|"}, false, 2, 2, (Object) null);
-        String str = (String) CollectionsKt.getOrNull(parts, 0);
+        List<String> parts = StringsKt.split$default(data == null ? "" : data, new String[]{"|"}, false, 2, 2, (Object) null);
+        String str = (String) (parts.isEmpty() ? null : parts.get(0));
         if (str == null) {
             str = "";
         }
-        String str2 = (String) CollectionsKt.getOrNull(parts, 1);
+        String str2 = parts.size() > 1 ? parts.get(1) : data;
         if (str2 == null) {
             str2 = data;
         }
         return new Pair<>(str, str2);
     }
 
+    /* Preservado do contrato antigo (sem efeito no fluxo novo). */
     private final String buildPlayerUrl(String type, String url) {
         StringBuilder sbAppend;
         String str;
-        if (!Intrinsics.areEqual(type, "movie")) {
+        if (!kotlin.jvm.internal.Intrinsics.areEqual(type, "movie")) {
             return url;
         }
         if (StringsKt.contains$default(url, "?", false, 2, (Object) null)) {
@@ -157,153 +273,47 @@ public final class PobreFlixExtractor {
         return sbAppend.append(str).toString();
     }
 
+    /* Ordem preferencial dos servidores (semântica antiga preservada):
+     * streamtape 1, filemoon 2, doodstream 3, mixdrop 4, demais por último. */
     /* JADX INFO: Access modifiers changed from: private */
-    public final int extractPriority(String onClick) {
-        List groupValues;
-        String str;
-        String lowerCase = null;
-        MatchResult matchResultFind$default = Regex.find$default(serverRegex, onClick, 0, 2, (Object) null);
-        if (matchResultFind$default != null && (groupValues = matchResultFind$default.getGroupValues()) != null && (str = (String) groupValues.get(1)) != null) {
-            lowerCase = str.toLowerCase(Locale.ROOT);
-            Intrinsics.checkNotNullExpressionValue(lowerCase, "toLowerCase(...)");
-        }
+    public final int extractPriority(String serverKey) {
+        String lowerCase = serverKey != null ? serverKey.toLowerCase(Locale.ROOT) : "";
         if (lowerCase == null) {
             lowerCase = "";
         }
-        String server = lowerCase;
-        Integer num = serverPriority.get(server);
+        Integer num = serverPriority.get(lowerCase);
         if (num != null) {
             return num.intValue();
         }
         return Integer.MAX_VALUE;
     }
 
+    /* Um embed por chamada; a URL chega pronta (prefixo+id) do playerData. */
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Code duplicated, block: B:33:0x0134  */
-    /* JADX WARN: Code duplicated, block: B:34:0x0135  */
-    /* JADX WARN: Code duplicated, block: B:7:0x0018  */
-    public final Object processItem(String onClick, String referer, Function1<? super SubtitleFile, Unit> function1, Function1<? super ExtractorLink, Unit> function2, Continuation<? super Unit> continuation) {
-        C00041 c00041;
-        boolean z;
-        C00041 c00042;
-        int i;
-        Function1<? super SubtitleFile, Unit> function3;
-        Function1<? super ExtractorLink, Unit> function4;
-        String referer2;
-        String playUrl;
-        String finalUrl;
-        if (continuation instanceof C00041) {
-            c00041 = (C00041) continuation;
-            if ((c00041.label & Integer.MIN_VALUE) != 0) {
-                c00041.label -= Integer.MIN_VALUE;
-            } else {
-                c00041 = new C00041(continuation);
-            }
-        } else {
-            c00041 = new C00041(continuation);
+    public final Object processItem(String embedUrl, String referer, Function1<? super SubtitleFile, Unit> subtitleCallback, Function1<? super ExtractorLink, Unit> callback, Continuation<? super Unit> continuation) {
+        if (embedUrl == null || embedUrl.isEmpty()) {
+            return Unit.INSTANCE;
         }
-        C00041 c00043 = c00041;
-        Object $result = c00043.result;
-        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        final Continuation<? super Unit> cont = continuation;
+        Continuation<Object> step = new Continuation<Object>() {
+            @NotNull
+            public CoroutineContext getContext() {
+                return cont.getContext();
+            }
+
+            public void resumeWith(@NotNull Object result) {
+                cont.resumeWith(Unit.INSTANCE);
+            }
+        };
+        Object r;
         try {
-            switch (c00043.label) {
-                case 0:
-                    ResultKt.throwOnFailure($result);
-                    MatchResult match = Regex.find$default(videoRegex, onClick, 0, 2, (Object) null);
-                    if (match == null) {
-                        return Unit.INSTANCE;
-                    }
-                    String id = (String) match.getGroupValues().get(1);
-                    String server = ((String) match.getGroupValues().get(2)).toLowerCase(Locale.ROOT);
-                    Intrinsics.checkNotNullExpressionValue(server, "toLowerCase(...)");
-                    String playUrl2 = "https://www.pobreflixtv.club/e/getplay.php?id=" + id + "&sv=" + server;
-                    try {
-                        Result.Companion companion = Result.Companion;
-                        PobreFlixExtractor pobreFlixExtractor = this;
-                        Requests app = MainActivityKt.getApp();
-                        Map mapMapOf = MapsKt.mapOf(TuplesKt.to("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"));
-                        c00043.L$0 = referer;
-                        c00043.L$1 = function1;
-                        c00043.L$2 = function2;
-                        c00043.L$3 = playUrl2;
-                        c00043.label = 1;
-                        z = true;
-                        c00042 = c00043;
-                        try {
-                            $result = Requests.get$default(app, playUrl2, mapMapOf, referer, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00042, 4088, (Object) null);
-                            if ($result == coroutine_suspended) {
-                                return coroutine_suspended;
-                            }
-                            i = 0;
-                            function3 = function1;
-                            function4 = function2;
-                            referer2 = referer;
-                            playUrl = playUrl2;
-                            NiceResponse response = (NiceResponse) $result;
-                            finalUrl = response.getUrl();
-                            if (finalUrl.length() > 0) {
-                                z = false;
-                            }
-                            if (z || Intrinsics.areEqual(finalUrl, playUrl) || StringsKt.contains$default(finalUrl, "pobreflixtv", false, 2, (Object) null)) {
-                                Result.constructor-impl(Unit.INSTANCE);
-                                return Unit.INSTANCE;
-                            }
-                            C00041 c00044 = c00042;
-                            try {
-                                c00044.L$0 = null;
-                                c00044.L$1 = null;
-                                c00044.L$2 = null;
-                                c00044.L$3 = null;
-                                c00044.label = 2;
-                                if (ExtractorApiKt.loadExtractor(finalUrl, referer2, function3, function4, c00044) == coroutine_suspended) {
-                                    return coroutine_suspended;
-                                }
-                                Result.constructor-impl(Unit.INSTANCE);
-                                return Unit.INSTANCE;
-                            } catch (Throwable th) {
-                                th = th;
-                                Result.Companion companion2 = Result.Companion;
-                                Result.constructor-impl(ResultKt.createFailure(th));
-                            }
-                        } catch (Throwable th2) {
-                            th = th2;
-                            Result.Companion companion3 = Result.Companion;
-                            Result.constructor-impl(ResultKt.createFailure(th));
-                        }
-                    } catch (Throwable th3) {
-                        th = th3;
-                        Result.Companion companion4 = Result.Companion;
-                        Result.constructor-impl(ResultKt.createFailure(th));
-                    }
-                    break;
-                case 1:
-                    i = 0;
-                    playUrl = (String) c00043.L$3;
-                    function4 = (Function1) c00043.L$2;
-                    function3 = (Function1) c00043.L$1;
-                    referer2 = (String) c00043.L$0;
-                    ResultKt.throwOnFailure($result);
-                    c00042 = c00043;
-                    z = true;
-                    NiceResponse response2 = (NiceResponse) $result;
-                    finalUrl = response2.getUrl();
-                    if (finalUrl.length() > 0) {
-                        z = false;
-                    }
-                    if (z) {
-                        break;
-                    }
-                    Result.constructor-impl(Unit.INSTANCE);
-                    return Unit.INSTANCE;
-                case 2:
-                    ResultKt.throwOnFailure($result);
-                    Result.constructor-impl(Unit.INSTANCE);
-                    return Unit.INSTANCE;
-                default:
-                    throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
-            }
-        } catch (Throwable th4) {
-            th = th4;
+            r = ExtractorApiKt.loadExtractor(embedUrl, referer != null ? referer : REFERER, subtitleCallback, callback, step);
+        } catch (Throwable th) {
+            r = ResultKt.createFailure(th);
         }
+        if (r == IntrinsicsKt.getCOROUTINE_SUSPENDED()) {
+            return IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        }
+        return Unit.INSTANCE;
     }
 }
