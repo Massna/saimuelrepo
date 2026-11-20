@@ -42,6 +42,19 @@ subprojects {
     apply(plugin = "kotlin-android")
     apply(plugin = "com.lagradost.cloudstream3.gradle")
 
+    // Os fontes sao Java (decompilados): o compileDex do plugin so pega a
+    // saida do compileDebugKotlin. Injetamos a saida do javac no input do
+    // compileDex via reflexao (evita depender da classe do task).
+    afterEvaluate {
+        tasks.named("compileDex").configure {
+            val getter = javaClass.methods.firstOrNull { it.name == "getInput" && it.parameterCount == 0 }
+            val coll = getter?.invoke(this) as? org.gradle.api.file.ConfigurableFileCollection
+            val javac = tasks.named("compileDebugJavaWithJavac")
+            coll?.from(javac)
+            dependsOn(javac)
+        }
+    }
+
     cloudstream {
         setRepo("https://github.com/Massna/saimuelrepo")
         authors = listOf("saimuelbr")
