@@ -5,6 +5,7 @@ import com.lagradost.cloudstream3.AnimeLoadResponse;
 import com.lagradost.cloudstream3.AnimeSearchResponse;
 import com.lagradost.cloudstream3.DubStatus;
 import com.lagradost.cloudstream3.Episode;
+import com.lagradost.cloudstream3.HomePageList;
 import com.lagradost.cloudstream3.LoadResponse;
 import com.lagradost.cloudstream3.MainAPI;
 import com.lagradost.cloudstream3.MainAPIKt;
@@ -630,11 +631,87 @@ public final class AnimesCloud extends MainAPI {
         */
     @org.jetbrains.annotations.Nullable
     public java.lang.Object getMainPage(int r18, @org.jetbrains.annotations.NotNull com.lagradost.cloudstream3.MainPageRequest r19, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super com.lagradost.cloudstream3.HomePageResponse> r20) {
-        /*
-            Method dump skipped, instruction units count: 272
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.AnimesCloud.AnimesCloud.getMainPage(int, com.lagradost.cloudstream3.MainPageRequest, kotlin.coroutines.Continuation):java.lang.Object");
+        AnonymousClass1 anonymousClass1;
+        AnimesCloud animesCloud;
+        MainPageRequest request;
+        Collection destination$iv$iv;
+        Iterator element$iv$iv;
+        if (r20 instanceof AnonymousClass1) {
+            anonymousClass1 = (AnonymousClass1) r20;
+            if ((anonymousClass1.label & Integer.MIN_VALUE) != 0) {
+                anonymousClass1.label -= Integer.MIN_VALUE;
+            } else {
+                anonymousClass1 = new AnonymousClass1(r20);
+            }
+        } else {
+            anonymousClass1 = new AnonymousClass1(r20);
+        }
+        Object $result = anonymousClass1.result;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch (anonymousClass1.label) {
+            case 0:
+                ResultKt.throwOnFailure($result);
+                animesCloud = this;
+                request = r19;
+                String url = animesCloud.getMainUrl() + "/" + request.getData();
+                anonymousClass1.L$0 = animesCloud;
+                anonymousClass1.L$1 = request;
+                anonymousClass1.label = 1;
+                try {
+                    $result = animesCloud.request(url, anonymousClass1);
+                } catch (Throwable th) {
+                    return AnimesCloud.<RuntimeException>sneakyThrow(th);
+                }
+                if ($result == coroutine_suspended) {
+                    return coroutine_suspended;
+                }
+                destination$iv$iv = new ArrayList();
+                element$iv$iv = ((Document) $result).select("div.items article, div.content div.items article").iterator();
+                break;
+            case 1:
+                request = (MainPageRequest) anonymousClass1.L$1;
+                animesCloud = (AnimesCloud) anonymousClass1.L$0;
+                ResultKt.throwOnFailure($result);
+                destination$iv$iv = new ArrayList();
+                element$iv$iv = ((Document) $result).select("div.items article, div.content div.items article").iterator();
+                break;
+            case 2:
+                element$iv$iv = (Iterator) anonymousClass1.L$3;
+                destination$iv$iv = (Collection) anonymousClass1.L$2;
+                request = (MainPageRequest) anonymousClass1.L$1;
+                animesCloud = (AnimesCloud) anonymousClass1.L$0;
+                ResultKt.throwOnFailure($result);
+                SearchResponse searchResultResumed = (SearchResponse) $result;
+                if (searchResultResumed != null) {
+                    destination$iv$iv.add(searchResultResumed);
+                }
+                break;
+            default:
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+        while (element$iv$iv.hasNext()) {
+            Element it = (Element) element$iv$iv.next();
+            anonymousClass1.L$0 = animesCloud;
+            anonymousClass1.L$1 = request;
+            anonymousClass1.L$2 = destination$iv$iv;
+            anonymousClass1.L$3 = element$iv$iv;
+            anonymousClass1.label = 2;
+            Object objToSearchResult = animesCloud.toSearchResult(it, anonymousClass1);
+            if (objToSearchResult == coroutine_suspended) {
+                return coroutine_suspended;
+            }
+            SearchResponse searchResult = (SearchResponse) objToSearchResult;
+            if (searchResult != null) {
+                destination$iv$iv.add(searchResult);
+            }
+        }
+        List items = (List) destination$iv$iv;
+        return MainAPIKt.newHomePageResponse(new HomePageList(request.getName(), items, false), Boxing.boxBoolean(false));
+    }
+
+    /* JADX INFO: synthetic rethrow helper preserving the original throwable */
+    private static <T extends Throwable> Object sneakyThrow(Throwable th) throws T {
+        throw (T) th;
     }
 
     /* JADX INFO: Access modifiers changed from: private */

@@ -1,13 +1,29 @@
 package com.AnimesCloud;
 
 import com.lagradost.cloudstream3.network.CloudflareKiller;
+import com.lagradost.cloudstream3.utils.ExtractorApiKt;
+import com.lagradost.cloudstream3.utils.ExtractorLink;
+import com.lagradost.cloudstream3.utils.ExtractorLinkType;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import kotlin.Metadata;
+import kotlin.ResultKt;
+import kotlin.Unit;
 import kotlin.coroutines.Continuation;
+import kotlin.coroutines.intrinsics.IntrinsicsKt;
 import kotlin.coroutines.jvm.internal.ContinuationImpl;
 import kotlin.coroutines.jvm.internal.DebugMetadata;
+import kotlin.jvm.functions.Function1;
 import kotlin.jvm.internal.SourceDebugExtension;
+import kotlin.text.StringsKt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /* JADX INFO: compiled from: AnimesCloudExtractor.kt */
 /* JADX INFO: loaded from: /tmp/cs3/AnimesCloud/classes.dex */
@@ -87,11 +103,122 @@ public final class AnimesCloudExtractor {
         	at jadx.core.utils.BlockUtils.traverseSuccessorsUntil(BlockUtils.java:749)
         */
     @org.jetbrains.annotations.Nullable
-    public final java.lang.Object extractVideoLinks(@org.jetbrains.annotations.NotNull java.lang.String r46, @org.jetbrains.annotations.NotNull java.lang.String r47, @org.jetbrains.annotations.NotNull java.lang.String r48, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.utils.ExtractorLink, kotlin.Unit> r49, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super java.lang.Boolean> r50) {
-        /*
-            Method dump skipped, instruction units count: 1104
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.AnimesCloud.AnimesCloudExtractor.extractVideoLinks(java.lang.String, java.lang.String, java.lang.String, kotlin.jvm.functions.Function1, kotlin.coroutines.Continuation):java.lang.Object");
+    public final java.lang.Object extractVideoLinks(@org.jetbrains.annotations.NotNull java.lang.String url, @org.jetbrains.annotations.NotNull java.lang.String mainUrl, @org.jetbrains.annotations.NotNull java.lang.String name, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.utils.ExtractorLink, kotlin.Unit> callback, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super java.lang.Boolean> continuation) {
+        AnonymousClass1 anonymousClass1;
+        if (continuation instanceof AnonymousClass1) {
+            anonymousClass1 = (AnonymousClass1) continuation;
+            if ((anonymousClass1.label & Integer.MIN_VALUE) != 0) {
+                anonymousClass1.label -= Integer.MIN_VALUE;
+            } else {
+                anonymousClass1 = new AnonymousClass1(continuation);
+            }
+        } else {
+            anonymousClass1 = new AnonymousClass1(continuation);
+        }
+        Object $result = anonymousClass1.result;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        List rows = null;
+        Function1 cb = null;
+        String referer = null;
+        int i = 0;
+        switch (anonymousClass1.label) {
+            case 0:
+                ResultKt.throwOnFailure($result);
+                String refererRoot = StringsKt.endsWith$default(mainUrl, "/", false, 2, (Object) null) ? mainUrl : mainUrl + "/";
+                List media = new ArrayList();
+                try {
+                    String post = null;
+                    List<Integer> sourceIdx = new ArrayList();
+                    if (StringsKt.contains$default(url, "http", false, 2, (Object) null)) {
+                        Document doc = Jsoup.connect(url).userAgent(USER_AGENT).header("Referer", refererRoot).ignoreHttpErrors(true).timeout(15000).get();
+                        Element postEl = doc.selectFirst("[data-post-id]");
+                        if (postEl != null) {
+                            post = postEl.attr("data-post-id");
+                        }
+                        for (Element e : doc.select("[data-animeq-source]")) {
+                            try {
+                                int v = Integer.parseInt(e.attr("data-animeq-source").trim());
+                                if (!sourceIdx.contains(Integer.valueOf(v))) {
+                                    sourceIdx.add(Integer.valueOf(v));
+                                }
+                            } catch (Exception ignored) {
+                            }
+                            for (Element s : e.select("source[src]")) {
+                                String src = s.attr("src");
+                                if (src.length() > 0 && !media.contains(src)) {
+                                    media.add(src);
+                                }
+                            }
+                        }
+                        for (Element s : doc.select("source[src]")) {
+                            String src = s.attr("src");
+                            if (src.length() > 0 && !media.contains(src)) {
+                                media.add(src);
+                            }
+                        }
+                    }
+                    if (post != null) {
+                        for (Integer num : sourceIdx) {
+                            try {
+                                String api = refererRoot + "wp-json/dooplayer/v2/" + post + "/tv/" + (num.intValue() + 1);
+                                String body = Jsoup.connect(api).userAgent(USER_AGENT).header("Referer", refererRoot).header("Accept", "application/json").ignoreContentType(true).ignoreHttpErrors(true).timeout(15000).execute().getBody();
+                                Matcher embedMatcher = Pattern.compile("\"embed_url\"\\s*:\\s*\"([^\"]+)\"").matcher(body);
+                                if (embedMatcher.find()) {
+                                    String embedUrl = embedMatcher.group(1).replace("\\/", "/").replace("\\u0026", "&");
+                                    Matcher srcMatcher = Pattern.compile("source=([^&\"]+)").matcher(embedUrl);
+                                    if (srcMatcher.find()) {
+                                        String decoded = URLDecoder.decode(srcMatcher.group(1), "UTF-8");
+                                        if ((StringsKt.contains$default(decoded, ".mp4", false, 2, (Object) null) || StringsKt.contains$default(decoded, ".m3u8", false, 2, (Object) null)) && !media.contains(decoded)) {
+                                            media.add(decoded);
+                                        }
+                                    }
+                                }
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                } catch (Exception e2) {
+                }
+                rows = new ArrayList();
+                for (Object m : media) {
+                    rows.add(m);
+                }
+                cb = callback;
+                referer = refererRoot;
+                i = 0;
+                break;
+            case 1:
+                ResultKt.throwOnFailure($result);
+                rows = (List) anonymousClass1.L$0;
+                cb = (Function1) anonymousClass1.L$1;
+                referer = (String) anonymousClass1.L$3;
+                cb.invoke((ExtractorLink) $result);
+                i = ((Integer) anonymousClass1.L$2).intValue() + 1;
+                break;
+            default:
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+        while (i < rows.size()) {
+            String mediaUrl = (String) rows.get(i);
+            final String ref = referer;
+            ExtractorLinkType extractorLinkType = StringsKt.contains$default(mediaUrl, ".m3u8", false, 2, (Object) null) ? ExtractorLinkType.M3U8 : ExtractorLinkType.VIDEO;
+            anonymousClass1.L$0 = rows;
+            anonymousClass1.L$1 = cb;
+            anonymousClass1.L$2 = Integer.valueOf(i);
+            anonymousClass1.L$3 = referer;
+            anonymousClass1.label = 1;
+            $result = ExtractorApiKt.newExtractorLink(name, name, mediaUrl, extractorLinkType, new Function1() {
+                public final Object invoke(Object obj) {
+                    ((ExtractorLink) obj).setReferer(ref);
+                    return Unit.INSTANCE;
+                }
+            }, anonymousClass1);
+            if ($result == coroutine_suspended) {
+                return coroutine_suspended;
+            }
+            cb.invoke((ExtractorLink) $result);
+            i++;
+        }
+        return Boolean.valueOf(!rows.isEmpty());
     }
 }

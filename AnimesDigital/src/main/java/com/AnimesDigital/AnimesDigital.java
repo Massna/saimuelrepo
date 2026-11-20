@@ -25,6 +25,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +37,7 @@ import kotlin.Pair;
 import kotlin.ResultKt;
 import kotlin.TuplesKt;
 import kotlin.Unit;
+import kotlin.comparisons.ComparisonsKt;
 import kotlin.collections.CollectionsKt;
 import kotlin.collections.MapsKt;
 import kotlin.collections.SetsKt;
@@ -1442,11 +1444,100 @@ public final class AnimesDigital extends MainAPI {
         	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:25)
         */
     public final java.lang.Object loadAllEpisodes(java.lang.String r27, org.jsoup.nodes.Document r28, kotlin.coroutines.Continuation<? super java.util.List<com.lagradost.cloudstream3.Episode>> r29) {
-        /*
-            Method dump skipped, instruction units count: 400
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.AnimesDigital.AnimesDigital.loadAllEpisodes(java.lang.String, org.jsoup.nodes.Document, kotlin.coroutines.Continuation):java.lang.Object");
+        C00041 c00041;
+        AnimesDigital animesDigital;
+        String url;
+        List episodes;
+        int page;
+        int hasNext;
+        Document doc;
+        if (r29 instanceof C00041) {
+            c00041 = (C00041) r29;
+            if ((c00041.label & Integer.MIN_VALUE) != 0) {
+                c00041.label -= Integer.MIN_VALUE;
+            } else {
+                c00041 = new C00041(r29);
+            }
+        } else {
+            c00041 = new C00041(r29);
+        }
+        Object $result = c00041.result;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch (c00041.label) {
+            case 0:
+                ResultKt.throwOnFailure($result);
+                animesDigital = this;
+                url = r27;
+                doc = r28;
+                episodes = (List) new ArrayList();
+                page = 1;
+                hasNext = 1;
+                break;
+            case 1:
+                hasNext = c00041.I$1;
+                page = c00041.I$0;
+                episodes = (List) c00041.L$2;
+                url = (String) c00041.L$1;
+                animesDigital = (AnimesDigital) c00041.L$0;
+                ResultKt.throwOnFailure($result);
+                doc = ((NiceResponse) $result).getDocument();
+                break;
+            default:
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+        while (hasNext != 0 && page <= 20) {
+            List pageEpisodes = animesDigital.extractEpisodesFromPage(doc);
+            Collection newEpisodes = new ArrayList();
+            for (Object obj : (Iterable) pageEpisodes) {
+                Episode ep = (Episode) obj;
+                boolean none$iv = true;
+                Iterable $this$none$iv = (Iterable) episodes;
+                if (!($this$none$iv instanceof Collection && ((Collection) $this$none$iv).isEmpty())) {
+                    for (Object it2 : $this$none$iv) {
+                        Episode it = (Episode) it2;
+                        if (Intrinsics.areEqual(it.getEpisode(), ep.getEpisode())) {
+                            none$iv = false;
+                            break;
+                        }
+                    }
+                }
+                if (none$iv) {
+                    newEpisodes.add(ep);
+                }
+            }
+            List newEpisodesList = (List) newEpisodes;
+            int continueFlag = ((Collection) newEpisodesList).isEmpty() ? 0 : hasNext;
+            if (!((Collection) newEpisodesList).isEmpty()) {
+                episodes.addAll((Collection) newEpisodesList);
+            }
+            int nextPage = page + 1;
+            if (continueFlag != 0) {
+                Requests app = MainActivityKt.getApp();
+                String nextUrl = animesDigital.buildNextPageUrl(url, nextPage);
+                c00041.L$0 = animesDigital;
+                c00041.L$1 = url;
+                c00041.L$2 = episodes;
+                c00041.I$0 = nextPage;
+                c00041.I$1 = continueFlag;
+                c00041.label = 1;
+                $result = Requests.get$default(app, nextUrl, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00041, 4094, (Object) null);
+                if ($result == coroutine_suspended) {
+                    return coroutine_suspended;
+                }
+                hasNext = continueFlag;
+                page = nextPage;
+                doc = ((NiceResponse) $result).getDocument();
+            } else {
+                hasNext = continueFlag;
+                page = nextPage;
+            }
+        }
+        return CollectionsKt.sortedWith((Iterable) episodes, (Comparator) new Comparator<Episode>() {
+            @Override
+            public int compare(Episode a, Episode b) {
+                return ComparisonsKt.compareValues((Comparable) b.getEpisode(), (Comparable) a.getEpisode());
+            }
+        });
     }
 
     private final String buildNextPageUrl(String base, int page) {

@@ -1,5 +1,9 @@
 package com.Doramas;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.lagradost.cloudstream3.Actor;
 import com.lagradost.cloudstream3.ActorRole;
 import com.lagradost.cloudstream3.Episode;
@@ -7,28 +11,27 @@ import com.lagradost.cloudstream3.HomePageResponse;
 import com.lagradost.cloudstream3.LoadResponse;
 import com.lagradost.cloudstream3.MainAPI;
 import com.lagradost.cloudstream3.MainAPIKt;
-import com.lagradost.cloudstream3.MainActivityKt;
 import com.lagradost.cloudstream3.MainPageData;
 import com.lagradost.cloudstream3.MainPageRequest;
 import com.lagradost.cloudstream3.MovieLoadResponse;
 import com.lagradost.cloudstream3.MovieSearchResponse;
 import com.lagradost.cloudstream3.Score;
 import com.lagradost.cloudstream3.SearchResponse;
+import com.lagradost.cloudstream3.SubtitleFile;
 import com.lagradost.cloudstream3.TvSeriesLoadResponse;
 import com.lagradost.cloudstream3.TvType;
-import com.lagradost.nicehttp.NiceResponse;
-import com.lagradost.nicehttp.Requests;
-import com.lagradost.nicehttp.ResponseParser;
+import com.lagradost.cloudstream3.utils.ExtractorApiKt;
+import com.lagradost.cloudstream3.utils.ExtractorLink;
+import com.lagradost.cloudstream3.utils.ExtractorLinkType;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import kotlin.Metadata;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import kotlin.Pair;
 import kotlin.ResultKt;
 import kotlin.TuplesKt;
@@ -36,32 +39,40 @@ import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
 import kotlin.collections.SetsKt;
 import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.intrinsics.IntrinsicsKt;
-import kotlin.coroutines.jvm.internal.ContinuationImpl;
 import kotlin.coroutines.jvm.internal.DebugMetadata;
 import kotlin.coroutines.jvm.internal.SuspendLambda;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
-import kotlin.jvm.internal.Intrinsics;
-import kotlin.jvm.internal.SourceDebugExtension;
 import kotlin.text.MatchResult;
 import kotlin.text.Regex;
 import kotlin.text.StringsKt;
-import okhttp3.Interceptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 /* JADX INFO: compiled from: Doramas.kt */
 /* JADX INFO: loaded from: /tmp/cs3/Doramas/classes.dex */
-@Metadata(d1 = {"\u0000\u0092\u0001\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0002\b\u000b\n\u0002\u0010\u000b\n\u0002\b\u0005\n\u0002\u0010\"\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\n\u0018\u00002\u00020\u0001B\u0007¢\u0006\u0004\b\u0002\u0010\u0003J\u001e\u0010\u001e\u001a\u00020 2\u0006\u0010!\u001a\u00020\"2\u0006\u0010#\u001a\u00020$H\u0096@¢\u0006\u0002\u0010%J\u001c\u0010&\u001a\b\u0012\u0004\u0012\u00020'0\u001c2\u0006\u0010(\u001a\u00020\u0005H\u0096@¢\u0006\u0002\u0010)J\u000e\u0010*\u001a\u0004\u0018\u00010'*\u00020+H\u0002J\u0018\u0010,\u001a\u0004\u0018\u00010-2\u0006\u0010.\u001a\u00020\u0005H\u0096@¢\u0006\u0002\u0010)JF\u0010/\u001a\u00020\u00112\u0006\u00100\u001a\u00020\u00052\u0006\u00101\u001a\u00020\u00112\u0012\u00102\u001a\u000e\u0012\u0004\u0012\u000204\u0012\u0004\u0012\u000205032\u0012\u00106\u001a\u000e\u0012\u0004\u0012\u000207\u0012\u0004\u0012\u00020503H\u0096@¢\u0006\u0002\u00108J\u0016\u00109\u001a\b\u0012\u0004\u0012\u00020:0\u001c2\u0006\u0010;\u001a\u00020<H\u0002J\u0016\u0010=\u001a\b\u0012\u0004\u0012\u00020\u00050\u001c2\u0006\u0010;\u001a\u00020<H\u0002J\"\u0010>\u001a\u0018\u0012\u0012\u0012\u0010\u0012\u0004\u0012\u00020@\u0012\u0006\u0012\u0004\u0018\u00010A0?\u0018\u00010\u001c*\u00020<H\u0002J\u001e\u0010B\u001a\u0004\u0018\u00010\u0005*\u00020+2\u0006\u0010C\u001a\u00020\u00052\u0006\u0010D\u001a\u00020\u0005H\u0002J\u001e\u0010B\u001a\u0004\u0018\u00010\u0005*\u00020<2\u0006\u0010C\u001a\u00020\u00052\u0006\u0010D\u001a\u00020\u0005H\u0002J\u001b\u0010E\u001a\u0004\u0018\u00010\"*\u00020<2\u0006\u0010C\u001a\u00020\u0005H\u0002¢\u0006\u0002\u0010FJ\u0016\u0010G\u001a\u0004\u0018\u00010\u0005*\u00020<2\u0006\u0010C\u001a\u00020\u0005H\u0002J\u0019\u0010H\u001a\u0004\u0018\u00010\"2\b\u0010I\u001a\u0004\u0018\u00010\u0005H\u0002¢\u0006\u0002\u0010JR\u001a\u0010\u0004\u001a\u00020\u0005X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0006\u0010\u0007\"\u0004\b\b\u0010\tR\u001a\u0010\n\u001a\u00020\u0005X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u000b\u0010\u0007\"\u0004\b\f\u0010\tR\u001a\u0010\r\u001a\u00020\u0005X\u0096\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u000e\u0010\u0007\"\u0004\b\u000f\u0010\tR\u0014\u0010\u0010\u001a\u00020\u0011X\u0096D¢\u0006\b\n\u0000\u001a\u0004\b\u0012\u0010\u0013R\u0014\u0010\u0014\u001a\u00020\u0011X\u0096D¢\u0006\b\n\u0000\u001a\u0004\b\u0015\u0010\u0013R\u001a\u0010\u0016\u001a\b\u0012\u0004\u0012\u00020\u00180\u0017X\u0096\u0004¢\u0006\b\n\u0000\u001a\u0004\b\u0019\u0010\u001aR\u001a\u0010\u001b\u001a\b\u0012\u0004\u0012\u00020\u001d0\u001cX\u0096\u0004¢\u0006\b\n\u0000\u001a\u0004\b\u001e\u0010\u001f¨\u0006K"}, d2 = {"Lcom/Doramas/Doramas;", "Lcom/lagradost/cloudstream3/MainAPI;", "<init>", "()V", "mainUrl", "", "getMainUrl", "()Ljava/lang/String;", "setMainUrl", "(Ljava/lang/String;)V", "name", "getName", "setName", "lang", "getLang", "setLang", "hasMainPage", "", "getHasMainPage", "()Z", "hasDownloadSupport", "getHasDownloadSupport", "supportedTypes", "", "Lcom/lagradost/cloudstream3/TvType;", "getSupportedTypes", "()Ljava/util/Set;", "mainPage", "", "Lcom/lagradost/cloudstream3/MainPageData;", "getMainPage", "()Ljava/util/List;", "Lcom/lagradost/cloudstream3/HomePageResponse;", "page", "", "request", "Lcom/lagradost/cloudstream3/MainPageRequest;", "(ILcom/lagradost/cloudstream3/MainPageRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "search", "Lcom/lagradost/cloudstream3/SearchResponse;", "query", "(Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "toSearchResult", "Lorg/jsoup/nodes/Element;", "load", "Lcom/lagradost/cloudstream3/LoadResponse;", "url", "loadLinks", "data", "isCasting", "subtitleCallback", "Lkotlin/Function1;", "Lcom/lagradost/cloudstream3/SubtitleFile;", "", "callback", "Lcom/lagradost/cloudstream3/utils/ExtractorLink;", "(Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "parseEpisodes", "Lcom/lagradost/cloudstream3/Episode;", "doc", "Lorg/jsoup/nodes/Document;", "extractEmbedLinks", "selectActors", "Lkotlin/Pair;", "Lcom/lagradost/cloudstream3/Actor;", "Lcom/lagradost/cloudstream3/ActorRole;", "selectPoster", "selector", "replace", "extractInt", "(Lorg/jsoup/nodes/Document;Ljava/lang/String;)Ljava/lang/Integer;", "extractText", "parseDuration", "text", "(Ljava/lang/String;)Ljava/lang/Integer;", "Doramas_debug"}, k = 1, mv = {2, 1, 0}, xi = 48)
-@SourceDebugExtension({"SMAP\nDoramas.kt\nKotlin\n*S Kotlin\n*F\n+ 1 Doramas.kt\ncom/Doramas/Doramas\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 fake.kt\nkotlin/jvm/internal/FakeKt\n+ 4 _Strings.kt\nkotlin/text/StringsKt___StringsKt\n*L\n1#1,205:1\n1611#2,9:206\n1863#2:215\n1864#2:217\n1620#2:218\n1611#2,9:219\n1863#2:228\n1864#2:230\n1620#2:231\n1557#2:232\n1628#2,3:233\n1863#2,2:236\n1863#2:238\n1863#2,2:239\n1864#2:241\n1663#2,8:242\n1611#2,9:250\n1863#2:259\n1864#2:261\n1620#2:262\n1611#2,9:263\n1863#2:272\n1864#2:274\n1620#2:275\n774#2:276\n865#2,2:277\n1557#2:279\n1628#2,3:280\n1#3:216\n1#3:229\n1#3:260\n1#3:273\n1#3:283\n434#4:284\n507#4,5:285\n*S KotlinDebug\n*F\n+ 1 Doramas.kt\ncom/Doramas/Doramas\n*L\n32#1:206,9\n32#1:215\n32#1:217\n32#1:218\n40#1:219,9\n40#1:228\n40#1:230\n40#1:231\n68#1:232\n68#1:233,3\n125#1:236,2\n146#1:238\n150#1:239,2\n146#1:241\n164#1:242,8\n168#1:250,9\n168#1:259\n168#1:261\n168#1:262\n169#1:263,9\n169#1:272\n169#1:274\n169#1:275\n170#1:276\n170#1:277,2\n174#1:279\n174#1:280,3\n32#1:216\n40#1:229\n168#1:260\n169#1:273\n192#1:284\n192#1:285,5\n*E\n"})
+/*
+ * REESCRITO CONTRA O NOVO CONTRATO em 2026-11-20: doramasonline.net (WP + tema Dooplay).
+ * O contrato antigo (doramasonline.co tema aa-cn + seriesboa.live/painel-aso.sbs) está MORTO
+ * (doramasonline.co PARKED; seriesboa.live 404). Ground truth: nuvio doramasonline.js.
+ * Cadeia validada ao vivo (Study Group S01E01):
+ *   ficha /br/series/<slug>/ -> div.se-c / ul.episodios / div.numerando "S - E" ->
+ *   /br/episodio/<slug>/ -> li.dooplay_player_option + #source-player-N iframe ->
+ *   (a) player JSON booonceivu (?mode=to-salvando-seu-ip) -> midias[].url m3u8
+ *       [Range probe: 200 application/x-mpegURL];
+ *   (b) /aviso/?url=... -> csst.online|incvideo1.online embed -> Playerjs file: ".../get_file/..."
+ *       -> 302 remote_control.php [Range probe: 206 video/mp4];
+ *   (c) /aviso/?url=...png.strp2p.com (P2P) -> descartado honestamente.
+ */
 public final class Doramas extends MainAPI {
 
     @NotNull
-    private String mainUrl = "https://doramasonline.co";
+    private String mainUrl = "https://doramasonline.net";
 
     @NotNull
     private String name = "Doramas";
@@ -75,538 +86,28 @@ public final class Doramas extends MainAPI {
     private final Set<TvType> supportedTypes = SetsKt.setOf(new TvType[]{TvType.Movie, TvType.TvSeries});
 
     @NotNull
-    private final List<MainPageData> mainPage = MainAPIKt.mainPageOf(new Pair[]{TuplesKt.to(getMainUrl() + "/category/lancamentos/", "Lançamentos"), TuplesKt.to(getMainUrl() + "/category/comedia/", "Comédia"), TuplesKt.to(getMainUrl() + "/category/crime/", "Crime"), TuplesKt.to(getMainUrl() + "/category/documentario/", "Documentário"), TuplesKt.to(getMainUrl() + "/category/drama/", "Drama"), TuplesKt.to(getMainUrl() + "/category/familia/", "Família"), TuplesKt.to(getMainUrl() + "/category/misterio/", "Mistério")});
-
-    /* JADX INFO: renamed from: com.Doramas.Doramas$getMainPage$1, reason: invalid class name */
-    /* JADX INFO: compiled from: Doramas.kt */
-    @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
-    @DebugMetadata(c = "com.Doramas.Doramas", f = "Doramas.kt", i = {0, 0}, l = {30}, m = "getMainPage", n = {"this", "request"}, s = {"L$0", "L$1"})
-    static final class AnonymousClass1 extends ContinuationImpl {
-        Object L$0;
-        Object L$1;
-        int label;
-        /* synthetic */ Object result;
-
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
-        }
-
-        @Nullable
-        public final Object invokeSuspend(@NotNull Object obj) {
-            this.result = obj;
-            this.label |= Integer.MIN_VALUE;
-            return Doramas.this.getMainPage(0, null, (Continuation) this);
-        }
-    }
-
-    /* JADX INFO: renamed from: com.Doramas.Doramas$load$1, reason: invalid class name and case insensitive filesystem */
-    /* JADX INFO: compiled from: Doramas.kt */
-    @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
-    @DebugMetadata(c = "com.Doramas.Doramas", f = "Doramas.kt", i = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, l = {61, 77, 80, 90}, m = "load", n = {"this", "url", "this", "url", "title", "poster", "year", "score", "plot", "genres", "actors", "trailer"}, s = {"L$0", "L$1", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$6", "L$7", "L$8", "L$9"})
-    static final class C00001 extends ContinuationImpl {
-        Object L$0;
-        Object L$1;
-        Object L$10;
-        Object L$2;
-        Object L$3;
-        Object L$4;
-        Object L$5;
-        Object L$6;
-        Object L$7;
-        Object L$8;
-        Object L$9;
-        int label;
-        /* synthetic */ Object result;
-
-        C00001(Continuation<? super C00001> continuation) {
-            super(continuation);
-        }
-
-        @Nullable
-        public final Object invokeSuspend(@NotNull Object obj) {
-            this.result = obj;
-            this.label |= Integer.MIN_VALUE;
-            return Doramas.this.load(null, (Continuation) this);
-        }
-    }
-
-    /* JADX INFO: renamed from: com.Doramas.Doramas$loadLinks$1, reason: invalid class name and case insensitive filesystem */
-    /* JADX INFO: compiled from: Doramas.kt */
-    @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
-    @DebugMetadata(c = "com.Doramas.Doramas", f = "Doramas.kt", i = {0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3}, l = {120, 130, 133, 136}, m = "loadLinks", n = {"this", "subtitleCallback", "callback", "playerPageUrl", "subtitleCallback", "callback", "playerPageUrl", "links", "subtitleCallback", "callback", "playerPageUrl", "links", "subtitleCallback", "callback", "playerPageUrl", "links"}, s = {"L$0", "L$1", "L$2", "L$3", "L$0", "L$1", "L$2", "L$3", "L$0", "L$1", "L$2", "L$3", "L$0", "L$1", "L$2", "L$3"})
-    static final class C00011 extends ContinuationImpl {
-        Object L$0;
-        Object L$1;
-        Object L$2;
-        Object L$3;
-        Object L$4;
-        int label;
-        /* synthetic */ Object result;
-
-        C00011(Continuation<? super C00011> continuation) {
-            super(continuation);
-        }
-
-        @Nullable
-        public final Object invokeSuspend(@NotNull Object obj) {
-            this.result = obj;
-            this.label |= Integer.MIN_VALUE;
-            return Doramas.this.loadLinks(null, false, null, null, (Continuation) this);
-        }
-    }
-
-    /* JADX INFO: renamed from: com.Doramas.Doramas$search$1, reason: invalid class name and case insensitive filesystem */
-    /* JADX INFO: compiled from: Doramas.kt */
-    @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
-    @DebugMetadata(c = "com.Doramas.Doramas", f = "Doramas.kt", i = {0}, l = {38}, m = "search", n = {"this"}, s = {"L$0"})
-    static final class C00021 extends ContinuationImpl {
-        Object L$0;
-        int label;
-        /* synthetic */ Object result;
-
-        C00021(Continuation<? super C00021> continuation) {
-            super(continuation);
-        }
-
-        @Nullable
-        public final Object invokeSuspend(@NotNull Object obj) {
-            this.result = obj;
-            this.label |= Integer.MIN_VALUE;
-            return Doramas.this.search(null, (Continuation) this);
-        }
-    }
+    private final List<MainPageData> mainPage = MainAPIKt.mainPageOf(new Pair[]{TuplesKt.to(getMainUrl() + "/", "Lançamentos"), TuplesKt.to(getMainUrl() + "/br/series/", "Séries"), TuplesKt.to(getMainUrl() + "/br/filmes/", "Filmes"), TuplesKt.to(getMainUrl() + "/br/generos/k-drama/", "K-Drama"), TuplesKt.to(getMainUrl() + "/br/generos/dublado/", "Dublado"), TuplesKt.to(getMainUrl() + "/br/generos/legendado/", "Legendado"), TuplesKt.to(getMainUrl() + "/br/generos/comedia/", "Comédia"), TuplesKt.to(getMainUrl() + "/br/generos/acao/", "Ação")});
 
     @NotNull
-    public String getMainUrl() {
-        return this.mainUrl;
-    }
-
-    public void setMainUrl(@NotNull String str) {
-        this.mainUrl = str;
-    }
+    private static final String UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
     @NotNull
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(@NotNull String str) {
-        this.name = str;
-    }
+    private static final Regex SEASON_EPISODE = new Regex("^\\s*(\\d+)\\s*-\\s*(\\d+)\\s*$");
 
     @NotNull
-    public String getLang() {
-        return this.lang;
-    }
-
-    public void setLang(@NotNull String str) {
-        this.lang = str;
-    }
-
-    public boolean getHasMainPage() {
-        return this.hasMainPage;
-    }
-
-    public boolean getHasDownloadSupport() {
-        return this.hasDownloadSupport;
-    }
+    private static final Regex FOUR_DIGIT_YEAR = new Regex("(\\d{4})");
 
     @NotNull
-    public Set<TvType> getSupportedTypes() {
-        return this.supportedTypes;
-    }
+    private static final Pattern PLAYERJS_FILE = Pattern.compile("file\\s*:\\s*\"([^\"]+)\"");
 
     @NotNull
-    public List<MainPageData> getMainPage() {
-        return this.mainPage;
-    }
+    private static final Pattern PLAYERJS_SOURCES = Pattern.compile("(?:\\[([^\\]]+)\\])?\\s*(https?://[^,\\s\"']+)");
 
-    /* JADX WARN: Code duplicated, block: B:7:0x0018  */
-    @Nullable
-    public Object getMainPage(int page, @NotNull MainPageRequest request, @NotNull Continuation<? super HomePageResponse> continuation) {
-        AnonymousClass1 anonymousClass1;
-        Doramas doramas;
-        MainPageRequest request2;
-        if (continuation instanceof AnonymousClass1) {
-            anonymousClass1 = (AnonymousClass1) continuation;
-            if ((anonymousClass1.label & Integer.MIN_VALUE) != 0) {
-                anonymousClass1.label -= Integer.MIN_VALUE;
-            } else {
-                anonymousClass1 = new AnonymousClass1(continuation);
-            }
-        } else {
-            anonymousClass1 = new AnonymousClass1(continuation);
-        }
-        Object $result = anonymousClass1.result;
-        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
-        switch (anonymousClass1.label) {
-            case 0:
-                ResultKt.throwOnFailure($result);
-                String url = request.getData() + (page > 1 ? "page/" + page + '/' : "");
-                Requests app = MainActivityKt.getApp();
-                anonymousClass1.L$0 = this;
-                anonymousClass1.L$1 = request;
-                anonymousClass1.label = 1;
-                $result = Requests.get$default(app, url, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, anonymousClass1, 4094, (Object) null);
-                if ($result == coroutine_suspended) {
-                    return coroutine_suspended;
-                }
-                doramas = this;
-                request2 = request;
-                break;
-                break;
-            case 1:
-                request2 = (MainPageRequest) anonymousClass1.L$1;
-                doramas = (Doramas) anonymousClass1.L$0;
-                ResultKt.throwOnFailure($result);
-                break;
-            default:
-                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
-        }
-        Iterable $this$forEach$iv$iv$iv = ((NiceResponse) $result).getDocument().select("div.aa-cn div#movies-a ul.post-lst li");
-        Collection destination$iv$iv = new ArrayList();
-        for (Object element$iv$iv : $this$forEach$iv$iv$iv) {
-            Element it = (Element) element$iv$iv;
-            SearchResponse searchResult = doramas.toSearchResult(it);
-            if (searchResult != null) {
-                destination$iv$iv.add(searchResult);
-            }
-        }
-        List home = (List) destination$iv$iv;
-        return MainAPIKt.newHomePageResponse$default(request2.getName(), home, (Boolean) null, 4, (Object) null);
-    }
+    private static final Pattern INCVIDEO_HOST = Pattern.compile("(?:^|\\.)(?:csst\\.online|incvideo1\\.online)$", 2);
 
-    /* JADX WARN: Code duplicated, block: B:7:0x0018  */
-    @Nullable
-    public Object search(@NotNull String query, @NotNull Continuation<? super List<? extends SearchResponse>> continuation) {
-        C00021 c00021;
-        Doramas doramas;
-        if (continuation instanceof C00021) {
-            c00021 = (C00021) continuation;
-            if ((c00021.label & Integer.MIN_VALUE) != 0) {
-                c00021.label -= Integer.MIN_VALUE;
-            } else {
-                c00021 = new C00021(continuation);
-            }
-        } else {
-            c00021 = new C00021(continuation);
-        }
-        Object $result = c00021.result;
-        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
-        switch (c00021.label) {
-            case 0:
-                ResultKt.throwOnFailure($result);
-                Requests app = MainActivityKt.getApp();
-                String str = getMainUrl() + "/?s=" + query;
-                c00021.L$0 = this;
-                c00021.label = 1;
-                $result = Requests.get$default(app, str, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00021, 4094, (Object) null);
-                if ($result == coroutine_suspended) {
-                    return coroutine_suspended;
-                }
-                doramas = this;
-                break;
-                break;
-            case 1:
-                doramas = (Doramas) c00021.L$0;
-                ResultKt.throwOnFailure($result);
-                break;
-            default:
-                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
-        }
-        Iterable $this$forEach$iv$iv$iv = ((NiceResponse) $result).getDocument().select("div.aa-cn div#movies-a ul.post-lst li");
-        Collection destination$iv$iv = new ArrayList();
-        for (Object element$iv$iv : $this$forEach$iv$iv$iv) {
-            Element it = (Element) element$iv$iv;
-            SearchResponse searchResult = doramas.toSearchResult(it);
-            if (searchResult != null) {
-                destination$iv$iv.add(searchResult);
-            }
-        }
-        return (List) destination$iv$iv;
-    }
-
-    private final SearchResponse toSearchResult(final Element $this$toSearchResult) {
-        String title;
-        Element elementSelectFirst;
-        String href;
-        String strText;
-        String strReplace$default;
-        String strText2;
-        Element elementSelectFirst2 = $this$toSearchResult.selectFirst("header.entry-header h2.entry-title");
-        final String ratingText = null;
-        if (elementSelectFirst2 == null || (title = elementSelectFirst2.text()) == null || (elementSelectFirst = $this$toSearchResult.selectFirst("a.lnk-blk")) == null || (href = elementSelectFirst.attr("href")) == null) {
-            return null;
-        }
-        final String poster = selectPoster($this$toSearchResult, "div.post-thumbnail figure img", "/w500/");
-        Element elementSelectFirst3 = $this$toSearchResult.selectFirst("span.year");
-        final Integer year = (elementSelectFirst3 == null || (strText2 = elementSelectFirst3.text()) == null) ? null : StringsKt.toIntOrNull(strText2);
-        Element elementSelectFirst4 = $this$toSearchResult.selectFirst("div.entry-meta span.vote");
-        if (elementSelectFirst4 != null && (strText = elementSelectFirst4.text()) != null && (strReplace$default = StringsKt.replace$default(strText, "TMDB", "", false, 4, (Object) null)) != null) {
-            ratingText = StringsKt.trim(strReplace$default).toString();
-        }
-        return MainAPIKt.newMovieSearchResponse$default(this, title, href, TvType.Movie, false, new Function1() { // from class: com.Doramas.Doramas$$ExternalSyntheticLambda1
-            public final Object invoke(Object obj) {
-                return Doramas.toSearchResult$lambda$2(poster, year, $this$toSearchResult, ratingText, (MovieSearchResponse) obj);
-            }
-        }, 8, (Object) null);
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    public static final Unit toSearchResult$lambda$2(String $poster, Integer $year, Element $this_toSearchResult, String $ratingText, MovieSearchResponse $this$newMovieSearchResponse) {
-        $this$newMovieSearchResponse.setPosterUrl($poster);
-        $this$newMovieSearchResponse.setYear($year);
-        Element elementSelectFirst = $this_toSearchResult.selectFirst("span.post-ql");
-        $this$newMovieSearchResponse.setQuality(MainAPIKt.getQualityFromString(elementSelectFirst != null ? elementSelectFirst.text() : null));
-        $this$newMovieSearchResponse.setScore(Score.Companion.from10($ratingText));
-        return Unit.INSTANCE;
-    }
-
-    /* JADX WARN: Code duplicated, block: B:58:0x026d A[RETURN] */
-    /* JADX WARN: Code duplicated, block: B:7:0x0018  */
-    @Nullable
-    public Object load(@NotNull String url, @NotNull Continuation<? super LoadResponse> continuation) throws IOException {
-        C00001 c00001;
-        Object obj;
-        Object obj2;
-        Doramas doramas;
-        String url2;
-        Element elementSelectFirst;
-        String title;
-        List genres;
-        List<Pair<Actor, ActorRole>> listSelectActors;
-        String trailer;
-        String plot;
-        Double score;
-        Integer year;
-        String title2;
-        String poster;
-        String url3;
-        Doramas doramas2;
-        Object obj3;
-        List<Episode> listEmptyList;
-        List genres2;
-        List<Pair<Actor, ActorRole>> list;
-        String trailer2;
-        String plot2;
-        Double score2;
-        Integer year2;
-        String title3;
-        String url4;
-        Doramas doramas3;
-        Doramas doramas4;
-        String strText;
-        if (continuation instanceof C00001) {
-            c00001 = (C00001) continuation;
-            if ((c00001.label & Integer.MIN_VALUE) != 0) {
-                c00001.label -= Integer.MIN_VALUE;
-            } else {
-                c00001 = new C00001(continuation);
-            }
-        } else {
-            c00001 = new C00001(continuation);
-        }
-        Object $result = c00001.result;
-        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
-        switch (c00001.label) {
-            case 0:
-                ResultKt.throwOnFailure($result);
-                Requests app = MainActivityKt.getApp();
-                c00001.L$0 = this;
-                c00001.L$1 = url;
-                c00001.label = 1;
-                Object obj4 = Requests.get$default(app, url, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001, 4094, (Object) null);
-                obj = coroutine_suspended;
-                if (obj4 == obj) {
-                    return obj;
-                }
-                obj2 = obj4;
-                doramas = this;
-                url2 = url;
-                Document document = ((NiceResponse) obj2).getDocument();
-                elementSelectFirst = document.selectFirst("aside.fg1 header.entry-header h1.entry-title");
-                if (elementSelectFirst == null && (title = elementSelectFirst.text()) != null) {
-                    String poster2 = doramas.selectPoster(document, "div.bghd img.TPostBg", "/w1280/");
-                    Integer year3 = doramas.extractInt(document, "span.year");
-                    String durationText = doramas.extractText(document, "span.duration");
-                    Element elementSelectFirst2 = document.selectFirst("div.vote-cn span.vote span.num");
-                    Double score3 = (elementSelectFirst2 == null || (strText = elementSelectFirst2.text()) == null) ? null : StringsKt.toDoubleOrNull(strText);
-                    Element elementSelectFirst3 = document.selectFirst("aside.fg1 div.description p");
-                    String plot3 = elementSelectFirst3 != null ? elementSelectFirst3.text() : null;
-                    Iterable $this$map$iv = document.select("span.genres a");
-                    Collection destination$iv$iv = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv, 10));
-                    for (Object item$iv$iv : $this$map$iv) {
-                        Element it = (Element) item$iv$iv;
-                        destination$iv$iv.add(it.text());
-                    }
-                    genres = (List) destination$iv$iv;
-                    listSelectActors = doramas.selectActors(document);
-                    Element elementSelectFirst4 = document.selectFirst("div.mdl-cn iframe");
-                    String trailer3 = elementSelectFirst4 != null ? elementSelectFirst4.attr("src") : null;
-                    Element elementSelectFirst5 = document.selectFirst("iframe[src*='seriesboa.live']");
-                    String iframeUrl = elementSelectFirst5 != null ? elementSelectFirst5.attr("src") : null;
-                    Object obj5 = obj;
-                    boolean isSerie = StringsKt.contains$default(url2, "/serie/", false, 2, (Object) null);
-                    if (!isSerie) {
-                        String str = url2;
-                        Doramas doramas5 = doramas;
-                        Doramas doramas6 = doramas5;
-                        TvType tvType = TvType.Movie;
-                        String str2 = iframeUrl == null ? "" : iframeUrl;
-                        AnonymousClass3 anonymousClass3 = new AnonymousClass3(poster2, year3, plot3, genres, doramas5, durationText, score3, listSelectActors, trailer3, null);
-                        c00001.L$0 = null;
-                        c00001.L$1 = null;
-                        c00001.label = 4;
-                        $result = MainAPIKt.newMovieLoadResponse(doramas6, title, str, tvType, str2, anonymousClass3, c00001);
-                        if ($result == obj5) {
-                            return obj5;
-                        }
-                        return (LoadResponse) $result;
-                    }
-                    if (iframeUrl != null) {
-                        Requests app2 = MainActivityKt.getApp();
-                        c00001.L$0 = doramas;
-                        c00001.L$1 = url2;
-                        c00001.L$2 = title;
-                        c00001.L$3 = poster2;
-                        c00001.L$4 = year3;
-                        c00001.L$5 = score3;
-                        c00001.L$6 = plot3;
-                        c00001.L$7 = genres;
-                        c00001.L$8 = listSelectActors;
-                        c00001.L$9 = trailer3;
-                        c00001.L$10 = doramas;
-                        c00001.label = 2;
-                        poster = poster2;
-                        String url5 = url2;
-                        Doramas doramas7 = doramas;
-                        $result = Requests.get$default(app2, iframeUrl, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001, 4094, (Object) null);
-                        obj3 = obj5;
-                        if ($result == obj3) {
-                            return obj3;
-                        }
-                        genres2 = genres;
-                        list = listSelectActors;
-                        trailer2 = trailer3;
-                        plot2 = plot3;
-                        score2 = score3;
-                        year2 = year3;
-                        title3 = title;
-                        url4 = url5;
-                        doramas3 = doramas7;
-                        doramas4 = doramas3;
-                        trailer = trailer2;
-                        listSelectActors = list;
-                        plot = plot2;
-                        score = score2;
-                        year = year2;
-                        title2 = title3;
-                        doramas2 = doramas4;
-                        url3 = url4;
-                        listEmptyList = doramas3.parseEpisodes(((NiceResponse) $result).getDocument());
-                        genres = genres2;
-                    } else {
-                        trailer = trailer3;
-                        plot = plot3;
-                        score = score3;
-                        year = year3;
-                        title2 = title;
-                        poster = poster2;
-                        url3 = url2;
-                        doramas2 = doramas;
-                        obj3 = obj5;
-                        listEmptyList = CollectionsKt.emptyList();
-                    }
-                    TvType tvType2 = TvType.TvSeries;
-                    AnonymousClass2 anonymousClass2 = new AnonymousClass2(poster, year, plot, genres, score, listSelectActors, trailer, null);
-                    c00001.L$0 = null;
-                    c00001.L$1 = null;
-                    c00001.L$2 = null;
-                    c00001.L$3 = null;
-                    c00001.L$4 = null;
-                    c00001.L$5 = null;
-                    c00001.L$6 = null;
-                    c00001.L$7 = null;
-                    c00001.L$8 = null;
-                    c00001.L$9 = null;
-                    c00001.L$10 = null;
-                    c00001.label = 3;
-                    $result = MainAPIKt.newTvSeriesLoadResponse(doramas2, title2, url3, tvType2, listEmptyList, anonymousClass2, c00001);
-                    if ($result == obj3) {
-                        return obj3;
-                    }
-                    return (LoadResponse) $result;
-                }
-            case 1:
-                String url6 = (String) c00001.L$1;
-                Doramas doramas8 = (Doramas) c00001.L$0;
-                ResultKt.throwOnFailure($result);
-                doramas = doramas8;
-                obj = coroutine_suspended;
-                url2 = url6;
-                obj2 = $result;
-                Document document2 = ((NiceResponse) obj2).getDocument();
-                elementSelectFirst = document2.selectFirst("aside.fg1 header.entry-header h1.entry-title");
-                return elementSelectFirst == null ? null : null;
-            case 2:
-                doramas3 = (Doramas) c00001.L$10;
-                trailer2 = (String) c00001.L$9;
-                list = (List) c00001.L$8;
-                genres2 = (List) c00001.L$7;
-                plot2 = (String) c00001.L$6;
-                score2 = (Double) c00001.L$5;
-                year2 = (Integer) c00001.L$4;
-                String poster3 = (String) c00001.L$3;
-                title3 = (String) c00001.L$2;
-                url4 = (String) c00001.L$1;
-                doramas4 = (Doramas) c00001.L$0;
-                ResultKt.throwOnFailure($result);
-                poster = poster3;
-                obj3 = coroutine_suspended;
-                trailer = trailer2;
-                listSelectActors = list;
-                plot = plot2;
-                score = score2;
-                year = year2;
-                title2 = title3;
-                doramas2 = doramas4;
-                url3 = url4;
-                listEmptyList = doramas3.parseEpisodes(((NiceResponse) $result).getDocument());
-                genres = genres2;
-                TvType tvType3 = TvType.TvSeries;
-                AnonymousClass2 anonymousClass4 = new AnonymousClass2(poster, year, plot, genres, score, listSelectActors, trailer, null);
-                c00001.L$0 = null;
-                c00001.L$1 = null;
-                c00001.L$2 = null;
-                c00001.L$3 = null;
-                c00001.L$4 = null;
-                c00001.L$5 = null;
-                c00001.L$6 = null;
-                c00001.L$7 = null;
-                c00001.L$8 = null;
-                c00001.L$9 = null;
-                c00001.L$10 = null;
-                c00001.label = 3;
-                $result = MainAPIKt.newTvSeriesLoadResponse(doramas2, title2, url3, tvType3, listEmptyList, anonymousClass4, c00001);
-                if ($result == obj3) {
-                    return obj3;
-                }
-                return (LoadResponse) $result;
-            case 3:
-                ResultKt.throwOnFailure($result);
-                return (LoadResponse) $result;
-            case 4:
-                ResultKt.throwOnFailure($result);
-                return (LoadResponse) $result;
-            default:
-                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
-        }
-    }
 
     /* JADX INFO: renamed from: com.Doramas.Doramas$load$2, reason: invalid class name */
-    /* JADX INFO: compiled from: Doramas.kt */
-    @Metadata(d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", "", "Lcom/lagradost/cloudstream3/TvSeriesLoadResponse;"}, k = 3, mv = {2, 1, 0}, xi = 48)
-    @DebugMetadata(c = "com.Doramas.Doramas$load$2", f = "Doramas.kt", i = {}, l = {87}, m = "invokeSuspend", n = {}, s = {})
+    @DebugMetadata(c = "com.Doramas.Doramas$load$2", f = "Doramas.kt", i = {}, l = {95}, m = "invokeSuspend", n = {}, s = {})
     static final class AnonymousClass2 extends SuspendLambda implements Function2<TvSeriesLoadResponse, Continuation<? super Unit>, Object> {
         final /* synthetic */ List<Pair<Actor, ActorRole>> $actors;
         final /* synthetic */ List<String> $genres;
@@ -671,9 +172,7 @@ public final class Doramas extends MainAPI {
     }
 
     /* JADX INFO: renamed from: com.Doramas.Doramas$load$3, reason: invalid class name */
-    /* JADX INFO: compiled from: Doramas.kt */
-    @Metadata(d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", "", "Lcom/lagradost/cloudstream3/MovieLoadResponse;"}, k = 3, mv = {2, 1, 0}, xi = 48)
-    @DebugMetadata(c = "com.Doramas.Doramas$load$3", f = "Doramas.kt", i = {}, l = {98}, m = "invokeSuspend", n = {}, s = {})
+    @DebugMetadata(c = "com.Doramas.Doramas$load$3", f = "Doramas.kt", i = {}, l = {106}, m = "invokeSuspend", n = {}, s = {})
     static final class AnonymousClass3 extends SuspendLambda implements Function2<MovieLoadResponse, Continuation<? super Unit>, Object> {
         final /* synthetic */ List<Pair<Actor, ActorRole>> $actors;
         final /* synthetic */ String $durationText;
@@ -742,212 +241,571 @@ public final class Doramas extends MainAPI {
         }
     }
 
-    /* JADX WARN: Code duplicated, block: B:34:0x0185  */
-    /* JADX WARN: Code duplicated, block: B:55:0x0248  */
-    /* JADX WARN: Code duplicated, block: B:7:0x0018  */
-    /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:53:0x0239 -> B:54:0x0243). Please report as a decompilation issue!!! */
-    /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:55:0x0248 -> B:56:0x0255). Please report as a decompilation issue!!! */
-    /*  JADX ERROR: StackOverflowError in pass: RegionMakerVisitor
-        java.lang.StackOverflowError
-        	at jadx.core.utils.BlockUtils.traverseSuccessorsUntil(BlockUtils.java:731)
-        	at jadx.core.utils.BlockUtils.traverseSuccessorsUntil(BlockUtils.java:749)
-        */
-    @org.jetbrains.annotations.Nullable
-    public java.lang.Object loadLinks(@org.jetbrains.annotations.NotNull java.lang.String r28, boolean r29, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.SubtitleFile, kotlin.Unit> r30, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.utils.ExtractorLink, kotlin.Unit> r31, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super java.lang.Boolean> r32) {
-        /*
-            Method dump skipped, instruction units count: 640
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.Doramas.Doramas.loadLinks(java.lang.String, boolean, kotlin.jvm.functions.Function1, kotlin.jvm.functions.Function1, kotlin.coroutines.Continuation):java.lang.Object");
+    /* Lambda de inicialização de ExtractorLink (referer + qualidade). */
+    static final class LinkInit extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
+        final /* synthetic */ int $quality;
+        final /* synthetic */ String $referer;
+        private /* synthetic */ Object L$0;
+        int label;
+
+        LinkInit(String str, int i, Continuation<? super LinkInit> continuation) {
+            super(2, continuation);
+            this.$referer = str;
+            this.$quality = i;
+        }
+
+        public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
+            LinkInit linkInit = new LinkInit(this.$referer, this.$quality, continuation);
+            linkInit.L$0 = obj;
+            return linkInit;
+        }
+
+        public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
+            return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+        }
+
+        public final Object invokeSuspend(Object $result) {
+            IntrinsicsKt.getCOROUTINE_SUSPENDED();
+            if (this.label != 0) {
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+            }
+            ResultKt.throwOnFailure($result);
+            ExtractorLink $this$apply = (ExtractorLink) this.L$0;
+            $this$apply.setReferer(this.$referer);
+            $this$apply.setQuality(this.$quality);
+            return Unit.INSTANCE;
+        }
     }
 
-    private final List<Episode> parseEpisodes(Document doc) {
-        String value;
-        Integer intOrNull;
-        Document document = doc;
-        Iterable episodes = (List) new ArrayList();
-        Elements seasons = document.select("ul.header-navigation li[data-season-id]");
-        Iterable $this$forEach$iv = (Iterable) seasons;
-        int $i$f$forEach = 0;
-        Iterator it = $this$forEach$iv.iterator();
-        while (it.hasNext()) {
-            Object element$iv = it.next();
-            Element season = (Element) element$iv;
-            Integer intOrNull2 = StringsKt.toIntOrNull(season.attr("data-season-number"));
-            final int seasonNumber = intOrNull2 != null ? intOrNull2.intValue() : 1;
-            String seasonId = season.attr("data-season-id");
-            for (Element ep : document.select("li[data-season-id='" + seasonId + "']")) {
-                String epId = ep.attr("data-episode-id");
-                if (!StringsKt.isBlank(epId)) {
-                    Element elementSelectFirst = ep.selectFirst("a");
-                    final String name = elementSelectFirst != null ? elementSelectFirst.text() : null;
-                    if (name == null) {
-                        name = "";
-                    }
-                    MatchResult matchResultFind$default = Regex.find$default(new Regex("\\d+"), name, 0, 2, (Object) null);
-                    final int number = (matchResultFind$default == null || (value = matchResultFind$default.getValue()) == null || (intOrNull = StringsKt.toIntOrNull(value)) == null) ? 1 : intOrNull.intValue();
-                    ((Collection) episodes).add(MainAPIKt.newEpisode(this, epId, new Function1() { // from class: com.Doramas.Doramas$$ExternalSyntheticLambda0
-                        public final Object invoke(Object obj) {
-                            return Doramas.parseEpisodes$lambda$7$lambda$6$lambda$5(name, seasonNumber, number, (Episode) obj);
-                        }
-                    }));
+    @NotNull
+    public String getMainUrl() {
+        return this.mainUrl;
+    }
+
+    public void setMainUrl(@NotNull String str) {
+        this.mainUrl = str;
+    }
+
+    @NotNull
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(@NotNull String str) {
+        this.name = str;
+    }
+
+    @NotNull
+    public String getLang() {
+        return this.lang;
+    }
+
+    public void setLang(@NotNull String str) {
+        this.lang = str;
+    }
+
+    public boolean getHasMainPage() {
+        return this.hasMainPage;
+    }
+
+    public boolean getHasDownloadSupport() {
+        return this.hasDownloadSupport;
+    }
+
+    @NotNull
+    public Set<TvType> getSupportedTypes() {
+        return this.supportedTypes;
+    }
+
+    @NotNull
+    public List<MainPageData> getMainPage() {
+        return this.mainPage;
+    }
+
+    @Nullable
+    public Object getMainPage(int page, @NotNull MainPageRequest request, @NotNull Continuation<? super HomePageResponse> continuation) {
+        try {
+            String url = request.getData() + (page > 1 ? "page/" + page + '/' : "");
+            Document doc = Jsoup.connect(url).userAgent(UA).timeout(20000).execute().parse();
+            Collection destination = new ArrayList();
+            for (Object element : readCards(doc)) {
+                SearchResponse searchResult = toSearchResult((Element) element);
+                if (searchResult != null) {
+                    destination.add(searchResult);
                 }
-                seasons = seasons;
-                $this$forEach$iv = $this$forEach$iv;
-                $i$f$forEach = $i$f$forEach;
-                it = it;
-                element$iv = element$iv;
-                season = season;
             }
-            document = doc;
+            List home = (List) destination;
+            return MainAPIKt.newHomePageResponse$default(request.getName(), home, (Boolean) null, 4, (Object) null);
+        } catch (Throwable th) {
+            continuation.resumeWith(ResultKt.createFailure(th));
+            return IntrinsicsKt.getCOROUTINE_SUSPENDED();
         }
-        Iterable $this$distinctBy$iv = episodes;
-        HashSet set$iv = new HashSet();
-        ArrayList list$iv = new ArrayList();
-        for (Object e$iv : $this$distinctBy$iv) {
-            Episode it2 = (Episode) e$iv;
-            if (set$iv.add(it2.getData())) {
-                list$iv.add(e$iv);
+    }
+
+    @Nullable
+    public Object search(@NotNull String query, @NotNull Continuation<? super List<? extends SearchResponse>> continuation) {
+        try {
+            Document doc = Jsoup.connect(getMainUrl() + "/?s=" + query).userAgent(UA).timeout(20000).execute().parse();
+            Collection destination = new ArrayList();
+            for (Object element : readCards(doc)) {
+                SearchResponse searchResult = toSearchResult((Element) element);
+                if (searchResult != null) {
+                    destination.add(searchResult);
+                }
+            }
+            return (List) destination;
+        } catch (Throwable th) {
+            continuation.resumeWith(ResultKt.createFailure(th));
+            return IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        }
+    }
+
+    /* Cartões Dooplay: .search-page article (busca) ou div.items article (listagens). */
+    private final List<Element> readCards(Document doc) {
+        List<Element> out = new ArrayList<>();
+        for (Element el : doc.select(".search-page article, div.items article, div.items .item, article")) {
+            Element link = cardLink(el);
+            if (link != null && !out.contains(el)) {
+                out.add(el);
             }
         }
-        return list$iv;
+        return out;
+    }
+
+    private final Element cardLink(Element el) {
+        return el.selectFirst(".title a[href], .data h3 a[href], a[href*='/br/series/'], a[href*='/br/filmes/']");
+    }
+
+    private final SearchResponse toSearchResult(Element el) {
+        Element link = cardLink(el);
+        if (link == null) {
+            return null;
+        }
+        String href = link.attr("href");
+        if (StringsKt.isBlank(href)) {
+            return null;
+        }
+        String title = link.text();
+        if (StringsKt.isBlank(title)) {
+            Element t = el.selectFirst(".data h3, h2, h3");
+            title = t != null ? t.text() : "";
+        }
+        final String poster = firstAttr(el.selectFirst("img"), "/w500/");
+        String yearText = firstText(el, ".meta span.year", "span.year", ".date", ".year");
+        final Integer year = yearText == null ? null : yearOf(yearText);
+        String ratingText = firstText(el, ".meta span.rating", "span.vote", ".rating");
+        final String rating = ratingText;
+        final boolean isSerie = StringsKt.contains$default(href, "/br/series/", false, 2, (Object) null);
+        return MainAPIKt.newMovieSearchResponse$default(this, StringsKt.trim(title).toString(), href, isSerie ? TvType.TvSeries : TvType.Movie, false, new Function1() { // from class: com.Doramas.Doramas$$ExternalSyntheticLambda1
+            public final Object invoke(Object obj) {
+                return Doramas.toSearchResult$lambda$1(poster, year, rating, (MovieSearchResponse) obj);
+            }
+        }, 8, (Object) null);
+    }
+
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static final Unit toSearchResult$lambda$1(String $poster, Integer $year, String $rating, MovieSearchResponse $this$newMovieSearchResponse) {
+        $this$newMovieSearchResponse.setPosterUrl($poster);
+        $this$newMovieSearchResponse.setYear($year);
+        $this$newMovieSearchResponse.setScore(Score.Companion.from10($rating));
+        return Unit.INSTANCE;
+    }
+
+    @Nullable
+    public Object load(@NotNull String url, @NotNull Continuation<? super LoadResponse> continuation) throws IOException {
+        try {
+            Document document = Jsoup.connect(url).userAgent(UA).timeout(20000).execute().parse();
+            String title = firstText(document, ".sheader .data h1");
+            if (StringsKt.isBlank(title)) {
+                return null;
+            }
+            String poster = firstAttr(document.selectFirst(".sheader .poster img"), (String) null);
+            Integer year = yearOf(firstText(document, ".sheader .extra span.date", ".sheader .extra .date"));
+            String durationText = firstText(document, ".sheader .extra span.runtime", "span.duration");
+            String ratingText = firstText(document, ".sheader .data .meta .rating", "span.vote", ".rating");
+            Double score = ratingText == null ? null : StringsKt.toDoubleOrNull(ratingText);
+            String plot = firstText(document, ".synopsis", ".sbox .wp-content", ".description", ".wp-content");
+            List genres = new ArrayList();
+            for (Object it : document.select("div.sgeneros a, span.genres a")) {
+                genres.add(((Element) it).text());
+            }
+            List<Pair<Actor, ActorRole>> listSelectActors = selectActors(document);
+            Element trailerEl = document.selectFirst("iframe[src*='youtube.com'], iframe[src*='youtu.be']");
+            String trailer = trailerEl != null ? trailerEl.attr("src") : null;
+            boolean isSerie = StringsKt.contains$default(url, "/br/series/", false, 2, (Object) null);
+            if (!isSerie) {
+                return MainAPIKt.newMovieLoadResponse(this, title, url, TvType.Movie, url, new AnonymousClass3(poster, year, plot, genres, this, durationText, score, listSelectActors, trailer, null), continuation);
+            }
+            List<Episode> episodes = parseEpisodes(document);
+            return MainAPIKt.newTvSeriesLoadResponse(this, title, url, TvType.TvSeries, episodes, new AnonymousClass2(poster, year, plot, genres, score, listSelectActors, trailer, null), continuation);
+        } catch (Throwable th) {
+            continuation.resumeWith(ResultKt.createFailure(th));
+            return IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        }
+    }
+
+    @Nullable
+    public Object loadLinks(@NotNull String data, boolean isCasting, @NotNull Function1<? super SubtitleFile, Unit> subtitleCallback, @NotNull Function1<? super ExtractorLink, Unit> callback, @NotNull Continuation<? super Boolean> continuation) {
+        List<String[]> jobs;
+        try {
+            jobs = resolvePage(data, subtitleCallback, callback);
+        } catch (Throwable th) {
+            continuation.resumeWith(ResultKt.createFailure(th));
+            return IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        }
+        if (jobs.isEmpty()) {
+            return Boolean.TRUE;
+        }
+        processChain(jobs, 0, data, subtitleCallback, callback, continuation);
+        return IntrinsicsKt.getCOROUTINE_SUSPENDED();
+    }
+
+    /* Cadeia de continuação (padrão PobreFlix): um job por vez; loadExtractor/newExtractorLink
+     * são suspend, então o avanço acontece síncrono (retorno de valor) ou via resumeWith do step.
+     * Falha de um servidor não derruba os demais. */
+    private final void processChain(final List<String[]> jobs, int start, final String referer, final Function1<? super SubtitleFile, Unit> subtitleCallback, final Function1<? super ExtractorLink, Unit> callback, final Continuation<? super Boolean> continuation) {
+        int i = start;
+        while (i < jobs.size()) {
+            final int next = i + 1;
+            final String[] job = jobs.get(i);
+            Continuation<Object> step = new Continuation<Object>() {
+                @NotNull
+                public CoroutineContext getContext() {
+                    return continuation.getContext();
+                }
+
+                public void resumeWith(@NotNull Object result) {
+                    if ("L".equals(job[0]) && (result instanceof ExtractorLink)) {
+                        callback.invoke((ExtractorLink) result);
+                    }
+                    Doramas.this.processChain(jobs, next, referer, subtitleCallback, callback, continuation);
+                }
+            };
+            Object r;
+            try {
+                if ("E".equals(job[0])) {
+                    r = ExtractorApiKt.loadExtractor(job[1], referer, subtitleCallback, callback, step);
+                } else {
+                    r = ExtractorApiKt.newExtractorLink(job[1], job[2], job[3], "M3U8".equals(job[6]) ? ExtractorLinkType.M3U8 : ExtractorLinkType.VIDEO, new LinkInit(job[4], StringsKt.toIntOrNull(job[5]) != null ? StringsKt.toIntOrNull(job[5]).intValue() : 0, null), step);
+                }
+            } catch (Throwable th) {
+                r = ResultKt.createFailure(th);
+            }
+            if (r == IntrinsicsKt.getCOROUTINE_SUSPENDED()) {
+                return;
+            }
+            if ("L".equals(job[0]) && (r instanceof ExtractorLink)) {
+                callback.invoke((ExtractorLink) r);
+            }
+            i++;
+        }
+        continuation.resumeWith(Boolean.TRUE);
+    }
+
+    /* Resolve todos os players conhecidos de forma bloqueante (Jsoup) e devolve os jobs:
+     * "L" = link direto (source|name|url|referer|quality|type); "E" = embed p/ loadExtractor. */
+    private final List<String[]> resolvePage(String pageUrl, Function1<? super SubtitleFile, Unit> subtitleCallback, Function1<? super ExtractorLink, Unit> callback) throws Exception {
+        List<String[]> jobs = new ArrayList<>();
+        Document doc = Jsoup.connect(pageUrl).userAgent(UA).timeout(20000).execute().parse();
+        for (Element item : doc.select("li.dooplay_player_option")) {
+            String nume = item.attr("data-nume");
+            String label = firstText(item, ".title");
+            if (StringsKt.isBlank(nume) || (label != null && StringsKt.contains$default(label.toLowerCase(), "trailer", false, 2, (Object) null))) {
+                continue;
+            }
+            Element container = doc.selectFirst("#source-player-" + nume);
+            Element iframe = container != null ? container.selectFirst("iframe") : null;
+            String src = iframe != null ? iframe.attr("src") : null;
+            if (StringsKt.isBlank(src)) {
+                src = iframe != null ? iframe.attr("data-src") : null;
+            }
+            if (StringsKt.isBlank(src)) {
+                continue;
+            }
+            String iframeUrl = abs(src, pageUrl);
+            try {
+                resolveOption(iframeUrl, pageUrl, label, jobs);
+            } catch (Throwable th) {
+                /* opção descartada; demais seguem */
+            }
+        }
+        return jobs;
+    }
+
+    private final void resolveOption(String iframeUrl, String pageUrl, String label, List<String[]> jobs) throws Exception {
+        String host = hostOf(iframeUrl);
+        String path = pathOf(iframeUrl);
+        if (StringsKt.contains$default(host, "booonceivu", false, 2, (Object) null)) {
+            resolveJsonPlayer(iframeUrl, pageUrl, label, jobs);
+            return;
+        }
+        if (INCVIDEO_HOST.matcher(host).find()) {
+            resolveIncVideo(iframeUrl, pageUrl, label, jobs);
+            return;
+        }
+        if (StringsKt.contains$default(path, "/aviso", false, 2, (Object) null)) {
+            resolveAviso(iframeUrl, pageUrl, label, jobs);
+            return;
+        }
+        jobs.add(new String[]{"E", iframeUrl});
+    }
+
+    /* Player JSON Booonceivu: GET + mode=to-salvando-seu-ip -> {status:"success",midias:[{url,qualidade}]}.
+     * legendas[] existe no contrato, mas não emitimos SubtitleFile direto (sem construtor comprovado);
+     * legendas de hosts conhecidos seguem via loadExtractor. */
+    private final void resolveJsonPlayer(String iframeUrl, String pageUrl, String label, List<String[]> jobs) throws Exception {
+        String requestUrl = StringsKt.contains$default(iframeUrl, "mode=", false, 2, (Object) null) ? iframeUrl : iframeUrl + (StringsKt.contains$default(iframeUrl, "?", false, 2, (Object) null) ? "&" : "?") + "mode=to-salvando-seu-ip";
+        String json = Jsoup.connect(requestUrl).userAgent(UA).referrer(pageUrl).header("Accept", "application/json").ignoreContentType(true).timeout(20000).execute().body();
+        JsonObject root = new Gson().fromJson(json, JsonObject.class);
+        if (root == null || !"success".equals(root.has("status") ? root.get("status").getAsString() : null) || !root.has("midias") || root.get("midias").isJsonNull()) {
+            return;
+        }
+        JsonArray midias = root.getAsJsonArray("midias");
+        for (JsonElement el : midias) {
+            JsonObject midia = el.getAsJsonObject();
+            if (!midia.has("url")) {
+                continue;
+            }
+            String url = midia.get("url").getAsString();
+            if (!StringsKt.contains$default(url, ".m3u8", false, 2, (Object) null)) {
+                continue;
+            }
+            String qualidade = midia.has("qualidade") && !midia.get("qualidade").isJsonNull() ? midia.get("qualidade").getAsString() : null;
+            jobs.add(new String[]{"L", "Doramas Booonceivu", (label != null ? label + " " : "") + (qualidade != null ? qualidade : "HLS"), url, pageUrl, String.valueOf(mapQuality(qualidade)), "M3U8"});
+        }
+    }
+
+    /* /aviso/?url=<enc> decodifica (até 2x) o destino; só IncVideo é resolvido (P2P é descartado). */
+    private final void resolveAviso(String iframeUrl, String pageUrl, String label, List<String[]> jobs) throws Exception {
+        String raw = null;
+        int q = iframeUrl.indexOf("url=");
+        if (q >= 0) {
+            raw = iframeUrl.substring(q + 4);
+            int amp = raw.indexOf('&');
+            if (amp >= 0) {
+                raw = raw.substring(0, amp);
+            }
+        }
+        if (StringsKt.isBlank(raw)) {
+            return;
+        }
+        String value = raw;
+        for (int i = 0; i < 2; i++) {
+            String decoded = URLDecoder.decode(value, "UTF-8");
+            if (decoded.equals(value)) {
+                break;
+            }
+            value = decoded;
+        }
+        String target = value;
+        if (!INCVIDEO_HOST.matcher(hostOf(target)).find()) {
+            return; /* ex.: png.strp2p.com (P2P) — sem suporte */
+        }
+        resolveIncVideo(target, pageUrl, label, jobs);
+    }
+
+    /* IncVideo (csst.online|incvideo1.online): Playerjs file: "[q]https://.../get_file/...mp4/".
+     * Cada /get_file/ redireciona (302) para remote_control.php que serve o MP4.
+     * Validado ao vivo: Range bytes=0-0 -> 206 video/mp4. Emitimos a URL /get_file/ (estável). */
+    private final void resolveIncVideo(String embedUrl, String pageUrl, String label, List<String[]> jobs) throws Exception {
+        org.jsoup.Connection.Response resp = Jsoup.connect(embedUrl).userAgent(UA).referrer(pageUrl).followRedirects(true).ignoreContentType(true).timeout(20000).execute();
+        if (!INCVIDEO_HOST.matcher(hostOf(resp.url().toString())).find()) {
+            return;
+        }
+        String embedFinal = resp.url().toString();
+        Matcher fileMatcher = PLAYERJS_FILE.matcher(resp.body());
+        if (!fileMatcher.find()) {
+            return;
+        }
+        Matcher srcMatcher = PLAYERJS_SOURCES.matcher(fileMatcher.group(1));
+        while (srcMatcher.find()) {
+            String url = srcMatcher.group(2);
+            if (url == null || !StringsKt.contains$default(url, "/get_file/", false, 2, (Object) null)) {
+                continue;
+            }
+            String qualityLabel = srcMatcher.group(1) != null ? srcMatcher.group(1).trim() : null;
+            org.jsoup.Connection.Response probe = Jsoup.connect(url).userAgent(UA).referrer(embedFinal).header("Range", "bytes=0-0").followRedirects(true).ignoreContentType(true).maxBodySize(1024).timeout(20000).execute();
+            int code = probe.statusCode();
+            if (code != 200 && code != 206) {
+                continue;
+            }
+            jobs.add(new String[]{"L", "Doramas IncVideo", (label != null ? label + " " : "") + (qualityLabel != null ? qualityLabel : "MP4"), url, embedFinal, String.valueOf(mapQuality(qualityLabel)), "VIDEO"});
+        }
+    }
+
+    /* Dooplay: div.se-c (temporada) -> ul.episodios li -> div.numerando "S - E" +
+     * div.episodiotitle a[href] -> /br/episodio/<slug>/. Validado ao vivo. */
+    private final List<Episode> parseEpisodes(Document doc) {
+        List<Episode> episodes = new ArrayList<>();
+        int blockIndex = 0;
+        for (Element block : doc.select("div.se-c")) {
+            blockIndex++;
+            String seasonText = firstText(block, "span.se-t");
+            Integer seasonNum = seasonText == null ? null : StringsKt.toIntOrNull(seasonText.trim());
+            final int seasonNumber = seasonNum != null ? seasonNum.intValue() : blockIndex;
+            for (Element item : block.select("ul.episodios li")) {
+                Element num = item.selectFirst("div.numerando");
+                String numerando = num != null ? num.text() : "";
+                MatchResult m = Regex.find$default(SEASON_EPISODE, numerando, 0, 2, (Object) null);
+                Element a = item.selectFirst("div.episodiotitle a[href]");
+                if (a == null) {
+                    continue;
+                }
+                String href = abs(a.attr("href"), getMainUrl());
+                if (StringsKt.isBlank(href)) {
+                    continue;
+                }
+                final int itemSeason = (m == null || StringsKt.toIntOrNull((String) m.getGroupValues().get(1)) == null) ? seasonNumber : StringsKt.toIntOrNull((String) m.getGroupValues().get(1)).intValue();
+                final int number = (m == null || StringsKt.toIntOrNull((String) m.getGroupValues().get(2)) == null) ? 1 : StringsKt.toIntOrNull((String) m.getGroupValues().get(2)).intValue();
+                final String name = a.text();
+                episodes.add(MainAPIKt.newEpisode(this, href, new Function1() { // from class: com.Doramas.Doramas$$ExternalSyntheticLambda0
+                    public final Object invoke(Object obj) {
+                        return Doramas.parseEpisodes$lambda$5(name, itemSeason, number, (Episode) obj);
+                    }
+                }));
+            }
+        }
+        /* distinct por data (contrato antigo preservado) */
+        HashSet set = new HashSet();
+        ArrayList list = new ArrayList();
+        for (Object e : episodes) {
+            Episode it2 = (Episode) e;
+            if (set.add(it2.getData())) {
+                list.add(e);
+            }
+        }
+        return list;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static final Unit parseEpisodes$lambda$7$lambda$6$lambda$5(String $name, int $seasonNumber, int $number, Episode $this$newEpisode) {
+    public static final Unit parseEpisodes$lambda$5(String $name, int $itemSeason, int $number, Episode $this$newEpisode) {
         $this$newEpisode.setName(StringsKt.trim($name).toString());
-        $this$newEpisode.setSeason(Integer.valueOf($seasonNumber));
+        $this$newEpisode.setSeason(Integer.valueOf($itemSeason));
         $this$newEpisode.setEpisode(Integer.valueOf($number));
         return Unit.INSTANCE;
     }
 
-    private final List<String> extractEmbedLinks(Document doc) {
-        Iterable $this$mapNotNull$iv = doc.select("button[data-source]");
-        Collection destination$iv$iv = new ArrayList();
-        for (Object element$iv$iv$iv : $this$mapNotNull$iv) {
-            Element it = (Element) element$iv$iv$iv;
-            String strAttr = it.attr("data-source");
-            if (strAttr != null) {
-                destination$iv$iv.add(strAttr);
+    private final List<Pair<Actor, ActorRole>> selectActors(Document doc) {
+        List<Pair<Actor, ActorRole>> actors = new ArrayList<>();
+        for (Object it : doc.select("#cast .person a, .persons .person a, ul.cast-lst a, .cast a")) {
+            Element el = (Element) it;
+            String name = el.text();
+            if (!StringsKt.isBlank(name)) {
+                actors.add(TuplesKt.to(new Actor(name, el.attr("href")), (Object) null));
             }
         }
-        List buttons = (List) destination$iv$iv;
-        Iterable $this$mapNotNull$iv2 = doc.select("div#player iframe, div.play-overlay iframe");
-        Collection destination$iv$iv2 = new ArrayList();
-        for (Object element$iv$iv$iv2 : $this$mapNotNull$iv2) {
-            Element it2 = (Element) element$iv$iv$iv2;
-            String strAttr2 = it2.attr("src");
-            if (strAttr2 != null) {
-                destination$iv$iv2.add(strAttr2);
-            }
-        }
-        List iframes = (List) destination$iv$iv2;
-        Iterable $this$filter$iv = CollectionsKt.distinct(CollectionsKt.plus(buttons, iframes));
-        Collection destination$iv$iv3 = new ArrayList();
-        for (Object element$iv$iv : $this$filter$iv) {
-            String it3 = (String) element$iv$iv;
-            if (!StringsKt.isBlank(it3)) {
-                destination$iv$iv3.add(element$iv$iv);
-            }
-        }
-        return (List) destination$iv$iv3;
-    }
-
-    private final List<Pair<Actor, ActorRole>> selectActors(Document $this$selectActors) {
-        ArrayList arrayList;
-        Iterable $this$map$iv = $this$selectActors.select("ul.cast-lst a");
-        Collection destination$iv$iv = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv, 10));
-        Iterator it = $this$map$iv.iterator();
-        while (true) {
-            arrayList = null;
-            if (!it.hasNext()) {
-                break;
-            }
-            Object item$iv$iv = it.next();
-            Element it2 = (Element) item$iv$iv;
-            destination$iv$iv.add(TuplesKt.to(new Actor(it2.text(), it2.attr("href")), (Object) null));
-        }
-        List actors = (List) destination$iv$iv;
-        List list = actors;
-        if (!list.isEmpty()) {
-            arrayList = list;
-        }
-        return arrayList;
-    }
-
-    private final String selectPoster(Element $this$selectPoster, String selector, String replace) {
-        Element img = $this$selectPoster.selectFirst(selector);
-        if (img == null) {
-            return null;
-        }
-        String strAttr = img.attr("src");
-        if (StringsKt.isBlank(strAttr)) {
-            strAttr = img.attr("data-src");
-        }
-        String src = strAttr;
-        String it = !StringsKt.isBlank(src) ? src : null;
-        if (it == null) {
-            return null;
-        }
-        String str = StringsKt.startsWith$default(it, "//", false, 2, (Object) null) ? "https:" + it : it;
-        if (str != null) {
-            return StringsKt.replace$default(str, replace, "/original/", false, 4, (Object) null);
-        }
-        return null;
-    }
-
-    private final String selectPoster(Document $this$selectPoster, String selector, String replace) {
-        Intrinsics.checkNotNull($this$selectPoster, "null cannot be cast to non-null type org.jsoup.nodes.Element");
-        return selectPoster((Element) $this$selectPoster, selector, replace);
-    }
-
-    private final Integer extractInt(Document $this$extractInt, String selector) throws IOException {
-        CharSequence $this$filter$iv;
-        Element elementSelectFirst = $this$extractInt.selectFirst(selector);
-        if (elementSelectFirst != null && ($this$filter$iv = elementSelectFirst.text()) != null) {
-            CharSequence $this$filterTo$iv$iv = $this$filter$iv;
-            Appendable destination$iv$iv = new StringBuilder();
-            int length = $this$filterTo$iv$iv.length();
-            for (int index$iv$iv = 0; index$iv$iv < length; index$iv$iv++) {
-                char element$iv$iv = $this$filterTo$iv$iv.charAt(index$iv$iv);
-                if (Character.isDigit(element$iv$iv)) {
-                    destination$iv$iv.append(element$iv$iv);
-                }
-            }
-            String $this$filter$iv2 = ((StringBuilder) destination$iv$iv).toString();
-            if ($this$filter$iv2 != null) {
-                return StringsKt.toIntOrNull($this$filter$iv2);
-            }
-        }
-        return null;
-    }
-
-    private final String extractText(Document $this$extractText, String selector) {
-        Element elementSelectFirst = $this$extractText.selectFirst(selector);
-        if (elementSelectFirst != null) {
-            return elementSelectFirst.text();
+        if (!actors.isEmpty()) {
+            return actors;
         }
         return null;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public final Integer parseDuration(String text) {
-        List groupValues;
-        String str;
         if (text == null) {
             return null;
         }
         MatchResult it = Regex.find$default(new Regex("(\\d+)h\\s*(\\d+)m"), text, 0, 2, (Object) null);
         if (it == null) {
             MatchResult matchResultFind$default = Regex.find$default(new Regex("(\\d+)m"), text, 0, 2, (Object) null);
-            if (matchResultFind$default == null || (groupValues = matchResultFind$default.getGroupValues()) == null || (str = (String) groupValues.get(1)) == null) {
+            if (matchResultFind$default == null) {
                 return null;
             }
-            return StringsKt.toIntOrNull(str);
+            return StringsKt.toIntOrNull((String) matchResultFind$default.getGroupValues().get(1));
         }
         Integer intOrNull = StringsKt.toIntOrNull((String) it.getGroupValues().get(1));
         int iIntValue = (intOrNull != null ? intOrNull.intValue() : 0) * 60;
         Integer intOrNull2 = StringsKt.toIntOrNull((String) it.getGroupValues().get(2));
         return Integer.valueOf(iIntValue + (intOrNull2 != null ? intOrNull2.intValue() : 0));
+    }
+
+    private final Integer yearOf(String text) {
+        if (text == null) {
+            return null;
+        }
+        MatchResult m = Regex.find$default(FOUR_DIGIT_YEAR, text, 0, 2, (Object) null);
+        return m == null ? null : StringsKt.toIntOrNull(m.getValue());
+    }
+
+    private final String firstText(Element root, String... selectors) {
+        if (root == null) {
+            return null;
+        }
+        for (String selector : selectors) {
+            Element el = root.selectFirst(selector);
+            if (el != null && !StringsKt.isBlank(el.text())) {
+                return el.text();
+            }
+        }
+        return null;
+    }
+
+    private final String firstAttr(Element img, String replace) {
+        if (img == null) {
+            return null;
+        }
+        String src = img.attr("src");
+        if (StringsKt.isBlank(src)) {
+            src = img.attr("data-src");
+        }
+        if (StringsKt.isBlank(src)) {
+            return null;
+        }
+        String str = StringsKt.startsWith$default(src, "//", false, 2, (Object) null) ? "https:" + src : src;
+        return str;
+    }
+
+    private final String abs(String href, String base) {
+        if (StringsKt.isBlank(href)) {
+            return href;
+        }
+        if (StringsKt.startsWith$default(href, "//", false, 2, (Object) null)) {
+            return "https:" + href;
+        }
+        if (StringsKt.startsWith$default(href, "http", false, 2, (Object) null)) {
+            return href;
+        }
+        if (StringsKt.startsWith$default(href, "/", false, 2, (Object) null)) {
+            return getMainUrl() + href;
+        }
+        return base + href;
+    }
+
+    private final String hostOf(String url) {
+        try {
+            return new java.net.URI(url).getHost() != null ? new java.net.URI(url).getHost().toLowerCase() : "";
+        } catch (Throwable th) {
+            return "";
+        }
+    }
+
+    private final String pathOf(String url) {
+        try {
+            String p = new java.net.URI(url).getPath();
+            return p != null ? p : "";
+        } catch (Throwable th) {
+            return "";
+        }
+    }
+
+    /* Mapa de qualidade do player Booonceivu/IncVideo: SD=1080, LD=720, FD=360 (contrato nuvio). */
+    private final int mapQuality(String label) {
+        if (label == null) {
+            return 0;
+        }
+        String key = StringsKt.trim(label).toString().toUpperCase();
+        if (StringsKt.contains$default(key, "SD", false, 2, (Object) null) && !StringsKt.contains$default(key, "360", false, 2, (Object) null)) {
+            return 1080;
+        }
+        if (StringsKt.contains$default(key, "LD", false, 2, (Object) null)) {
+            return 720;
+        }
+        if (StringsKt.contains$default(key, "FD", false, 2, (Object) null)) {
+            return 360;
+        }
+        MatchResult m = Regex.find$default(new Regex("(\\d{3,4})"), key, 0, 2, (Object) null);
+        Integer value = m == null ? null : StringsKt.toIntOrNull(m.getValue());
+        return value != null ? value.intValue() : 0;
     }
 }

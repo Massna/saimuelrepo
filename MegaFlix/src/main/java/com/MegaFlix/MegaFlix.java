@@ -14,11 +14,16 @@ import com.lagradost.cloudstream3.SearchResponse;
 import com.lagradost.cloudstream3.TvSeriesLoadResponse;
 import com.lagradost.cloudstream3.TvSeriesSearchResponse;
 import com.lagradost.cloudstream3.TvType;
+import com.lagradost.cloudstream3.utils.ExtractorApiKt;
+import com.lagradost.cloudstream3.utils.ExtractorLink;
+import com.lagradost.cloudstream3.utils.ExtractorLinkType;
 import com.lagradost.nicehttp.NiceResponse;
 import com.lagradost.nicehttp.Requests;
 import com.lagradost.nicehttp.ResponseParser;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -26,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import kotlin.Metadata;
 import kotlin.Pair;
 import kotlin.ResultKt;
@@ -50,6 +57,7 @@ import kotlin.text.StringsKt;
 import okhttp3.Interceptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -489,12 +497,143 @@ public final class MegaFlix extends MainAPI {
         	at jadx.core.utils.BlockUtils.traverseSuccessorsUntil(BlockUtils.java:749)
         */
     @org.jetbrains.annotations.Nullable
-    public java.lang.Object load(@org.jetbrains.annotations.NotNull java.lang.String r50, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super com.lagradost.cloudstream3.LoadResponse> r51) {
-        /*
-            Method dump skipped, instruction units count: 984
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.MegaFlix.MegaFlix.load(java.lang.String, kotlin.coroutines.Continuation):java.lang.Object");
+    public java.lang.Object load(@org.jetbrains.annotations.NotNull java.lang.String url, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super com.lagradost.cloudstream3.LoadResponse> continuation) {
+        C0001 c0001;
+        if (continuation instanceof C0001) {
+            c0001 = (C0001) continuation;
+            if ((c0001.label & Integer.MIN_VALUE) != 0) {
+                c0001.label -= Integer.MIN_VALUE;
+            } else {
+                c0001 = new C0001(continuation);
+            }
+        } else {
+            c0001 = new C0001(continuation);
+        }
+        Object $result = c0001.result;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch (c0001.label) {
+            case 0: {
+                ResultKt.throwOnFailure($result);
+                try {
+                    String ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36";
+                    String pageUrl = getUrl(url);
+                    Document soup = Jsoup.connect(pageUrl).userAgent(ua)
+                            .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                            .header("Accept-Language", "pt-BR,pt;q=0.9,en;q=0.8")
+                            .header("Referer", getMainUrl() + "/")
+                            .cookie("ordem", "3")
+                            .timeout(15000).get();
+                    Element titleEl = soup.selectFirst("header.entry-header h1");
+                    if (titleEl == null) {
+                        titleEl = soup.selectFirst("h1");
+                    }
+                    String title = titleEl != null ? titleEl.text() : "";
+                    Element plotEl = soup.selectFirst("div.description p");
+                    String descipt = plotEl != null ? plotEl.text() : "";
+                    String poster = "";
+                    Element posterEl = soup.selectFirst("div.post-thumbnail figure img");
+                    if (posterEl == null) {
+                        posterEl = soup.selectFirst("figure img");
+                    }
+                    if (posterEl == null) {
+                        posterEl = soup.selectFirst("img.wp-post-image");
+                    }
+                    if (posterEl != null) {
+                        poster = posterEl.attr("src");
+                        if (poster.length() == 0) {
+                            poster = posterEl.attr("data-src");
+                        }
+                    }
+                    if (poster.length() == 0) {
+                        Element metaImg = soup.selectFirst("meta[property=og:image]");
+                        if (metaImg != null) {
+                            poster = metaImg.attr("content");
+                        }
+                    }
+                    if (poster.startsWith("//")) {
+                        poster = "https:" + poster;
+                    }
+                    Element yearEl = soup.selectFirst("header.entry-header span.year");
+                    String year = yearEl != null ? yearEl.text() : null;
+                    Element ratingEl = soup.selectFirst("div.vote-cn span.num");
+                    String rating = ratingEl != null ? ratingEl.text() : "0";
+                    String playerUrl = null;
+                    for (Element iframe : soup.select("iframe[src]")) {
+                        String src = iframe.attr("src");
+                        if (src.length() > 0 && !src.contains("youtube")) {
+                            playerUrl = src;
+                            break;
+                        }
+                    }
+                    TvType type = getType(url);
+                    if (type == TvType.Movie) {
+                        String dataUrl = playerUrl != null ? playerUrl : pageUrl;
+                        c0001.label = 1;
+                        $result = MainAPIKt.newMovieLoadResponse(this, title, pageUrl, TvType.Movie, dataUrl, new AnonymousClass5(poster, year, descipt, rating, null), c0001);
+                    } else {
+                        List episodes = new ArrayList();
+                        if (playerUrl != null) {
+                            Document playerDoc = Jsoup.connect(playerUrl).userAgent(ua)
+                                    .header("Referer", getMainUrl() + "/")
+                                    .ignoreHttpErrors(true)
+                                    .timeout(15000).get();
+                            Map<String, String> seasonMap = new LinkedHashMap();
+                            for (Element li : playerDoc.select("li[data-season-id]")) {
+                                String sid = li.attr("data-season-id");
+                                String snum = li.attr("data-season-number");
+                                if (sid.length() > 0 && snum.length() > 0 && !seasonMap.containsKey(sid)) {
+                                    seasonMap.put(sid, snum);
+                                }
+                            }
+                            String origin = "";
+                            try {
+                                URI playerUri = new URI(playerUrl);
+                                origin = playerUri.getScheme() + "://" + playerUri.getHost();
+                            } catch (Exception ignored) {
+                            }
+                            for (Element li : playerDoc.select("li[data-episode-id]")) {
+                                String epId = li.attr("data-episode-id");
+                                if (epId.length() == 0) {
+                                    continue;
+                                }
+                                String epName = li.text().trim();
+                                Integer epNum = extractNumber(epName);
+                                final Integer fEp = epNum != null ? epNum : Integer.valueOf(1);
+                                String seasonStr = seasonMap.get(li.attr("data-season-id"));
+                                Integer seasonNum = seasonStr != null ? extractNumber(seasonStr) : null;
+                                final Integer fSeason = seasonNum != null ? seasonNum : Integer.valueOf(1);
+                                final String fName = epName.length() > 0 ? epName : ("Episodio " + fEp);
+                                String epUrl = origin + "/episodio/" + epId;
+                                episodes.add(MainAPIKt.newEpisode(this, epUrl, new Function1() {
+                                    public final Object invoke(Object obj) {
+                                        Episode episode = (Episode) obj;
+                                        episode.setName(fName);
+                                        episode.setSeason(fSeason);
+                                        episode.setEpisode(fEp);
+                                        return Unit.INSTANCE;
+                                    }
+                                }));
+                            }
+                        }
+                        c0001.label = 1;
+                        $result = MainAPIKt.newTvSeriesLoadResponse(this, title, pageUrl, TvType.TvSeries, episodes, new AnonymousClass4(poster, year, descipt, rating, null), c0001);
+                    }
+                    if ($result == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                } catch (Exception e) {
+                    return null;
+                }
+                break;
+            }
+            case 1: {
+                ResultKt.throwOnFailure($result);
+                break;
+            }
+            default:
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+        return $result;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
