@@ -21,19 +21,19 @@ final class AnimesDigital$loadLinks$3$1$1 extends SuspendLambda implements Funct
     int label;
 
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-    AnimesDigital$loadLinks$3$1$1(String str, Continuation<? super AnimesDigital$loadLinks$3$1$1> continuation) {
-        super(2, continuation);
+    AnimesDigital$loadLinks$3$1$1(String str, Continuation<?> continuation) {
+        super(2, (Continuation) continuation);
         this.$realUrl = str;
     }
 
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        Continuation<Unit> animesDigital$loadLinks$3$1$1 = new AnimesDigital$loadLinks$3$1$1(this.$realUrl, continuation);
+        AnimesDigital$loadLinks$3$1$1 animesDigital$loadLinks$3$1$1 = new AnimesDigital$loadLinks$3$1$1(this.$realUrl, continuation);
         animesDigital$loadLinks$3$1$1.L$0 = obj;
-        return animesDigital$loadLinks$3$1$1;
+        return (Continuation<Unit>) (Object) animesDigital$loadLinks$3$1$1;
     }
 
     public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-        return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+        return ((AnimesDigital$loadLinks$3$1$1) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     public final Object invokeSuspend(Object obj) {

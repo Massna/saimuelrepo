@@ -83,8 +83,8 @@ public final class PobreFlixExtractor {
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -104,8 +104,8 @@ public final class PobreFlixExtractor {
         int label;
         /* synthetic */ Object result;
 
-        C00041(Continuation<? super C00041> continuation) {
-            super(continuation);
+        C00041(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -244,7 +244,7 @@ public final class PobreFlixExtractor {
     }
 
     private final Pair<String, String> parseData(String data) {
-        List<String> parts = StringsKt.split$default(data == null ? "" : data, new String[]{"|"}, false, 2, 2, (Object) null);
+        List<String> parts = StringsKt.split(data == null ? "" : data, new String[]{"|"}, false, 2);
         String str = (String) (parts.isEmpty() ? null : parts.get(0));
         if (str == null) {
             str = "";
@@ -263,7 +263,7 @@ public final class PobreFlixExtractor {
         if (!kotlin.jvm.internal.Intrinsics.areEqual(type, "movie")) {
             return url;
         }
-        if (StringsKt.contains$default(url, "?", false, 2, (Object) null)) {
+        if (StringsKt.contains(url, "?", false)) {
             sbAppend = new StringBuilder().append(url);
             str = "&area=online";
         } else {

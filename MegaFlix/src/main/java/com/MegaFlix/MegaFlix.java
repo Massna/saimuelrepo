@@ -43,6 +43,7 @@ import kotlin.collections.MapsKt;
 import kotlin.collections.SetsKt;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.intrinsics.IntrinsicsKt;
+import kotlin.coroutines.jvm.internal.Boxing;
 import kotlin.coroutines.jvm.internal.ContinuationImpl;
 import kotlin.coroutines.jvm.internal.DebugMetadata;
 import kotlin.coroutines.jvm.internal.SuspendLambda;
@@ -89,14 +90,14 @@ public final class MegaFlix extends MainAPI {
     /* JADX INFO: compiled from: MegaFlix.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.MegaFlix.MegaFlix", f = "MegaFlix.kt", i = {0, 0}, l = {66}, m = "getMainPage", n = {"this", "request"}, s = {"L$0", "L$1"})
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -111,7 +112,7 @@ public final class MegaFlix extends MainAPI {
     /* JADX INFO: compiled from: MegaFlix.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.MegaFlix.MegaFlix", f = "MegaFlix.kt", i = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, l = {133, 161, 189, 203}, m = "load", n = {"this", "url", "type", "this", "url", "title", "descipt", "rating", "year", "backgroundPoster", "episodeList", "url1", "season"}, s = {"L$0", "L$1", "L$2", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$6", "L$7", "L$8", "L$10"})
-    static final class C00001 extends ContinuationImpl {
+    final class C00001 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$10;
@@ -126,8 +127,8 @@ public final class MegaFlix extends MainAPI {
         int label;
         /* synthetic */ Object result;
 
-        C00001(Continuation<? super C00001> continuation) {
-            super(continuation);
+        C00001(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -142,7 +143,7 @@ public final class MegaFlix extends MainAPI {
     /* JADX INFO: compiled from: MegaFlix.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.MegaFlix.MegaFlix", f = "MegaFlix.kt", i = {0, 0, 0, 1, 1, 1, 1, 2, 2, 2}, l = {225, 230, 238}, m = "loadLinks", n = {"data", "subtitleCallback", "callback", "data", "subtitleCallback", "callback", "destination$iv$iv", "data", "subtitleCallback", "callback"}, s = {"L$0", "L$1", "L$2", "L$0", "L$1", "L$2", "L$3", "L$0", "L$1", "L$2"})
-    static final class C00011 extends ContinuationImpl {
+    final class C00011 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
@@ -152,8 +153,8 @@ public final class MegaFlix extends MainAPI {
         int label;
         /* synthetic */ Object result;
 
-        C00011(Continuation<? super C00011> continuation) {
-            super(continuation);
+        C00011(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -168,13 +169,13 @@ public final class MegaFlix extends MainAPI {
     /* JADX INFO: compiled from: MegaFlix.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.MegaFlix.MegaFlix", f = "MegaFlix.kt", i = {0}, l = {101}, m = "search", n = {"this"}, s = {"L$0"})
-    static final class C00021 extends ContinuationImpl {
+    final class C00021 extends ContinuationImpl {
         Object L$0;
         int label;
         /* synthetic */ Object result;
 
-        C00021(Continuation<? super C00021> continuation) {
-            super(continuation);
+        C00021(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -230,7 +231,12 @@ public final class MegaFlix extends MainAPI {
     }
 
     private final String getUrl(String url) {
-        URI uri = new URI(url);
+        URI uri;
+        try {
+            uri = new URI(url);
+        } catch (java.net.URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         StringBuilder sbAppend = new StringBuilder().append(getMainUrl());
         String path = uri.getPath();
         if (path == null) {
@@ -254,7 +260,7 @@ public final class MegaFlix extends MainAPI {
         AnonymousClass1 anonymousClass2;
         int $i$f$mapNotNull;
         boolean containsExtension;
-        String strText;
+        String strText = null;
         if (continuation instanceof AnonymousClass1) {
             anonymousClass1 = (AnonymousClass1) continuation;
             if ((anonymousClass1.label & Integer.MIN_VALUE) != 0) {
@@ -278,13 +284,12 @@ public final class MegaFlix extends MainAPI {
                 anonymousClass1.L$0 = this;
                 anonymousClass1.L$1 = request;
                 anonymousClass1.label = 1;
-                $result = Requests.get$default(app, url, mapMapOf, (String) null, (Map) null, cookies, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, anonymousClass1, 4076, (Object) null);
+                $result = app.get(url, mapMapOf, (String) null, java.util.Collections.emptyMap(), cookies, true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), anonymousClass1);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 request2 = request;
                 megaFlix = this;
-                break;
                 break;
             case 1:
                 request2 = (MainPageRequest) anonymousClass1.L$1;
@@ -338,7 +343,7 @@ public final class MegaFlix extends MainAPI {
                         String ext = (String) element$iv;
                         anonymousClass2 = anonymousClass1;
                         $i$f$mapNotNull = $i$f$mapNotNull2;
-                        if (StringsKt.endsWith$default(postUrl, ext, false, 2, (Object) null)) {
+                        if (StringsKt.endsWith(postUrl, ext, false)) {
                             containsExtension = true;
                         } else {
                             anonymousClass1 = anonymousClass2;
@@ -351,11 +356,11 @@ public final class MegaFlix extends MainAPI {
                     }
                 }
             }
-            MovieSearchResponse movieSearchResponseNewMovieSearchResponse$default = containsExtension ? MainAPIKt.newMovieSearchResponse$default(megaFlix, title, link, StringsKt.contains$default(link, "filme", false, 2, (Object) null) ? TvType.Movie : TvType.TvSeries, false, new Function1() { // from class: com.MegaFlix.MegaFlix$$ExternalSyntheticLambda1
+            MovieSearchResponse movieSearchResponseNewMovieSearchResponse$default = containsExtension ? MainAPIKt.newMovieSearchResponse(megaFlix, title, link, StringsKt.contains(link, "filme", false) ? TvType.Movie : TvType.TvSeries, false, new Function1() { // from class: com.MegaFlix.MegaFlix$$ExternalSyntheticLambda1
                 public final Object invoke(Object obj) {
                     return MegaFlix.getMainPage$lambda$4$lambda$3(postUrl, (MovieSearchResponse) obj);
                 }
-            }, 8, (Object) null) : null;
+            }) : null;
             if (movieSearchResponseNewMovieSearchResponse$default != null) {
                 destination$iv$iv.add(movieSearchResponseNewMovieSearchResponse$default);
             }
@@ -363,7 +368,7 @@ public final class MegaFlix extends MainAPI {
             $i$f$mapNotNull2 = $i$f$mapNotNull;
         }
         List home = (List) destination$iv$iv;
-        return MainAPIKt.newHomePageResponse$default(request2.getName(), home, (Boolean) null, 4, (Object) null);
+        return MainAPIKt.newHomePageResponse(request2.getName(), home, (Boolean) null);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -379,9 +384,9 @@ public final class MegaFlix extends MainAPI {
         MegaFlix megaFlix;
         String strAttr;
         C00021 c00022;
-        boolean z;
+        boolean z = false;
         String strAttr2;
-        String strText;
+        String strText = null;
         if (continuation instanceof C00021) {
             c00021 = (C00021) continuation;
             if ((c00021.label & Integer.MIN_VALUE) != 0) {
@@ -401,12 +406,11 @@ public final class MegaFlix extends MainAPI {
                 String str = getMainUrl() + "/?s=" + query;
                 c00021.L$0 = this;
                 c00021.label = 1;
-                $result = Requests.get$default(app, str, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00021, 4094, (Object) null);
+                $result = app.get(str, java.util.Collections.emptyMap(), (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), c00021);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 megaFlix = this;
-                break;
                 break;
             case 1:
                 megaFlix = (MegaFlix) c00021.L$0;
@@ -445,7 +449,7 @@ public final class MegaFlix extends MainAPI {
                         Object element$iv = it2.next();
                         String ext = (String) element$iv;
                         c00022 = c00021;
-                        if (StringsKt.endsWith$default(postUrl, ext, false, 2, (Object) null)) {
+                        if (StringsKt.endsWith(postUrl, ext, false)) {
                             z = true;
                         } else {
                             c00021 = c00022;
@@ -457,11 +461,11 @@ public final class MegaFlix extends MainAPI {
                 }
             }
             boolean containsExtension = z;
-            TvSeriesSearchResponse tvSeriesSearchResponseNewTvSeriesSearchResponse$default = containsExtension ? MainAPIKt.newTvSeriesSearchResponse$default(megaFlix, title, link, StringsKt.contains$default(link, "filme", false, 2, (Object) null) ? TvType.Movie : TvType.TvSeries, false, new Function1() { // from class: com.MegaFlix.MegaFlix$$ExternalSyntheticLambda0
+            TvSeriesSearchResponse tvSeriesSearchResponseNewTvSeriesSearchResponse$default = containsExtension ? MainAPIKt.newTvSeriesSearchResponse(megaFlix, title, link, StringsKt.contains(link, "filme", false) ? TvType.Movie : TvType.TvSeries, false, new Function1() { // from class: com.MegaFlix.MegaFlix$$ExternalSyntheticLambda0
                 public final Object invoke(Object obj) {
                     return MegaFlix.search$lambda$7$lambda$6(postUrl, (TvSeriesSearchResponse) obj);
                 }
-            }, 8, (Object) null) : null;
+            }) : null;
             if (tvSeriesSearchResponseNewTvSeriesSearchResponse$default != null) {
                 destination$iv$iv.add(tvSeriesSearchResponseNewTvSeriesSearchResponse$default);
             }
@@ -496,7 +500,29 @@ public final class MegaFlix extends MainAPI {
         	at jadx.core.utils.BlockUtils.traverseSuccessorsUntil(BlockUtils.java:731)
         	at jadx.core.utils.BlockUtils.traverseSuccessorsUntil(BlockUtils.java:749)
         */
-    @org.jetbrains.annotations.Nullable
+final class C0001 extends ContinuationImpl {
+        Object L$0;
+        Object L$1;
+        Object L$2;
+        Object L$3;
+        Object L$4;
+        Object L$5;
+        int label;
+        /* synthetic */ Object result;
+
+        C0001(Continuation<?> continuation) {
+            super((Continuation) continuation);
+        }
+
+        @Nullable
+        public final Object invokeSuspend(@NotNull Object obj) {
+            this.result = obj;
+            this.label |= Integer.MIN_VALUE;
+            return MegaFlix.this.load(null, (Continuation) this);
+        }
+    }
+
+        @org.jetbrains.annotations.Nullable
     public java.lang.Object load(@org.jetbrains.annotations.NotNull java.lang.String url, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super com.lagradost.cloudstream3.LoadResponse> continuation) {
         C0001 c0001;
         if (continuation instanceof C0001) {
@@ -605,14 +631,14 @@ public final class MegaFlix extends MainAPI {
                                 final String fName = epName.length() > 0 ? epName : ("Episodio " + fEp);
                                 String epUrl = origin + "/episodio/" + epId;
                                 episodes.add(MainAPIKt.newEpisode(this, epUrl, new Function1() {
-                                    public final Object invoke(Object obj) {
+                public final Object invoke(Object obj) {
                                         Episode episode = (Episode) obj;
                                         episode.setName(fName);
                                         episode.setSeason(fSeason);
                                         episode.setEpisode(fEp);
                                         return Unit.INSTANCE;
-                                    }
-                                }));
+                }
+            }));
                             }
                         }
                         c0001.label = 1;
@@ -657,8 +683,8 @@ public final class MegaFlix extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass4(String str, String str2, String str3, String str4, Continuation<? super AnonymousClass4> continuation) {
-            super(2, continuation);
+        AnonymousClass4(String str, String str2, String str3, String str4, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$backgroundPoster = str;
             this.$year = str2;
             this.$descipt = str3;
@@ -666,13 +692,13 @@ public final class MegaFlix extends MainAPI {
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass4 = new AnonymousClass4(this.$backgroundPoster, this.$year, this.$descipt, this.$rating, continuation);
+            AnonymousClass4 anonymousClass4 = new AnonymousClass4(this.$backgroundPoster, this.$year, this.$descipt, this.$rating, continuation);
             anonymousClass4.L$0 = obj;
-            return anonymousClass4;
+            return (Continuation<Unit>) (Object) anonymousClass4;
         }
 
         public final Object invoke(TvSeriesLoadResponse tvSeriesLoadResponse, Continuation<? super Unit> continuation) {
-            return create(tvSeriesLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass4) (Object) create(tvSeriesLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -706,8 +732,8 @@ public final class MegaFlix extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass5(String str, String str2, String str3, String str4, Continuation<? super AnonymousClass5> continuation) {
-            super(2, continuation);
+        AnonymousClass5(String str, String str2, String str3, String str4, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$backgroundPoster = str;
             this.$year = str2;
             this.$descipt = str3;
@@ -715,13 +741,13 @@ public final class MegaFlix extends MainAPI {
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass5 = new AnonymousClass5(this.$backgroundPoster, this.$year, this.$descipt, this.$rating, continuation);
+            AnonymousClass5 anonymousClass5 = new AnonymousClass5(this.$backgroundPoster, this.$year, this.$descipt, this.$rating, continuation);
             anonymousClass5.L$0 = obj;
-            return anonymousClass5;
+            return (Continuation<Unit>) (Object) anonymousClass5;
         }
 
         public final Object invoke(MovieLoadResponse movieLoadResponse, Continuation<? super Unit> continuation) {
-            return create(movieLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass5) (Object) create(movieLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -754,22 +780,149 @@ public final class MegaFlix extends MainAPI {
         */
     @org.jetbrains.annotations.Nullable
     public java.lang.Object loadLinks(@org.jetbrains.annotations.NotNull java.lang.String r35, boolean r36, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.SubtitleFile, kotlin.Unit> r37, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.utils.ExtractorLink, kotlin.Unit> r38, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super java.lang.Boolean> r39) {
-        /*
-            Method dump skipped, instruction units count: 578
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.MegaFlix.MegaFlix.loadLinks(java.lang.String, boolean, kotlin.jvm.functions.Function1, kotlin.jvm.functions.Function1, kotlin.coroutines.Continuation):java.lang.Object");
+        C00011 c00011;
+        String data = null;
+        Function1 subtitleCallback = null;
+        Function1 callback = null;
+        Collection destination$iv$iv = null;
+        Iterator it = null;
+        int step = 0;
+        if (r39 instanceof C00011) {
+            c00011 = (C00011) r39;
+            if ((c00011.label & Integer.MIN_VALUE) != 0) {
+                c00011.label -= Integer.MIN_VALUE;
+            } else {
+                c00011 = new C00011(r39);
+            }
+        } else {
+            c00011 = new C00011(r39);
+        }
+        Object $result = c00011.result;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        boolean inUrlBranch = false;
+        switch (c00011.label) {
+            case 0: {
+                ResultKt.throwOnFailure($result);
+                data = r35;
+                subtitleCallback = r37;
+                callback = r38;
+                step = 0;
+                inUrlBranch = isUrl(data);
+                if (inUrlBranch) {
+                    c00011.L$0 = data;
+                    c00011.L$1 = subtitleCallback;
+                    c00011.L$2 = callback;
+                    c00011.label = 1;
+                    /* bytecode original: app.get(); getUrl() normalizava o host
+                       para mainUrl (dados eram URLs do próprio site). Adaptado: os dados atuais são URLs absolutas
+                       cross-host (player/episódios do embed painel-aso.sbs), então busca a URL diretamente. */
+                    $result = MainActivityKt.getApp().get(data, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00011);
+                    if ($result == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                }
+                break;
+            }
+            case 1: {
+                callback = (Function1) c00011.L$2;
+                subtitleCallback = (Function1) c00011.L$1;
+                data = (String) c00011.L$0;
+                ResultKt.throwOnFailure($result);
+                step = 0;
+                inUrlBranch = true;
+                break;
+            }
+            case 2: {
+                destination$iv$iv = (Collection) c00011.L$5;
+                it = (Iterator) c00011.L$4;
+                callback = (Function1) c00011.L$2;
+                subtitleCallback = (Function1) c00011.L$1;
+                data = (String) c00011.L$0;
+                ResultKt.throwOnFailure($result);
+                step = 2;
+                inUrlBranch = true;
+                break;
+            }
+            case 3: {
+                it = (Iterator) c00011.L$3;
+                callback = (Function1) c00011.L$2;
+                subtitleCallback = (Function1) c00011.L$1;
+                data = (String) c00011.L$0;
+                ResultKt.throwOnFailure($result);
+                step = 3;
+                inUrlBranch = false;
+                break;
+            }
+            default:
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+        if (inUrlBranch) {
+            if (step == 0) {
+                Document doc = ((NiceResponse) $result).getDocument();
+                /* bytecode original: select("ul.players li a") + attr("data-url") — markup morto no site atual;
+                   adaptado para as linhas de player atuais button[data-source], com fallback para o markup antigo.
+                   O resolver antigo megafrixapi.com/blog/index.php?link= continua vivo e é mantido. */
+                Iterable rows = (Iterable) doc.select("button[data-source], ul.players li a");
+                destination$iv$iv = new ArrayList(CollectionsKt.collectionSizeOrDefault(rows, 10));
+                it = rows.iterator();
+            } else {
+                destination$iv$iv.add(Boxing.boxBoolean(((Boolean) $result).booleanValue()));
+            }
+            while (it.hasNext()) {
+                Element el = (Element) it.next();
+                String link = el.attr("data-source");
+                if (link.length() == 0) {
+                    link = el.attr("data-url");
+                }
+                String url = StringsKt.replace(link, "https://megafrixapi.com/blog/index.php?link=", "", false);
+                c00011.L$0 = data;
+                c00011.L$1 = subtitleCallback;
+                c00011.L$2 = callback;
+                c00011.L$3 = destination$iv$iv;
+                c00011.L$4 = it;
+                c00011.L$5 = destination$iv$iv;
+                c00011.label = 2;
+                Object obj = ExtractorApiKt.loadExtractor(url, url, subtitleCallback, callback, c00011);
+                if (obj == coroutine_suspended) {
+                    return coroutine_suspended;
+                }
+                destination$iv$iv.add(Boxing.boxBoolean(((Boolean) obj).booleanValue()));
+            }
+        } else {
+            if (step == 0) {
+                List items = StringsKt.split((CharSequence) StringsKt.trim(data, new char[]{'[', ']'}), new char[]{','}, false, 0);
+                Collection mapped$iv$iv = new ArrayList(CollectionsKt.collectionSizeOrDefault((Iterable) items, 10));
+                for (Object objItem : (Iterable) items) {
+                    mapped$iv$iv.add(StringsKt.trim((CharSequence) StringsKt.replace((String) objItem, "\"", "", false)).toString());
+                }
+                it = ((List) mapped$iv$iv).iterator();
+            }
+            while (it.hasNext()) {
+                String item = (String) it.next();
+                String url = StringsKt.replace(item, "https://megafrixapi.com/blog/index.php?link=", "", false);
+                c00011.L$0 = data;
+                c00011.L$1 = subtitleCallback;
+                c00011.L$2 = callback;
+                c00011.L$3 = it;
+                c00011.label = 3;
+                Object obj = ExtractorApiKt.loadExtractor(url, url, subtitleCallback, callback, c00011);
+                if (obj == coroutine_suspended) {
+                    return coroutine_suspended;
+                }
+            }
+        }
+        return Boxing.boxBoolean(data.length() == 0);
     }
 
     private final TvType getType(String t) {
-        return StringsKt.contains$default(t, "filme", false, 2, (Object) null) ? TvType.Movie : TvType.TvSeries;
+        return StringsKt.contains(t, "filme", false) ? TvType.Movie : TvType.TvSeries;
     }
 
     private final String extrairLink(String input) {
         MatchGroupCollection groups;
         MatchGroup matchGroup;
         Regex regex = new Regex("window\\.location\\.href\\s*=\\s*[\"'](.*?)[\"']\\s*;?");
-        MatchResult matchResult = Regex.find$default(regex, input, 0, 2, (Object) null);
+        MatchResult matchResult = regex.find(input, 0);
         if (matchResult == null || (groups = matchResult.getGroups()) == null || (matchGroup = groups.get(1)) == null) {
             return null;
         }
@@ -782,7 +935,7 @@ public final class MegaFlix extends MainAPI {
         MatchGroup matchGroup;
         String value;
         Regex regex = new Regex("(\\d+)");
-        MatchResult matchResult = Regex.find$default(regex, text, 0, 2, (Object) null);
+        MatchResult matchResult = regex.find(text, 0);
         if (matchResult == null || (groups = matchResult.getGroups()) == null || (matchGroup = groups.get(1)) == null || (value = matchGroup.getValue()) == null) {
             return null;
         }
@@ -793,7 +946,7 @@ public final class MegaFlix extends MainAPI {
         MatchGroupCollection groups;
         MatchGroup matchGroup;
         Regex regex = new Regex(".*/assistir/([^/]+)[/?]?.*");
-        MatchResult matchResult = Regex.find$default(regex, url, 0, 2, (Object) null);
+        MatchResult matchResult = regex.find(url, 0);
         if (matchResult == null || (groups = matchResult.getGroups()) == null || (matchGroup = groups.get(1)) == null) {
             return null;
         }

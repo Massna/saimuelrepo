@@ -25,20 +25,20 @@ final class NetCine$loadLinks$3$2$1 extends SuspendLambda implements Function2<E
     final /* synthetic */ NetCine this$0;
 
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-    NetCine$loadLinks$3$2$1(NetCine netCine, Ref.ObjectRef<String> objectRef, Continuation<? super NetCine$loadLinks$3$2$1> continuation) {
-        super(2, continuation);
+    NetCine$loadLinks$3$2$1(NetCine netCine, Ref.ObjectRef<String> objectRef, Continuation<?> continuation) {
+        super(2, (Continuation) continuation);
         this.this$0 = netCine;
         this.$ref = objectRef;
     }
 
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        Continuation<Unit> netCine$loadLinks$3$2$1 = new NetCine$loadLinks$3$2$1(this.this$0, this.$ref, continuation);
+        NetCine$loadLinks$3$2$1 netCine$loadLinks$3$2$1 = new NetCine$loadLinks$3$2$1(this.this$0, this.$ref, continuation);
         netCine$loadLinks$3$2$1.L$0 = obj;
-        return netCine$loadLinks$3$2$1;
+        return (Continuation<Unit>) (Object) netCine$loadLinks$3$2$1;
     }
 
     public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-        return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+        return ((NetCine$loadLinks$3$2$1) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     public final Object invokeSuspend(Object obj) {

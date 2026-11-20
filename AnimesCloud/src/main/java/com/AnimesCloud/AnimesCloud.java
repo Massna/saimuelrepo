@@ -11,6 +11,7 @@ import com.lagradost.cloudstream3.MainAPI;
 import com.lagradost.cloudstream3.MainAPIKt;
 import com.lagradost.cloudstream3.MainActivityKt;
 import com.lagradost.cloudstream3.MainPageData;
+import com.lagradost.cloudstream3.MainPageRequest;
 import com.lagradost.cloudstream3.MovieLoadResponse;
 import com.lagradost.cloudstream3.Score;
 import com.lagradost.cloudstream3.SearchQuality;
@@ -72,7 +73,7 @@ public final class AnimesCloud extends MainAPI {
     private String persistedCookies;
 
     @NotNull
-    private static final Mutex locker = MutexKt.Mutex$default(false, 1, (Object) null);
+    private static final Mutex locker = MutexKt.Mutex(false);
 
     @NotNull
     private String mainUrl = "https://animesdrive.cloud/";
@@ -99,7 +100,7 @@ public final class AnimesCloud extends MainAPI {
     /* JADX INFO: compiled from: AnimesCloud.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.AnimesCloud.AnimesCloud", f = "AnimesCloud.kt", i = {0, 0, 1, 1, 1}, l = {78, 80}, m = "getMainPage", n = {"this", "request", "this", "request", "destination$iv$iv"}, s = {"L$0", "L$1", "L$0", "L$1", "L$2"})
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
@@ -107,8 +108,8 @@ public final class AnimesCloud extends MainAPI {
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -123,14 +124,14 @@ public final class AnimesCloud extends MainAPI {
     /* JADX INFO: compiled from: AnimesCloud.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.AnimesCloud.AnimesCloud", f = "AnimesCloud.kt", i = {0, 0}, l = {116, 142, 151}, m = "load", n = {"this", "url"}, s = {"L$0", "L$1"})
-    static final class C00001 extends ContinuationImpl {
+    final class C00001 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        C00001(Continuation<? super C00001> continuation) {
-            super(continuation);
+        C00001(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -145,22 +146,26 @@ public final class AnimesCloud extends MainAPI {
     /* JADX INFO: compiled from: AnimesCloud.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.AnimesCloud.AnimesCloud", f = "AnimesCloud.kt", i = {0, 0, 0, 1, 1, 1}, l = {199, 46, 64}, m = "request", n = {"this", "url", "$this$withLock_u24default$iv", "this", "url", "$this$withLock_u24default$iv"}, s = {"L$0", "L$1", "L$2", "L$0", "L$1", "L$2"})
-    static final class C00011 extends ContinuationImpl {
+    final class C00011 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
         int label;
         /* synthetic */ Object result;
 
-        C00011(Continuation<? super C00011> continuation) {
-            super(continuation);
+        C00011(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
         public final Object invokeSuspend(@NotNull Object obj) {
             this.result = obj;
             this.label |= Integer.MIN_VALUE;
-            return AnimesCloud.this.request(null, (Continuation) this);
+            try {
+                return AnimesCloud.this.request(null, (Continuation) this);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -168,13 +173,13 @@ public final class AnimesCloud extends MainAPI {
     /* JADX INFO: compiled from: AnimesCloud.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.AnimesCloud.AnimesCloud", f = "AnimesCloud.kt", i = {0}, l = {98}, m = "search", n = {"this"}, s = {"L$0"})
-    static final class C00021 extends ContinuationImpl {
+    final class C00021 extends ContinuationImpl {
         Object L$0;
         int label;
         /* synthetic */ Object result;
 
-        C00021(Continuation<? super C00021> continuation) {
-            super(continuation);
+        C00021(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -269,7 +274,7 @@ public final class AnimesCloud extends MainAPI {
         String url5;
         AnimesCloud animesCloud4;
         Mutex $this$withLock_u24default$iv3;
-        boolean z;
+        boolean z = false;
         Object obj;
         NiceResponse resMain;
         List cookieList;
@@ -328,7 +333,7 @@ public final class AnimesCloud extends MainAPI {
                                 z = true;
                                 c00012 = c00013;
                                 try {
-                                    $result = Requests.get$default(app, mainUrl, mapMapOf, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 60L, interceptor, false, (ResponseParser) null, c00012, 3324, (Object) null);
+                                    $result = app.get(mainUrl, mapMapOf, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), 60L, interceptor, true, app.getResponseParser(), c00012);
                                     coroutine_suspended = coroutine_suspended;
                                     if ($result == coroutine_suspended) {
                                         return coroutine_suspended;
@@ -345,13 +350,13 @@ public final class AnimesCloud extends MainAPI {
                                                 cookieList = new ArrayList();
                                                 Iterable $this$forEach$iv = resMain.getOkhttpResponse().headers("Set-Cookie");
                                                 for (Object element$iv : $this$forEach$iv) {
-                                                    cookieList.add(StringsKt.split$default((String) element$iv, new String[]{";"}, false, 0, 6, (Object) null).get(0));
+                                                    cookieList.add(StringsKt.split((String) element$iv, new String[]{";"}, false, 0).get(0));
                                                 }
                                                 it = resMain.getOkhttpResponse().request().header("Cookie");
                                                 if (it != null) {
                                                     Boxing.boxBoolean(cookieList.add(it));
                                                 }
-                                                animesCloud3.persistedCookies = CollectionsKt.joinToString$default(CollectionsKt.distinct(cookieList), "; ", (CharSequence) null, (CharSequence) null, 0, (CharSequence) null, (Function1) null, 62, (Object) null);
+                                                animesCloud3.persistedCookies = CollectionsKt.joinToString(CollectionsKt.distinct(cookieList), "; ", "", "", -1, "...", (Function1) null);
                                                 isInitialized = z;
                                             }
                                             animesCloud = animesCloud3;
@@ -383,13 +388,13 @@ public final class AnimesCloud extends MainAPI {
                                     c00014.L$2 = null;
                                     c00014.label = 3;
                                     obj = coroutine_suspended;
-                                    $result = Requests.get$default(app2, url2, defaultHeaders, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, interceptor2, false, (ResponseParser) null, c00014, 3580, (Object) null);
+                                    $result = app2.get(url2, defaultHeaders, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app2.getDefaultCacheTime(), app2.getDefaultCacheTimeUnit(), app2.getDefaultTimeOut(), interceptor2, true, app2.getResponseParser(), c00014);
                                     if ($result == obj) {
                                         return obj;
                                     }
                                     return ((NiceResponse) $result).getDocument();
                                 } catch (Throwable th2) {
-                                    th = th2;
+                                    Throwable th = th2;
                                     owner$iv2 = owner$iv;
                                     $this$withLock_u24default$iv2 = $this$withLock_u24default$iv3;
                                     $this$withLock_u24default$iv2.unlock(owner$iv2);
@@ -408,7 +413,7 @@ public final class AnimesCloud extends MainAPI {
                         $this$withLock_u24default$iv2.unlock(owner$iv2);
                         url2 = url4;
                     } catch (Throwable th3) {
-                        th = th3;
+                        Throwable th = th3;
                         owner$iv2 = owner$iv;
                         $this$withLock_u24default$iv2 = $this$withLock_u24default$iv;
                     }
@@ -426,7 +431,7 @@ public final class AnimesCloud extends MainAPI {
                 c00015.L$2 = null;
                 c00015.label = 3;
                 obj = coroutine_suspended;
-                $result = Requests.get$default(app3, url2, defaultHeaders2, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, interceptor3, false, (ResponseParser) null, c00015, 3580, (Object) null);
+                $result = app3.get(url2, defaultHeaders2, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app3.getDefaultCacheTime(), app3.getDefaultCacheTimeUnit(), app3.getDefaultTimeOut(), interceptor3, true, app3.getResponseParser(), c00015);
                 if ($result == obj) {
                     return obj;
                 }
@@ -455,7 +460,7 @@ public final class AnimesCloud extends MainAPI {
                     $this$withLock_u24default$iv3 = $this$withLock_u24default$iv;
                     z = true;
                     c00012 = c00013;
-                    $result = Requests.get$default(app4, mainUrl2, mapMapOf2, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 60L, interceptor4, false, (ResponseParser) null, c00012, 3324, (Object) null);
+                    $result = app4.get(mainUrl2, mapMapOf2, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app4.getDefaultCacheTime(), app4.getDefaultCacheTimeUnit(), 60L, interceptor4, true, app4.getResponseParser(), c00012);
                     coroutine_suspended = coroutine_suspended;
                     if ($result == coroutine_suspended) {
                         return coroutine_suspended;
@@ -469,14 +474,16 @@ public final class AnimesCloud extends MainAPI {
                     if (resMain.getCode() == 200) {
                         cookieList = new ArrayList();
                         Iterable $this$forEach$iv2 = resMain.getOkhttpResponse().headers("Set-Cookie");
-                        while (r13.hasNext()) {
-                            cookieList.add(StringsKt.split$default((String) element$iv, new String[]{";"}, false, 0, 6, (Object) null).get(0));
+                        Iterator<?> it13 = $this$forEach$iv2.iterator();
+                        while (it13.hasNext()) {
+                            Object element$iv = it13.next();
+                            cookieList.add(StringsKt.split((String) element$iv, new String[]{";"}, false, 0).get(0));
                         }
                         it = resMain.getOkhttpResponse().request().header("Cookie");
                         if (it != null) {
                             Boxing.boxBoolean(cookieList.add(it));
                         }
-                        animesCloud3.persistedCookies = CollectionsKt.joinToString$default(CollectionsKt.distinct(cookieList), "; ", (CharSequence) null, (CharSequence) null, 0, (CharSequence) null, (Function1) null, 62, (Object) null);
+                        animesCloud3.persistedCookies = CollectionsKt.joinToString(CollectionsKt.distinct(cookieList), "; ", "", "", -1, "...", (Function1) null);
                         isInitialized = z;
                     }
                     animesCloud = animesCloud3;
@@ -500,7 +507,7 @@ public final class AnimesCloud extends MainAPI {
                 c00016.L$2 = null;
                 c00016.label = 3;
                 obj = coroutine_suspended;
-                $result = Requests.get$default(app5, url2, defaultHeaders3, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, interceptor5, false, (ResponseParser) null, c00016, 3580, (Object) null);
+                $result = app5.get(url2, defaultHeaders3, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app5.getDefaultCacheTime(), app5.getDefaultCacheTimeUnit(), app5.getDefaultTimeOut(), interceptor5, true, app5.getResponseParser(), c00016);
                 if ($result == obj) {
                     return obj;
                 }
@@ -519,14 +526,16 @@ public final class AnimesCloud extends MainAPI {
                     if (resMain.getCode() == 200) {
                         cookieList = new ArrayList();
                         Iterable $this$forEach$iv3 = resMain.getOkhttpResponse().headers("Set-Cookie");
-                        while (r13.hasNext()) {
-                            cookieList.add(StringsKt.split$default((String) element$iv, new String[]{";"}, false, 0, 6, (Object) null).get(0));
+                        Iterator<?> it13 = $this$forEach$iv3.iterator();
+                        while (it13.hasNext()) {
+                            Object element$iv = it13.next();
+                            cookieList.add(StringsKt.split((String) element$iv, new String[]{";"}, false, 0).get(0));
                         }
                         it = resMain.getOkhttpResponse().request().header("Cookie");
                         if (it != null) {
                             Boxing.boxBoolean(cookieList.add(it));
                         }
-                        animesCloud3.persistedCookies = CollectionsKt.joinToString$default(CollectionsKt.distinct(cookieList), "; ", (CharSequence) null, (CharSequence) null, 0, (CharSequence) null, (Function1) null, 62, (Object) null);
+                        animesCloud3.persistedCookies = CollectionsKt.joinToString(CollectionsKt.distinct(cookieList), "; ", "", "", -1, "...", (Function1) null);
                         isInitialized = z;
                     }
                     animesCloud = animesCloud3;
@@ -546,39 +555,23 @@ public final class AnimesCloud extends MainAPI {
                     c00017.L$2 = null;
                     c00017.label = 3;
                     obj = coroutine_suspended;
-                    $result = Requests.get$default(app6, url2, defaultHeaders4, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, interceptor6, false, (ResponseParser) null, c00017, 3580, (Object) null);
+                    $result = app6.get(url2, defaultHeaders4, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app6.getDefaultCacheTime(), app6.getDefaultCacheTimeUnit(), app6.getDefaultTimeOut(), interceptor6, true, app6.getResponseParser(), c00017);
                     if ($result == obj) {
                         return obj;
                     }
                     return ((NiceResponse) $result).getDocument();
                 } catch (Throwable th4) {
-                    th = th4;
+                    Throwable th = th4;
                     $this$withLock_u24default$iv2.unlock(owner$iv2);
                     throw th;
                 }
-                Unit unit5 = Unit.INSTANCE;
-                $this$withLock_u24default$iv2.unlock(owner$iv2);
-                url2 = url4;
-                Requests app7 = MainActivityKt.getApp();
-                Map<String, String> defaultHeaders5 = animesCloud.getDefaultHeaders();
-                Interceptor interceptor7 = animesCloud.cloudflareInterceptor;
-                C00011 c00018 = c00012;
-                c00018.L$0 = null;
-                c00018.L$1 = null;
-                c00018.L$2 = null;
-                c00018.label = 3;
-                obj = coroutine_suspended;
-                $result = Requests.get$default(app7, url2, defaultHeaders5, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, interceptor7, false, (ResponseParser) null, c00018, 3580, (Object) null);
-                if ($result == obj) {
-                    return obj;
-                }
-                return ((NiceResponse) $result).getDocument();
             case 3:
                 ResultKt.throwOnFailure($result);
                 return ((NiceResponse) $result).getDocument();
             default:
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
+        return null;
     }
 
     private final String extractPoster(Element $this$extractPoster) {
@@ -593,7 +586,7 @@ public final class AnimesCloud extends MainAPI {
         if (it == null) {
             it = img.attr("src");
             boolean z = false;
-            if (!StringsKt.isBlank(it) && !StringsKt.contains$default(it, "placeholder", false, 2, (Object) null)) {
+            if (!StringsKt.isBlank(it) && !StringsKt.contains(it, "placeholder", false)) {
                 z = true;
             }
             if (!z) {
@@ -716,7 +709,7 @@ public final class AnimesCloud extends MainAPI {
 
     /* JADX INFO: Access modifiers changed from: private */
     public final Object toSearchResult(Element $this$toSearchResult, Continuation<? super SearchResponse> continuation) {
-        String strText;
+        String strText = null;
         String title;
         String strAttr;
         String strText2;
@@ -737,11 +730,11 @@ public final class AnimesCloud extends MainAPI {
         }
         final Double scoreValue = doubleOrNull;
         final String poster = extractPoster($this$toSearchResult);
-        return MainAPIKt.newAnimeSearchResponse$default(this, title, href, TvType.Anime, false, new Function1() { // from class: com.AnimesCloud.AnimesCloud$$ExternalSyntheticLambda0
+        return MainAPIKt.newAnimeSearchResponse(this, title, href, TvType.Anime, false, new Function1() { // from class: com.AnimesCloud.AnimesCloud$$ExternalSyntheticLambda0
             public final Object invoke(Object obj) {
                 return AnimesCloud.toSearchResult$lambda$9(poster, scoreValue, (AnimeSearchResponse) obj);
             }
-        }, 8, (Object) null);
+        });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -754,12 +747,12 @@ public final class AnimesCloud extends MainAPI {
 
     /* JADX WARN: Code duplicated, block: B:7:0x0018  */
     @Nullable
-    public Object search(@NotNull String query, @NotNull Continuation<? super List<? extends SearchResponse>> continuation) throws Throwable {
+    public Object search(@NotNull String query, @NotNull Continuation<? super List<? extends SearchResponse>> continuation) {
         C00021 c00021;
         Object objRequest;
         AnimesCloud animesCloud;
         AnimeSearchResponse animeSearchResponseNewAnimeSearchResponse$default;
-        String strText;
+        String strText = null;
         String title;
         String strAttr;
         String strText2;
@@ -779,15 +772,18 @@ public final class AnimesCloud extends MainAPI {
         switch (c00021.label) {
             case 0:
                 ResultKt.throwOnFailure($result);
-                String str = getMainUrl() + "/?s=" + StringsKt.replace$default(query, " ", "+", false, 4, (Object) null);
+                String str = getMainUrl() + "/?s=" + StringsKt.replace(query, " ", "+", false);
                 c00021.L$0 = this;
                 c00021.label = 1;
-                objRequest = request(str, c00021);
+                try {
+                    objRequest = request(str, c00021);
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
                 if (objRequest == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 animesCloud = this;
-                break;
                 break;
             case 1:
                 animesCloud = (AnimesCloud) c00021.L$0;
@@ -816,11 +812,11 @@ public final class AnimesCloud extends MainAPI {
                     final Integer yearVal = (elementSelectFirst3 == null || (strText2 = elementSelectFirst3.text()) == null || (string = StringsKt.trim(strText2).toString()) == null) ? null : StringsKt.toIntOrNull(string);
                     Element elementSelectFirst4 = item.selectFirst("div.image div.thumbnail a img");
                     final String poster = elementSelectFirst4 != null ? animesCloud.extractPoster(elementSelectFirst4) : null;
-                    animeSearchResponseNewAnimeSearchResponse$default = MainAPIKt.newAnimeSearchResponse$default(animesCloud, title, href, TvType.Anime, false, new Function1() { // from class: com.AnimesCloud.AnimesCloud$$ExternalSyntheticLambda2
+                    animeSearchResponseNewAnimeSearchResponse$default = MainAPIKt.newAnimeSearchResponse(animesCloud, title, href, TvType.Anime, false, new Function1() { // from class: com.AnimesCloud.AnimesCloud$$ExternalSyntheticLambda2
                         public final Object invoke(Object obj) {
                             return AnimesCloud.search$lambda$11$lambda$10(poster, yearVal, (AnimeSearchResponse) obj);
                         }
-                    }, 8, (Object) null);
+                    });
                 }
             }
             if (animeSearchResponseNewAnimeSearchResponse$default != null) {
@@ -863,7 +859,7 @@ public final class AnimesCloud extends MainAPI {
     /* JADX WARN: Code duplicated, block: B:97:0x020d A[RETURN] */
     /* JADX WARN: Code duplicated, block: B:99:0x0212  */
     @Nullable
-    public Object load(@NotNull String url, @NotNull Continuation<? super LoadResponse> continuation) throws Throwable {
+    public Object load(@NotNull String url, @NotNull Continuation<? super LoadResponse> continuation) {
         C00001 c00001;
         Object objRequest;
         String url2;
@@ -878,14 +874,14 @@ public final class AnimesCloud extends MainAPI {
         String durationText;
         Collection destination$iv$iv;
         List actors;
-        boolean z;
+        boolean z = false;
         boolean isMovie;
         TvType tvType;
         TvType type;
         Element elementSelectFirst2;
         Element elementSelectFirst3;
         String plotText;
-        String strText;
+        String strText = null;
         Element elementSelectFirst4;
         String finalPoster;
         Object objNewMovieLoadResponse;
@@ -916,7 +912,11 @@ public final class AnimesCloud extends MainAPI {
                 c00001.L$0 = this;
                 c00001.L$1 = url;
                 c00001.label = 1;
-                objRequest = request(url, c00001);
+                try {
+                    objRequest = request(url, c00001);
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
                 if (objRequest == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -935,83 +935,7 @@ public final class AnimesCloud extends MainAPI {
                     } else {
                         next = null;
                     }
-                    element = (Element) next;
-                    if (element != null || (elementSelectFirst6 = element.selectFirst("span.valor")) == null) {
-                        durationText = null;
-                    } else {
-                        durationText = elementSelectFirst6.text();
-                    }
-                    Iterable $this$forEach$iv$iv$iv = document.select("div.person");
-                    destination$iv$iv = new ArrayList();
-                    for (Object element$iv$iv : $this$forEach$iv$iv$iv) {
-                        Element it2 = (Element) element$iv$iv;
-                        elementSelectFirst5 = it2.selectFirst("div.data div.name a");
-                        if (elementSelectFirst5 != null || (name = elementSelectFirst5.text()) == null) {
-                            pair = null;
-                        } else {
-                            Element elementSelectFirst7 = it2.selectFirst("div.data div.caracter");
-                            if (elementSelectFirst7 == null || (role = elementSelectFirst7.text()) == null) {
-                                role = "";
-                            }
-                            Element elementSelectFirst8 = it2.selectFirst("div.img img");
-                            String img = elementSelectFirst8 != null ? elementSelectFirst8.attr("src") : null;
-                            pair = new Pair(new Actor(name, img), role);
-                        }
-                        if (pair != null) {
-                            destination$iv$iv.add(pair);
-                        }
-                    }
-                    actors = (List) destination$iv$iv;
-                    if (!StringsKt.contains$default(url2, "/filme/", false, 2, (Object) null) || document.select("div#seasons").isEmpty()) {
-                        z = true;
-                    } else {
-                        z = false;
-                    }
-                    isMovie = z;
-                    if (isMovie) {
-                        tvType = TvType.AnimeMovie;
-                    } else {
-                        tvType = TvType.Anime;
-                    }
-                    type = tvType;
-                    elementSelectFirst2 = document.selectFirst("div.wp-content p:first-child");
-                    if (elementSelectFirst2 != null || (strText2 = elementSelectFirst2.text()) == null || (string = StringsKt.trim(strText2).toString()) == null) {
-                        elementSelectFirst3 = document.selectFirst("div.wp-content");
-                        if (elementSelectFirst3 != null || (strText = elementSelectFirst3.text()) == null) {
-                            plotText = null;
-                        } else {
-                            plotText = StringsKt.trim(strText).toString();
-                        }
-                    } else {
-                        plotText = string;
-                    }
-                    elementSelectFirst4 = document.selectFirst("div.g-item a");
-                    if (elementSelectFirst4 != null || (strAttr = elementSelectFirst4.attr("href")) == null) {
-                        finalPoster = null;
-                    } else {
-                        finalPoster = StringsKt.trim(strAttr).toString();
-                    }
-                    if (isMovie) {
-                        AnonymousClass2 anonymousClass2 = new AnonymousClass2(finalPoster, plotText, scoreValue, durationText, actors, null);
-                        c00001.L$0 = null;
-                        c00001.L$1 = null;
-                        c00001.label = 2;
-                        objNewMovieLoadResponse = MainAPIKt.newMovieLoadResponse(animesCloud, title, url2, type, url2, anonymousClass2, c00001);
-                        if (objNewMovieLoadResponse == coroutine_suspended) {
-                            return coroutine_suspended;
-                        }
-                        return (LoadResponse) objNewMovieLoadResponse;
-                    }
-                    AnonymousClass3 anonymousClass3 = new AnonymousClass3(finalPoster, plotText, scoreValue, durationText, actors, animesCloud.loadEpisodesFromPage(document, url2), null);
-                    c00001.L$0 = null;
-                    c00001.L$1 = null;
-                    c00001.label = 3;
-                    $result = MainAPIKt.newAnimeLoadResponse$default(animesCloud, title, url2, type, false, anonymousClass3, c00001, 8, (Object) null);
-                    if ($result == coroutine_suspended) {
-                        return coroutine_suspended;
-                    }
-                    return (LoadResponse) $result;
-                } while (!StringsKt.contains$default(((Element) next).text(), "Duração", false, 2, (Object) null));
+                } while (!StringsKt.contains(((Element) next).text(), "Duração", false));
                 element = (Element) next;
                 if (element != null) {
                     durationText = null;
@@ -1020,8 +944,9 @@ public final class AnimesCloud extends MainAPI {
                 }
                 Iterable $this$forEach$iv$iv$iv2 = document.select("div.person");
                 destination$iv$iv = new ArrayList();
-                while (r17.hasNext()) {
-                    Element it3 = (Element) element$iv$iv;
+                Iterator<?> it_r17 = $this$forEach$iv$iv$iv2.iterator();
+                    while (it_r17.hasNext()) {
+                        Element it3 = (Element) it_r17.next();
                     elementSelectFirst5 = it3.selectFirst("div.data div.name a");
                     if (elementSelectFirst5 != null) {
                     }
@@ -1031,7 +956,7 @@ public final class AnimesCloud extends MainAPI {
                     }
                 }
                 actors = (List) destination$iv$iv;
-                if (StringsKt.contains$default(url2, "/filme/", false, 2, (Object) null)) {
+                if (StringsKt.contains(url2, "/filme/", false)) {
                     z = true;
                 } else {
                     z = true;
@@ -1080,7 +1005,7 @@ public final class AnimesCloud extends MainAPI {
                 c00001.L$0 = null;
                 c00001.L$1 = null;
                 c00001.label = 3;
-                $result = MainAPIKt.newAnimeLoadResponse$default(animesCloud, title, url2, type, false, anonymousClass5, c00001, 8, (Object) null);
+                $result = MainAPIKt.newAnimeLoadResponse(animesCloud, title, url2, type, false, anonymousClass5, c00001);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -1107,81 +1032,7 @@ public final class AnimesCloud extends MainAPI {
                     } else {
                         next = null;
                     }
-                    element = (Element) next;
-                    if (element != null) {
-                        durationText = null;
-                    } else {
-                        durationText = null;
-                    }
-                    Iterable $this$forEach$iv$iv$iv3 = document.select("div.person");
-                    destination$iv$iv = new ArrayList();
-                    while (r17.hasNext()) {
-                        Element it4 = (Element) element$iv$iv;
-                        elementSelectFirst5 = it4.selectFirst("div.data div.name a");
-                        if (elementSelectFirst5 != null) {
-                            break;
-                        }
-                        pair = null;
-                        if (pair != null) {
-                            destination$iv$iv.add(pair);
-                        }
-                    }
-                    actors = (List) destination$iv$iv;
-                    if (StringsKt.contains$default(url2, "/filme/", false, 2, (Object) null)) {
-                        z = true;
-                    } else {
-                        z = true;
-                    }
-                    isMovie = z;
-                    if (isMovie) {
-                        tvType = TvType.AnimeMovie;
-                    } else {
-                        tvType = TvType.Anime;
-                    }
-                    type = tvType;
-                    elementSelectFirst2 = document.selectFirst("div.wp-content p:first-child");
-                    if (elementSelectFirst2 != null) {
-                        elementSelectFirst3 = document.selectFirst("div.wp-content");
-                        if (elementSelectFirst3 != null) {
-                            plotText = null;
-                        } else {
-                            plotText = null;
-                        }
-                    } else {
-                        elementSelectFirst3 = document.selectFirst("div.wp-content");
-                        if (elementSelectFirst3 != null) {
-                            plotText = null;
-                        } else {
-                            plotText = null;
-                        }
-                    }
-                    elementSelectFirst4 = document.selectFirst("div.g-item a");
-                    if (elementSelectFirst4 != null) {
-                        finalPoster = null;
-                    } else {
-                        finalPoster = null;
-                    }
-                    if (isMovie) {
-                        AnonymousClass2 anonymousClass6 = new AnonymousClass2(finalPoster, plotText, scoreValue, durationText, actors, null);
-                        c00001.L$0 = null;
-                        c00001.L$1 = null;
-                        c00001.label = 2;
-                        objNewMovieLoadResponse = MainAPIKt.newMovieLoadResponse(animesCloud, title, url2, type, url2, anonymousClass6, c00001);
-                        if (objNewMovieLoadResponse == coroutine_suspended) {
-                            return coroutine_suspended;
-                        }
-                        return (LoadResponse) objNewMovieLoadResponse;
-                    }
-                    AnonymousClass3 anonymousClass7 = new AnonymousClass3(finalPoster, plotText, scoreValue, durationText, actors, animesCloud.loadEpisodesFromPage(document, url2), null);
-                    c00001.L$0 = null;
-                    c00001.L$1 = null;
-                    c00001.label = 3;
-                    $result = MainAPIKt.newAnimeLoadResponse$default(animesCloud, title, url2, type, false, anonymousClass7, c00001, 8, (Object) null);
-                    if ($result == coroutine_suspended) {
-                        return coroutine_suspended;
-                    }
-                    return (LoadResponse) $result;
-                } while (!StringsKt.contains$default(((Element) next).text(), "Duração", false, 2, (Object) null));
+                } while (!StringsKt.contains(((Element) next).text(), "Duração", false));
                 element = (Element) next;
                 if (element != null) {
                     durationText = null;
@@ -1190,8 +1041,9 @@ public final class AnimesCloud extends MainAPI {
                 }
                 Iterable $this$forEach$iv$iv$iv4 = document.select("div.person");
                 destination$iv$iv = new ArrayList();
-                while (r17.hasNext()) {
-                    Element it5 = (Element) element$iv$iv;
+                Iterator<?> it_r17c = $this$forEach$iv$iv$iv4.iterator();
+                    while (it_r17c.hasNext()) {
+                        Element it5 = (Element) it_r17c.next();
                     elementSelectFirst5 = it5.selectFirst("div.data div.name a");
                     if (elementSelectFirst5 != null) {
                         break;
@@ -1202,7 +1054,7 @@ public final class AnimesCloud extends MainAPI {
                     }
                 }
                 actors = (List) destination$iv$iv;
-                if (StringsKt.contains$default(url2, "/filme/", false, 2, (Object) null)) {
+                if (StringsKt.contains(url2, "/filme/", false)) {
                     z = true;
                 } else {
                     z = true;
@@ -1251,7 +1103,7 @@ public final class AnimesCloud extends MainAPI {
                 c00001.L$0 = null;
                 c00001.L$1 = null;
                 c00001.label = 3;
-                $result = MainAPIKt.newAnimeLoadResponse$default(animesCloud, title, url2, type, false, anonymousClass9, c00001, 8, (Object) null);
+                $result = MainAPIKt.newAnimeLoadResponse(animesCloud, title, url2, type, false, anonymousClass9, c00001);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -1282,8 +1134,8 @@ public final class AnimesCloud extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass2(String str, String str2, Double d, String str3, List<Pair<Actor, String>> list, Continuation<? super AnonymousClass2> continuation) {
-            super(2, continuation);
+        AnonymousClass2(String str, String str2, Double d, String str3, List<Pair<Actor, String>> list, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$finalPoster = str;
             this.$plotText = str2;
             this.$scoreValue = d;
@@ -1292,13 +1144,13 @@ public final class AnimesCloud extends MainAPI {
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass2 = new AnonymousClass2(this.$finalPoster, this.$plotText, this.$scoreValue, this.$durationText, this.$actors, continuation);
+            AnonymousClass2 anonymousClass2 = new AnonymousClass2(this.$finalPoster, this.$plotText, this.$scoreValue, this.$durationText, this.$actors, continuation);
             anonymousClass2.L$0 = obj;
-            return anonymousClass2;
+            return (Continuation<Unit>) (Object) anonymousClass2;
         }
 
         public final Object invoke(MovieLoadResponse movieLoadResponse, Continuation<? super Unit> continuation) {
-            return create(movieLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass2) (Object) create(movieLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -1335,24 +1187,24 @@ public final class AnimesCloud extends MainAPI {
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
         /* JADX WARN: Multi-variable type inference failed */
-        AnonymousClass3(String str, String str2, Double d, String str3, List<Pair<Actor, String>> list, Map<DubStatus, ? extends List<Episode>> map, Continuation<? super AnonymousClass3> continuation) {
-            super(2, continuation);
+        AnonymousClass3(String str, String str2, Double d, String str3, List<Pair<Actor, String>> list, Map<DubStatus, ? extends List<Episode>> map, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$finalPoster = str;
             this.$plotText = str2;
             this.$scoreValue = d;
             this.$durationText = str3;
             this.$actors = list;
-            this.$episodes = map;
+            this.$episodes = (java.util.Map) map;
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass3 = new AnonymousClass3(this.$finalPoster, this.$plotText, this.$scoreValue, this.$durationText, this.$actors, this.$episodes, continuation);
+            AnonymousClass3 anonymousClass3 = new AnonymousClass3(this.$finalPoster, this.$plotText, this.$scoreValue, this.$durationText, this.$actors, this.$episodes, continuation);
             anonymousClass3.L$0 = obj;
-            return anonymousClass3;
+            return (Continuation<Unit>) (Object) anonymousClass3;
         }
 
         public final Object invoke(AnimeLoadResponse animeLoadResponse, Continuation<? super Unit> continuation) {
-            return create(animeLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass3) (Object) create(animeLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -1371,13 +1223,13 @@ public final class AnimesCloud extends MainAPI {
                     if (listEmptyList == null) {
                         listEmptyList = CollectionsKt.emptyList();
                     }
-                    MainAPIKt.addEpisodes(loadResponse, dubStatus, listEmptyList);
+                    MainAPIKt.addEpisodes((AnimeLoadResponse) loadResponse, dubStatus, listEmptyList);
                     DubStatus dubStatus2 = DubStatus.Dubbed;
                     List<Episode> listEmptyList2 = this.$episodes.get(DubStatus.Dubbed);
                     if (listEmptyList2 == null) {
                         listEmptyList2 = CollectionsKt.emptyList();
                     }
-                    MainAPIKt.addEpisodes(loadResponse, dubStatus2, listEmptyList2);
+                    MainAPIKt.addEpisodes((AnimeLoadResponse) loadResponse, dubStatus2, listEmptyList2);
                     return Unit.INSTANCE;
                 default:
                     throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
@@ -1394,7 +1246,7 @@ public final class AnimesCloud extends MainAPI {
             String episodeUrl = MainAPIKt.fixUrl(this, episodeElement.select("h3.episode-title a").attr("href"));
             String numText = episodeElement.select("a.episode-mini-number").text();
             Elements elements2 = elements;
-            final MatchResult match = Regex.find$default(new Regex("^(\\d+\\s*-\\s*)?(\\d+)$"), numText, 0, 2, (Object) null);
+            final MatchResult match = new Regex("^(\\d+\\s*-\\s*)?(\\d+)$").find(numText, 0);
             destination$iv$iv.add(MainAPIKt.newEpisode(this, episodeUrl, new Function1() { // from class: com.AnimesCloud.AnimesCloud$$ExternalSyntheticLambda1
                 public final Object invoke(Object obj) {
                     return AnimesCloud.loadEpisodesFromPage$lambda$15$lambda$14(episodeElement, match, (Episode) obj);
@@ -1403,7 +1255,7 @@ public final class AnimesCloud extends MainAPI {
             elements = elements2;
         }
         List episodeList = (List) destination$iv$iv;
-        return MapsKt.mapOf(TuplesKt.to(StringsKt.contains$default(baseUrl, "dublado", false, 2, (Object) null) ? DubStatus.Dubbed : DubStatus.Subbed, episodeList));
+        return (java.util.Map) MapsKt.mapOf(TuplesKt.to((DubStatus) (StringsKt.contains(baseUrl, "dublado", false) ? DubStatus.Dubbed : DubStatus.Subbed), episodeList));
     }
 
     /* JADX INFO: Access modifiers changed from: private */

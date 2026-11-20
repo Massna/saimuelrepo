@@ -50,6 +50,7 @@ import kotlinx.coroutines.DelayKt;
 import okhttp3.Interceptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -82,15 +83,15 @@ public final class TopFilmes extends MainAPI {
     /* JADX INFO: compiled from: TopFilmes.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.TopFilmes.TopFilmes", f = "TopFilmes.kt", i = {0, 0, 0, 1, 1}, l = {60, 62}, m = "getMainPage", n = {"this", "request", "url", "this", "request"}, s = {"L$0", "L$1", "L$2", "L$0", "L$1"})
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -105,14 +106,14 @@ public final class TopFilmes extends MainAPI {
     /* JADX INFO: compiled from: TopFilmes.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.TopFilmes.TopFilmes", f = "TopFilmes.kt", i = {0, 0}, l = {137, 153}, m = "load", n = {"this", "url"}, s = {"L$0", "L$1"})
-    static final class C00001 extends ContinuationImpl {
+    final class C00001 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        C00001(Continuation<? super C00001> continuation) {
-            super(continuation);
+        C00001(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -136,8 +137,8 @@ public final class TopFilmes extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass2(String str, Integer num, String str2, List<String> list, Continuation<? super AnonymousClass2> continuation) {
-            super(2, continuation);
+        AnonymousClass2(String str, Integer num, String str2, List<String> list, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$year = num;
             this.$plot = str2;
@@ -145,13 +146,13 @@ public final class TopFilmes extends MainAPI {
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass2 = new AnonymousClass2(this.$poster, this.$year, this.$plot, this.$genres, continuation);
+            AnonymousClass2 anonymousClass2 = new AnonymousClass2(this.$poster, this.$year, this.$plot, this.$genres, continuation);
             anonymousClass2.L$0 = obj;
-            return anonymousClass2;
+            return (Continuation<Unit>) (Object) anonymousClass2;
         }
 
         public final Object invoke(MovieLoadResponse movieLoadResponse, Continuation<? super Unit> continuation) {
-            return create(movieLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass2) (Object) create(movieLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -175,14 +176,14 @@ public final class TopFilmes extends MainAPI {
     /* JADX INFO: compiled from: TopFilmes.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.TopFilmes.TopFilmes", f = "TopFilmes.kt", i = {0, 0}, l = {198, 206, 222, 239, 260}, m = "loadLinks", n = {"this", "callback"}, s = {"L$0", "L$1"})
-    static final class C00011 extends ContinuationImpl {
+    final class C00011 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        C00011(Continuation<? super C00011> continuation) {
-            super(continuation);
+        C00011(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -197,22 +198,22 @@ public final class TopFilmes extends MainAPI {
     /* JADX INFO: compiled from: TopFilmes.kt */
     @Metadata(d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", "", "Lcom/lagradost/cloudstream3/utils/ExtractorLink;"}, k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.TopFilmes.TopFilmes$loadLinks$2", f = "TopFilmes.kt", i = {}, l = {}, m = "invokeSuspend", n = {}, s = {})
-    static final class C00022 extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
+    final class C00022 extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
         private /* synthetic */ Object L$0;
         int label;
 
-        C00022(Continuation<? super C00022> continuation) {
-            super(2, continuation);
+        C00022(Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> c00022 = TopFilmes.this.new C00022(continuation);
+            C00022 c00022 = TopFilmes.this.new C00022(continuation);
             c00022.L$0 = obj;
-            return c00022;
+            return (Continuation<Unit>) (Object) c00022;
         }
 
         public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-            return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((C00022) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -232,22 +233,22 @@ public final class TopFilmes extends MainAPI {
     /* JADX INFO: compiled from: TopFilmes.kt */
     @Metadata(d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", "", "Lcom/lagradost/cloudstream3/utils/ExtractorLink;"}, k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.TopFilmes.TopFilmes$loadLinks$3", f = "TopFilmes.kt", i = {}, l = {}, m = "invokeSuspend", n = {}, s = {})
-    static final class AnonymousClass3 extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
+    final class AnonymousClass3 extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
         private /* synthetic */ Object L$0;
         int label;
 
-        AnonymousClass3(Continuation<? super AnonymousClass3> continuation) {
-            super(2, continuation);
+        AnonymousClass3(Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass3 = TopFilmes.this.new AnonymousClass3(continuation);
+            AnonymousClass3 anonymousClass3 = TopFilmes.this.new AnonymousClass3(continuation);
             anonymousClass3.L$0 = obj;
-            return anonymousClass3;
+            return (Continuation<Unit>) (Object) anonymousClass3;
         }
 
         public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-            return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass3) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -267,22 +268,22 @@ public final class TopFilmes extends MainAPI {
     /* JADX INFO: compiled from: TopFilmes.kt */
     @Metadata(d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", "", "Lcom/lagradost/cloudstream3/utils/ExtractorLink;"}, k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.TopFilmes.TopFilmes$loadLinks$4", f = "TopFilmes.kt", i = {}, l = {}, m = "invokeSuspend", n = {}, s = {})
-    static final class AnonymousClass4 extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
+    final class AnonymousClass4 extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
         private /* synthetic */ Object L$0;
         int label;
 
-        AnonymousClass4(Continuation<? super AnonymousClass4> continuation) {
-            super(2, continuation);
+        AnonymousClass4(Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass4 = TopFilmes.this.new AnonymousClass4(continuation);
+            AnonymousClass4 anonymousClass4 = TopFilmes.this.new AnonymousClass4(continuation);
             anonymousClass4.L$0 = obj;
-            return anonymousClass4;
+            return (Continuation<Unit>) (Object) anonymousClass4;
         }
 
         public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-            return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass4) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -302,22 +303,22 @@ public final class TopFilmes extends MainAPI {
     /* JADX INFO: compiled from: TopFilmes.kt */
     @Metadata(d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\n"}, d2 = {"<anonymous>", "", "Lcom/lagradost/cloudstream3/utils/ExtractorLink;"}, k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.TopFilmes.TopFilmes$loadLinks$5", f = "TopFilmes.kt", i = {}, l = {}, m = "invokeSuspend", n = {}, s = {})
-    static final class AnonymousClass5 extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
+    final class AnonymousClass5 extends SuspendLambda implements Function2<ExtractorLink, Continuation<? super Unit>, Object> {
         private /* synthetic */ Object L$0;
         int label;
 
-        AnonymousClass5(Continuation<? super AnonymousClass5> continuation) {
-            super(2, continuation);
+        AnonymousClass5(Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass5 = TopFilmes.this.new AnonymousClass5(continuation);
+            AnonymousClass5 anonymousClass5 = TopFilmes.this.new AnonymousClass5(continuation);
             anonymousClass5.L$0 = obj;
-            return anonymousClass5;
+            return (Continuation<Unit>) (Object) anonymousClass5;
         }
 
         public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-            return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass5) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -337,14 +338,14 @@ public final class TopFilmes extends MainAPI {
     /* JADX INFO: compiled from: TopFilmes.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.TopFilmes.TopFilmes", f = "TopFilmes.kt", i = {0, 0, 1}, l = {117, 119}, m = "search", n = {"this", "url", "this"}, s = {"L$0", "L$1", "L$0"})
-    static final class C00031 extends ContinuationImpl {
+    final class C00031 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        C00031(Continuation<? super C00031> continuation) {
-            super(continuation);
+        C00031(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -358,7 +359,7 @@ public final class TopFilmes extends MainAPI {
     private final List<String> getMovieSources(Document document, String url) {
         Elements elements;
         Iterable iterable;
-        boolean z;
+        boolean z = false;
         Elements elementsSelect = document.select("div.links_dub a");
         if (elementsSelect.isEmpty()) {
             document.select("a[href*='player']");
@@ -374,7 +375,7 @@ public final class TopFilmes extends MainAPI {
                 elements = elementsSelect;
                 iterable = iterable2;
                 z = z2;
-                str = StringsKt.startsWith$default(strAttr, "//", false, 2, (Object) null) ? "https:" + strAttr : strAttr;
+                str = StringsKt.startsWith(strAttr, "//", false) ? "https:" + strAttr : strAttr;
             } else {
                 elements = elementsSelect;
                 iterable = iterable2;
@@ -396,7 +397,7 @@ public final class TopFilmes extends MainAPI {
         String strAttr2;
         String strAttr3;
         String strAttr4;
-        String strText;
+        String strText = null;
         String strText2;
         String str;
         Integer intOrNull;
@@ -405,7 +406,7 @@ public final class TopFilmes extends MainAPI {
         String strReplace$default;
         String strText5;
         String strText6;
-        final String strFixUrl = null;
+        String strFixUrl = null;
         if (Intrinsics.areEqual(element.tagName(), "a")) {
             strAttr = element.attr("href");
         } else {
@@ -474,14 +475,15 @@ public final class TopFilmes extends MainAPI {
         if (strAttr == null || str2 == null) {
             return null;
         }
-        if (str7 != null && (strReplace$default = StringsKt.replace$default(str7, "_filter(blur)", "", false, 4, (Object) null)) != null) {
+        if (str7 != null && (strReplace$default = StringsKt.replace(str7, "_filter(blur)", "", false)) != null) {
             strFixUrl = MainAPIKt.fixUrl(this, strReplace$default);
         }
-        return MainAPIKt.newMovieSearchResponse$default(this, str2, MainAPIKt.fixUrl(this, strAttr), TvType.Movie, false, new Function1() { // from class: com.TopFilmes.TopFilmes$$ExternalSyntheticLambda0
+        final String strFixUrlF = strFixUrl;
+        return MainAPIKt.newMovieSearchResponse(this, str2, MainAPIKt.fixUrl(this, strAttr), TvType.Movie, false, new Function1() { // from class: com.TopFilmes.TopFilmes$$ExternalSyntheticLambda0
             public final Object invoke(Object obj) {
-                return TopFilmes.toSearchResult$lambda$3(strFixUrl, num, (MovieSearchResponse) obj);
+                return TopFilmes.toSearchResult$lambda$3(strFixUrlF, num, (MovieSearchResponse) obj);
             }
-        }, 8, (Object) null);
+        });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -532,7 +534,7 @@ public final class TopFilmes extends MainAPI {
         Document document;
         ArrayList arrayList;
         Iterator it;
-        boolean z;
+        boolean z = false;
         SearchResponse searchResult;
         if (continuation instanceof AnonymousClass1) {
             anonymousClass1 = (AnonymousClass1) continuation;
@@ -576,7 +578,7 @@ public final class TopFilmes extends MainAPI {
                 anonymousClass1.label = 2;
                 topFilmes2 = topFilmes;
                 mainPageRequest3 = mainPageRequest2;
-                obj = Requests.get$default(app, strFixUrl, mapMapOf, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, anonymousClass1, 4092, (Object) null);
+                obj = app.get(strFixUrl, mapMapOf, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), anonymousClass1);
                 if (obj == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -616,7 +618,7 @@ public final class TopFilmes extends MainAPI {
                 anonymousClass1.label = 2;
                 topFilmes2 = topFilmes;
                 mainPageRequest3 = mainPageRequest2;
-                obj = Requests.get$default(app2, strFixUrl2, mapMapOf2, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, anonymousClass1, 4092, (Object) null);
+                obj = app2.get(strFixUrl2, mapMapOf2, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app2.getDefaultCacheTime(), app2.getDefaultCacheTimeUnit(), app2.getDefaultTimeOut(), (Interceptor) null, true, app2.getResponseParser(), anonymousClass1);
                 if (obj == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -710,7 +712,7 @@ public final class TopFilmes extends MainAPI {
         String strFixUrl;
         Element element;
         Integer intOrNull;
-        boolean z;
+        boolean z = false;
         Element element2;
         String string2;
         Element element3;
@@ -722,7 +724,7 @@ public final class TopFilmes extends MainAPI {
         String str3;
         boolean z2;
         String str4;
-        String strText;
+        String strText = null;
         String strText2;
         String strText3;
         String strText4;
@@ -750,7 +752,7 @@ public final class TopFilmes extends MainAPI {
                 c00001.L$0 = this;
                 c00001.L$1 = str;
                 c00001.label = 1;
-                objNewMovieLoadResponse = Requests.get$default(app, strFixUrl2, mapMapOf, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001, 4092, (Object) null);
+                objNewMovieLoadResponse = app.get(strFixUrl2, mapMapOf, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), c00001);
                 obj = coroutine_suspended;
                 if (objNewMovieLoadResponse == obj) {
                     return obj;
@@ -955,490 +957,46 @@ public final class TopFilmes extends MainAPI {
     /* JADX WARN: Type inference failed for: r14v3 */
     /* JADX WARN: Type inference failed for: r14v5 */
     @Nullable
-    public Object loadLinks(@NotNull String str, boolean z, @NotNull Function1<? super SubtitleFile, Unit> function1, @NotNull Function1<? super ExtractorLink, Unit> function2, @NotNull Continuation<? super Boolean> continuation) {
-        C00011 c00011;
-        boolean z2;
-        Object obj;
-        Function1<? super ExtractorLink, Unit> function3;
-        TopFilmes topFilmes;
-        Document document;
-        Element elementSelectFirst;
-        int i;
-        boolean z3;
-        Continuation continuation2;
-        Element elementSelectFirst2;
-        Continuation continuationAttr;
-        Continuation continuation3;
-        String str2;
-        boolean z4;
-        Iterator it;
-        Object next;
-        Element element;
-        String strAttr;
-        String str3;
-        Function1<? super ExtractorLink, Unit> function4;
-        String str4;
-        boolean z5;
-        boolean z6;
-        Continuation continuation4;
-        Function1<? super ExtractorLink, Unit> function5;
-        Element elementSelectFirst3;
-        String strAttr2;
-        String str5;
-        boolean z7;
-        Element elementSelectFirst4;
-        String strAttr3;
-        String str6;
-        String str7;
-        boolean z8;
-        String str8;
-        Function1<? super ExtractorLink, Unit> function6;
-        String str9;
-        Function1<? super ExtractorLink, Unit> function7;
-        if (continuation instanceof C00011) {
-            c00011 = (C00011) continuation;
-            if ((c00011.label & Integer.MIN_VALUE) != 0) {
-                c00011.label -= Integer.MIN_VALUE;
-            } else {
-                c00011 = new C00011(continuation);
-            }
-        } else {
-            c00011 = new C00011(continuation);
-        }
-        Object objNewExtractorLink = c00011.result;
-        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
-        boolean z9 = 2;
+    public java.lang.Object loadLinks(@NotNull java.lang.String data, boolean isCasting, @NotNull Function1<? super SubtitleFile, Unit> subtitleCallback, @NotNull Function1<? super ExtractorLink, Unit> callback, @NotNull Continuation<? super Boolean> continuation) {
+        String UA = "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
+        boolean found = false;
         try {
-            try {
-                switch (c00011.label) {
-                    case 0:
-                        ResultKt.throwOnFailure(objNewExtractorLink);
-                        String strRemoveSurrounding = str;
-                        try {
-                            if (StringsKt.startsWith$default(strRemoveSurrounding, "[", false, 2, (Object) null) && StringsKt.endsWith$default(strRemoveSurrounding, "]", false, 2, (Object) null)) {
-                                strRemoveSurrounding = StringsKt.removeSurrounding(StringsKt.trim((String) CollectionsKt.first(StringsKt.split$default(StringsKt.removeSuffix(StringsKt.removePrefix(strRemoveSurrounding, "["), "]"), new String[]{","}, false, 0, 6, (Object) null))).toString(), "\"");
-                            }
-                            String strReplace = strRemoveSurrounding;
-                            if (StringsKt.contains$default(strReplace, "player=", false, 2, (Object) null)) {
-                                strReplace = new Regex("player=\\d+").replace(strReplace, "player=1");
-                            }
-                            String strFixUrl = MainAPIKt.fixUrl(this, strReplace);
-                            Requests app = MainActivityKt.getApp();
-                            Map mapMapOf = MapsKt.mapOf(TuplesKt.to("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"));
-                            c00011.L$0 = this;
-                            c00011.L$1 = function2;
-                            c00011.label = 1;
-                            z2 = true;
-                            try {
-                                objNewExtractorLink = Requests.get$default(app, strFixUrl, mapMapOf, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00011, 4092, (Object) null);
-                                obj = coroutine_suspended;
-                                if (objNewExtractorLink == obj) {
-                                    return obj;
-                                }
-                                function3 = function2;
-                                topFilmes = this;
-                                document = ((NiceResponse) objNewExtractorLink).getDocument();
-                                elementSelectFirst = document.selectFirst("div.plyr__video-wrapper");
-                                if (elementSelectFirst != null) {
-                                    elementSelectFirst3 = elementSelectFirst.selectFirst("video#player");
-                                    if (elementSelectFirst3 != null) {
-                                        strAttr2 = elementSelectFirst3.attr("src");
-                                    } else {
-                                        strAttr2 = null;
-                                    }
-                                    str5 = strAttr2;
-                                    if (str5 != null || StringsKt.isBlank(str5)) {
-                                        z7 = true;
-                                    } else {
-                                        z7 = false;
-                                    }
-                                    if (!z7) {
-                                        if (StringsKt.startsWith$default(strAttr2, "//", false, 2, (Object) null)) {
-                                            str9 = "https:" + strAttr2;
-                                        } else {
-                                            str9 = strAttr2;
-                                        }
-                                        String name = topFilmes.getName();
-                                        ExtractorLinkType infer_type = ExtractorApiKt.getINFER_TYPE();
-                                        C00022 c00022 = topFilmes.new C00022(null);
-                                        c00011.L$0 = function3;
-                                        c00011.L$1 = null;
-                                        c00011.label = 2;
-                                        objNewExtractorLink = ExtractorApiKt.newExtractorLink(name, "TopFilmes Video", str9, infer_type, c00022, c00011);
-                                        if (objNewExtractorLink == obj) {
-                                            return obj;
-                                        }
-                                        function7 = function3;
-                                        function7.invoke(objNewExtractorLink);
-                                        return Boxing.boxBoolean(z2);
-                                    }
-                                    i = 2;
-                                    z3 = false;
-                                    continuation2 = null;
-                                    elementSelectFirst4 = elementSelectFirst.selectFirst("source");
-                                    if (elementSelectFirst4 != null) {
-                                        strAttr3 = elementSelectFirst4.attr("src");
-                                    } else {
-                                        strAttr3 = null;
-                                    }
-                                    str6 = strAttr3;
-                                    str7 = str6;
-                                    if (str7 != null || StringsKt.isBlank(str7)) {
-                                        z8 = true;
-                                    } else {
-                                        z8 = false;
-                                    }
-                                    if (!z8) {
-                                        if (StringsKt.startsWith$default(str6, "//", false, 2, (Object) null)) {
-                                            str8 = "https:" + str6;
-                                        } else {
-                                            str8 = str6;
-                                        }
-                                        String name2 = topFilmes.getName();
-                                        ExtractorLinkType infer_type2 = ExtractorApiKt.getINFER_TYPE();
-                                        AnonymousClass3 anonymousClass3 = topFilmes.new AnonymousClass3(null);
-                                        c00011.L$0 = function3;
-                                        c00011.L$1 = null;
-                                        c00011.label = 3;
-                                        objNewExtractorLink = ExtractorApiKt.newExtractorLink(name2, "TopFilmes Video", str8, infer_type2, anonymousClass3, c00011);
-                                        if (objNewExtractorLink == obj) {
-                                            return obj;
-                                        }
-                                        function6 = function3;
-                                        function6.invoke(objNewExtractorLink);
-                                        return Boxing.boxBoolean(z2);
-                                    }
-                                } else {
-                                    i = 2;
-                                    z3 = false;
-                                    continuation2 = null;
-                                }
-                                elementSelectFirst2 = document.selectFirst("video");
-                                if (elementSelectFirst2 != null) {
-                                    continuationAttr = elementSelectFirst2.attr("src");
-                                } else {
-                                    continuationAttr = continuation2;
-                                }
-                                continuation3 = continuationAttr;
-                                str2 = (CharSequence) continuation3;
-                                if (str2 != null || StringsKt.isBlank(str2)) {
-                                    z4 = true;
-                                } else {
-                                    z4 = false;
-                                }
-                                if (!z4) {
-                                    if (StringsKt.startsWith$default(continuation3, "//", z3, i, continuation2)) {
-                                        continuation4 = "https:" + ((String) continuation3);
-                                    } else {
-                                        continuation4 = continuation3;
-                                    }
-                                    String name3 = topFilmes.getName();
-                                    ExtractorLinkType infer_type3 = ExtractorApiKt.getINFER_TYPE();
-                                    AnonymousClass4 anonymousClass4 = topFilmes.new AnonymousClass4(continuation2);
-                                    c00011.L$0 = function3;
-                                    c00011.L$1 = continuation2;
-                                    c00011.label = 4;
-                                    objNewExtractorLink = ExtractorApiKt.newExtractorLink(name3, "TopFilmes Video", continuation4, infer_type3, anonymousClass4, c00011);
-                                    if (objNewExtractorLink == obj) {
-                                        return obj;
-                                    }
-                                    function5 = function3;
-                                    function5.invoke(objNewExtractorLink);
-                                    return Boxing.boxBoolean(z2);
-                                }
-                                it = document.select("source").iterator();
-                                do {
-                                    if (it.hasNext()) {
-                                        next = it.next();
-                                        Element element2 = (Element) next;
-                                        String strAttr4 = element2.attr("src");
-                                        String strAttr5 = element2.attr("type");
-                                        str4 = strAttr4;
-                                        if (str4 != null || StringsKt.isBlank(str4)) {
-                                            z5 = true;
-                                        } else {
-                                            z5 = false;
-                                        }
-                                        if (z5 && Intrinsics.areEqual(strAttr5, "video/mp4")) {
-                                            z6 = true;
-                                        } else {
-                                            z6 = false;
-                                        }
-                                    } else {
-                                        next = continuation2;
-                                    }
-                                    element = (Element) next;
-                                    if (element != null) {
-                                        return Boxing.boxBoolean(z3);
-                                    }
-                                    strAttr = element.attr("src");
-                                    if (StringsKt.startsWith$default(strAttr, "//", z3, 2, continuation2)) {
-                                        str3 = "https:" + strAttr;
-                                    } else {
-                                        str3 = strAttr;
-                                    }
-                                    String name4 = topFilmes.getName();
-                                    ExtractorLinkType infer_type4 = ExtractorApiKt.getINFER_TYPE();
-                                    AnonymousClass5 anonymousClass5 = topFilmes.new AnonymousClass5(continuation2);
-                                    c00011.L$0 = function3;
-                                    c00011.L$1 = continuation2;
-                                    c00011.label = 5;
-                                    objNewExtractorLink = ExtractorApiKt.newExtractorLink(name4, "TopFilmes Video", str3, infer_type4, anonymousClass5, c00011);
-                                    if (objNewExtractorLink == obj) {
-                                        return obj;
-                                    }
-                                    function4 = function3;
-                                    function4.invoke(objNewExtractorLink);
-                                    return Boxing.boxBoolean(z2);
-                                } while (!z6);
-                                element = (Element) next;
-                                if (element != null) {
-                                    return Boxing.boxBoolean(z3);
-                                }
-                                strAttr = element.attr("src");
-                                if (StringsKt.startsWith$default(strAttr, "//", z3, 2, continuation2)) {
-                                    str3 = "https:" + strAttr;
-                                } else {
-                                    str3 = strAttr;
-                                }
-                                String name5 = topFilmes.getName();
-                                ExtractorLinkType infer_type5 = ExtractorApiKt.getINFER_TYPE();
-                                AnonymousClass5 anonymousClass6 = topFilmes.new AnonymousClass5(continuation2);
-                                c00011.L$0 = function3;
-                                c00011.L$1 = continuation2;
-                                c00011.label = 5;
-                                objNewExtractorLink = ExtractorApiKt.newExtractorLink(name5, "TopFilmes Video", str3, infer_type5, anonymousClass6, c00011);
-                                if (objNewExtractorLink == obj) {
-                                    return obj;
-                                }
-                                function4 = function3;
-                                function4.invoke(objNewExtractorLink);
-                                return Boxing.boxBoolean(z2);
-                            } catch (Exception e) {
-                                z9 = 0;
-                                return Boxing.boxBoolean(z9);
-                            }
-                        } catch (Exception e2) {
-                            z9 = 0;
-                            return Boxing.boxBoolean(z9);
-                        }
-                    case 1:
-                        Function1<? super ExtractorLink, Unit> function8 = (Function1) c00011.L$1;
-                        TopFilmes topFilmes2 = (TopFilmes) c00011.L$0;
-                        ResultKt.throwOnFailure(objNewExtractorLink);
-                        topFilmes = topFilmes2;
-                        z2 = true;
-                        function3 = function8;
-                        obj = coroutine_suspended;
-                        document = ((NiceResponse) objNewExtractorLink).getDocument();
-                        elementSelectFirst = document.selectFirst("div.plyr__video-wrapper");
-                        if (elementSelectFirst != null) {
-                            elementSelectFirst3 = elementSelectFirst.selectFirst("video#player");
-                            if (elementSelectFirst3 != null) {
-                                strAttr2 = elementSelectFirst3.attr("src");
-                            } else {
-                                strAttr2 = null;
-                            }
-                            str5 = strAttr2;
-                            if (str5 != null) {
-                                z7 = true;
-                            } else {
-                                z7 = true;
-                            }
-                            if (!z7) {
-                                if (StringsKt.startsWith$default(strAttr2, "//", false, 2, (Object) null)) {
-                                    str9 = "https:" + strAttr2;
-                                } else {
-                                    str9 = strAttr2;
-                                }
-                                String name6 = topFilmes.getName();
-                                ExtractorLinkType infer_type6 = ExtractorApiKt.getINFER_TYPE();
-                                C00022 c00023 = topFilmes.new C00022(null);
-                                c00011.L$0 = function3;
-                                c00011.L$1 = null;
-                                c00011.label = 2;
-                                objNewExtractorLink = ExtractorApiKt.newExtractorLink(name6, "TopFilmes Video", str9, infer_type6, c00023, c00011);
-                                if (objNewExtractorLink == obj) {
-                                    return obj;
-                                }
-                                function7 = function3;
-                                function7.invoke(objNewExtractorLink);
-                                return Boxing.boxBoolean(z2);
-                            }
-                            i = 2;
-                            z3 = false;
-                            continuation2 = null;
-                            elementSelectFirst4 = elementSelectFirst.selectFirst("source");
-                            if (elementSelectFirst4 != null) {
-                                strAttr3 = elementSelectFirst4.attr("src");
-                            } else {
-                                strAttr3 = null;
-                            }
-                            str6 = strAttr3;
-                            str7 = str6;
-                            if (str7 != null) {
-                                z8 = true;
-                            } else {
-                                z8 = true;
-                            }
-                            if (!z8) {
-                                if (StringsKt.startsWith$default(str6, "//", false, 2, (Object) null)) {
-                                    str8 = "https:" + str6;
-                                } else {
-                                    str8 = str6;
-                                }
-                                String name7 = topFilmes.getName();
-                                ExtractorLinkType infer_type7 = ExtractorApiKt.getINFER_TYPE();
-                                AnonymousClass3 anonymousClass7 = topFilmes.new AnonymousClass3(null);
-                                c00011.L$0 = function3;
-                                c00011.L$1 = null;
-                                c00011.label = 3;
-                                objNewExtractorLink = ExtractorApiKt.newExtractorLink(name7, "TopFilmes Video", str8, infer_type7, anonymousClass7, c00011);
-                                if (objNewExtractorLink == obj) {
-                                    return obj;
-                                }
-                                function6 = function3;
-                                function6.invoke(objNewExtractorLink);
-                                return Boxing.boxBoolean(z2);
-                            }
-                        } else {
-                            i = 2;
-                            z3 = false;
-                            continuation2 = null;
-                        }
-                        elementSelectFirst2 = document.selectFirst("video");
-                        if (elementSelectFirst2 != null) {
-                            continuationAttr = elementSelectFirst2.attr("src");
-                        } else {
-                            continuationAttr = continuation2;
-                        }
-                        continuation3 = continuationAttr;
-                        str2 = (CharSequence) continuation3;
-                        if (str2 != null) {
-                            z4 = true;
-                        } else {
-                            z4 = true;
-                        }
-                        if (!z4) {
-                            if (StringsKt.startsWith$default(continuation3, "//", z3, i, continuation2)) {
-                                continuation4 = "https:" + ((String) continuation3);
-                            } else {
-                                continuation4 = continuation3;
-                            }
-                            String name8 = topFilmes.getName();
-                            ExtractorLinkType infer_type8 = ExtractorApiKt.getINFER_TYPE();
-                            AnonymousClass4 anonymousClass8 = topFilmes.new AnonymousClass4(continuation2);
-                            c00011.L$0 = function3;
-                            c00011.L$1 = continuation2;
-                            c00011.label = 4;
-                            objNewExtractorLink = ExtractorApiKt.newExtractorLink(name8, "TopFilmes Video", continuation4, infer_type8, anonymousClass8, c00011);
-                            if (objNewExtractorLink == obj) {
-                                return obj;
-                            }
-                            function5 = function3;
-                            function5.invoke(objNewExtractorLink);
-                            return Boxing.boxBoolean(z2);
-                        }
-                        it = document.select("source").iterator();
-                        do {
-                            if (it.hasNext()) {
-                                next = it.next();
-                                Element element3 = (Element) next;
-                                String strAttr6 = element3.attr("src");
-                                String strAttr7 = element3.attr("type");
-                                str4 = strAttr6;
-                                if (str4 != null) {
-                                    z5 = true;
-                                } else {
-                                    z5 = true;
-                                }
-                                if (z5) {
-                                    z6 = false;
-                                } else {
-                                    z6 = false;
-                                }
-                            } else {
-                                next = continuation2;
-                            }
-                            element = (Element) next;
-                            if (element != null) {
-                                return Boxing.boxBoolean(z3);
-                            }
-                            strAttr = element.attr("src");
-                            if (StringsKt.startsWith$default(strAttr, "//", z3, 2, continuation2)) {
-                                str3 = "https:" + strAttr;
-                            } else {
-                                str3 = strAttr;
-                            }
-                            String name9 = topFilmes.getName();
-                            ExtractorLinkType infer_type9 = ExtractorApiKt.getINFER_TYPE();
-                            AnonymousClass5 anonymousClass9 = topFilmes.new AnonymousClass5(continuation2);
-                            c00011.L$0 = function3;
-                            c00011.L$1 = continuation2;
-                            c00011.label = 5;
-                            objNewExtractorLink = ExtractorApiKt.newExtractorLink(name9, "TopFilmes Video", str3, infer_type9, anonymousClass9, c00011);
-                            if (objNewExtractorLink == obj) {
-                                return obj;
-                            }
-                            function4 = function3;
-                            function4.invoke(objNewExtractorLink);
-                            return Boxing.boxBoolean(z2);
-                        } while (!z6);
-                        element = (Element) next;
-                        if (element != null) {
-                            return Boxing.boxBoolean(z3);
-                        }
-                        strAttr = element.attr("src");
-                        if (StringsKt.startsWith$default(strAttr, "//", z3, 2, continuation2)) {
-                            str3 = "https:" + strAttr;
-                        } else {
-                            str3 = strAttr;
-                        }
-                        String name10 = topFilmes.getName();
-                        ExtractorLinkType infer_type10 = ExtractorApiKt.getINFER_TYPE();
-                        AnonymousClass5 anonymousClass10 = topFilmes.new AnonymousClass5(continuation2);
-                        c00011.L$0 = function3;
-                        c00011.L$1 = continuation2;
-                        c00011.label = 5;
-                        objNewExtractorLink = ExtractorApiKt.newExtractorLink(name10, "TopFilmes Video", str3, infer_type10, anonymousClass10, c00011);
-                        if (objNewExtractorLink == obj) {
-                            return obj;
-                        }
-                        function4 = function3;
-                        function4.invoke(objNewExtractorLink);
-                        return Boxing.boxBoolean(z2);
-                    case 2:
-                        function7 = (Function1) c00011.L$0;
-                        ResultKt.throwOnFailure(objNewExtractorLink);
-                        z2 = true;
-                        function7.invoke(objNewExtractorLink);
-                        return Boxing.boxBoolean(z2);
-                    case 3:
-                        function6 = (Function1) c00011.L$0;
-                        ResultKt.throwOnFailure(objNewExtractorLink);
-                        z2 = true;
-                        function6.invoke(objNewExtractorLink);
-                        return Boxing.boxBoolean(z2);
-                    case 4:
-                        function5 = (Function1) c00011.L$0;
-                        ResultKt.throwOnFailure(objNewExtractorLink);
-                        z2 = true;
-                        function5.invoke(objNewExtractorLink);
-                        return Boxing.boxBoolean(z2);
-                    case 5:
-                        function4 = (Function1) c00011.L$0;
-                        ResultKt.throwOnFailure(objNewExtractorLink);
-                        z2 = true;
-                        function4.invoke(objNewExtractorLink);
-                        return Boxing.boxBoolean(z2);
-                    default:
-                        throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+            Document doc = Jsoup.connect(data).userAgent(UA).timeout(15000).execute().parse();
+            List<String> playerUrls = new ArrayList<>();
+            for (Element a : doc.select("a[href]")) {
+                String href = a.attr("href");
+                if (href.contains("player=")) {
+                    String abs = href.startsWith("http") ? href : MainAPIKt.fixUrl(this, href);
+                    if (!playerUrls.contains(abs)) {
+                        playerUrls.add(abs);
+                    }
                 }
-            } catch (Exception e3) {
-                z9 = 0;
             }
-        } catch (Exception e4) {
+            int idx = 0;
+            for (String pu : playerUrls) {
+                idx++;
+                Document pd = Jsoup.connect(pu).userAgent(UA).timeout(15000).execute().parse();
+                Element srcEl = pd.selectFirst("video source");
+                if (srcEl == null) {
+                    srcEl = pd.selectFirst("source");
+                }
+                if (srcEl == null) {
+                    continue;
+                }
+                String url = srcEl.attr("src");
+                if (url == null || url.length() == 0) {
+                    continue;
+                }
+                if (url.startsWith("//")) {
+                    url = "https:" + url;
+                }
+                ExtractorLink link = new ExtractorLink(getName(), "TopFilmes " + idx, url, getMainUrl() + "/", 0, ExtractorLinkType.VIDEO, null, null);
+                callback.invoke(link);
+                found = true;
+            }
+        } catch (Exception e) {
         }
+        return Boxing.boxBoolean(found);
     }
 
     /* JADX WARN: Code duplicated, block: B:20:0x00d5 A[RETURN] */
@@ -1479,7 +1037,7 @@ public final class TopFilmes extends MainAPI {
         switch (c00031.label) {
             case 0:
                 ResultKt.throwOnFailure(obj);
-                String str3 = getMainUrl() + "/busca?q=" + StringsKt.replace$default(str, " ", "+", false, 4, (Object) null);
+                String str3 = getMainUrl() + "/busca?q=" + StringsKt.replace(str, " ", "+", false);
                 c00031.L$0 = this;
                 c00031.L$1 = str3;
                 c00031.label = 1;
@@ -1495,7 +1053,7 @@ public final class TopFilmes extends MainAPI {
                 c00031.L$1 = null;
                 c00031.label = 2;
                 topFilmes2 = topFilmes;
-                obj = Requests.get$default(app, strFixUrl, mapMapOf, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00031, 4092, (Object) null);
+                obj = app.get(strFixUrl, mapMapOf, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), c00031);
                 if (obj == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -1536,7 +1094,7 @@ public final class TopFilmes extends MainAPI {
                 c00031.L$1 = null;
                 c00031.label = 2;
                 topFilmes2 = topFilmes;
-                obj = Requests.get$default(app2, strFixUrl2, mapMapOf2, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00031, 4092, (Object) null);
+                obj = app2.get(strFixUrl2, mapMapOf2, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app2.getDefaultCacheTime(), app2.getDefaultCacheTimeUnit(), app2.getDefaultTimeOut(), (Interceptor) null, true, app2.getResponseParser(), c00031);
                 if (obj == coroutine_suspended) {
                     return coroutine_suspended;
                 }

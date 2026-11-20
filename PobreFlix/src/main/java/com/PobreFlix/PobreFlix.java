@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lagradost.cloudstream3.Actor;
+import com.lagradost.cloudstream3.ActorRole;
 import com.lagradost.cloudstream3.AnimeSearchResponse;
 import com.lagradost.cloudstream3.DubStatus;
 import com.lagradost.cloudstream3.Episode;
@@ -90,14 +91,14 @@ public final class PobreFlix extends MainAPI {
     private final List<MainPageData> mainPage = MainAPIKt.mainPageOf(new Pair[]{TuplesKt.to(getMainUrl() + "/filmes/", "Filmes"), TuplesKt.to(getMainUrl() + "/series/", "Séries")});
 
     /* JADX INFO: renamed from: com.PobreFlix.PobreFlix$extractPoster$1, reason: invalid class name */
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -109,14 +110,14 @@ public final class PobreFlix extends MainAPI {
     }
 
     /* JADX INFO: renamed from: com.PobreFlix.PobreFlix$getMainPage$1, reason: invalid class name and case insensitive filesystem */
-    static final class C00001 extends ContinuationImpl {
+    final class C00001 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        C00001(Continuation<? super C00001> continuation) {
-            super(continuation);
+        C00001(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -128,7 +129,7 @@ public final class PobreFlix extends MainAPI {
     }
 
     /* JADX INFO: renamed from: com.PobreFlix.PobreFlix$load$1, reason: invalid class name */
-    static final class C00011 extends ContinuationImpl {
+    final class C00011 extends ContinuationImpl {
         int I$0;
         Object L$0;
         Object L$1;
@@ -144,8 +145,8 @@ public final class PobreFlix extends MainAPI {
         int label;
         /* synthetic */ Object result;
 
-        C00011(Continuation<? super C00011> continuation) {
-            super(continuation);
+        C00011(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -157,7 +158,7 @@ public final class PobreFlix extends MainAPI {
     }
 
     /* JADX INFO: renamed from: com.PobreFlix.PobreFlix$loadEpisodes$1, reason: invalid class name */
-    static final class C00021 extends ContinuationImpl {
+    final class C00021 extends ContinuationImpl {
         int I$0;
         Object L$0;
         Object L$1;
@@ -166,8 +167,8 @@ public final class PobreFlix extends MainAPI {
         int label;
         /* synthetic */ Object result;
 
-        C00021(Continuation<? super C00021> continuation) {
-            super(continuation);
+        C00021(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -179,13 +180,13 @@ public final class PobreFlix extends MainAPI {
     }
 
     /* JADX INFO: renamed from: com.PobreFlix.PobreFlix$search$1, reason: invalid class name */
-    static final class C00031 extends ContinuationImpl {
+    final class C00031 extends ContinuationImpl {
         Object L$0;
         int label;
         /* synthetic */ Object result;
 
-        C00031(Continuation<? super C00031> continuation) {
-            super(continuation);
+        C00031(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -241,7 +242,12 @@ public final class PobreFlix extends MainAPI {
     }
 
     private final String normalizeUrl(String url) {
-        URI uri = new URI(url);
+        URI uri;
+        try {
+            uri = new URI(url);
+        } catch (java.net.URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         StringBuilder $this$normalizeUrl_u24lambda_u241 = new StringBuilder();
         $this$normalizeUrl_u24lambda_u241.append(getMainUrl());
         String path = uri.getPath();
@@ -363,7 +369,7 @@ public final class PobreFlix extends MainAPI {
     private final List<Pair<Actor, String>> parseActors(Document document) {
         List<Pair<Actor, String>> out = new ArrayList<>();
         for (Element p : document.select("p.extra")) {
-            if (!StringsKt.contains$default(p.text(), "Elenco", false, 2, (Object) null)) {
+            if (!StringsKt.contains(p.text(), "Elenco", false)) {
                 continue;
             }
             String[] parts = p.text().split("•");
@@ -373,7 +379,7 @@ public final class PobreFlix extends MainAPI {
             for (String a : parts[2].split(",")) {
                 String n = a.trim();
                 if (!n.isEmpty()) {
-                    out.add(new Pair<>(new Actor(n, (String) null), (Object) null));
+                    out.add(new Pair<Actor, String>(new Actor(n, (String) null), (String) null));
                 }
             }
             break;
@@ -391,7 +397,7 @@ public final class PobreFlix extends MainAPI {
         if (src == null || src.isEmpty()) {
             return null;
         }
-        return MainAPIKt.fixUrl(this, StringsKt.replace$default(src, "w185", "original", false, 4, (Object) null));
+        return MainAPIKt.fixUrl(this, StringsKt.replace(src, "w185", "original", false));
     }
 
     /* "movie|<videoId>" / "ep|<videoId>" (data do LoadResponse/Episode; ver report). */
@@ -495,21 +501,21 @@ public final class PobreFlix extends MainAPI {
         final String audio = badges.toString();
         Element yearEl = a.selectFirst(".info p");
         final Integer year = yearEl != null ? StringsKt.toIntOrNull(yearEl.text().trim()) : null;
-        final TvType tvType = StringsKt.contains$default(link, "/series/", false, 2, (Object) null) ? TvType.TvSeries : TvType.Movie;
-        return MainAPIKt.newAnimeSearchResponse$default(this, title, link, tvType, false, new Function1() {
-            public final Object invoke(Object obj) {
+        final TvType tvType = StringsKt.contains(link, "/series/", false) ? TvType.TvSeries : TvType.Movie;
+        return MainAPIKt.newAnimeSearchResponse(this, title, link, tvType, false, new Function1() {
+                public final Object invoke(Object obj) {
                 AnimeSearchResponse resp = (AnimeSearchResponse) obj;
                 Unit u = PobreFlix.toSearchResult$lambda$5(poster, qualityStr, audio, resp);
                 resp.setYear(year);
                 return u;
-            }
-        }, 8, (Object) null);
+                }
+            });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public static final Unit toSearchResult$lambda$5(String $poster, String $qualityStr, String $audio, AnimeSearchResponse $this$newAnimeSearchResponse) {
         EnumSet enumSetOf;
-        $this$newAnimeSearchResponse.setPosterUrl($poster != null ? StringsKt.replace$default($poster, "w185", "original", false, 4, (Object) null) : null);
+        $this$newAnimeSearchResponse.setPosterUrl($poster != null ? StringsKt.replace($poster, "w185", "original", false) : null);
         $this$newAnimeSearchResponse.setQuality(MainAPIKt.getQualityFromString($qualityStr));
         if (StringsKt.contains($audio, "DUB", true)) {
             enumSetOf = EnumSet.of(DubStatus.Dubbed);
@@ -526,7 +532,7 @@ public final class PobreFlix extends MainAPI {
             Document document = fetchDocument(str);
             JsonObject node = findJsonLd(document);
             boolean isSeries = !document.select("section.vbEpisodes, ol.vbEpisodeList").isEmpty()
-                    || StringsKt.contains$default(str, "/series/", false, 2, (Object) null);
+                    || StringsKt.contains(str, "/series/", false);
             /* Título novo: h2.one (limpo); fallback h1.type "Assistir X Online". */
             Element titleEl = document.selectFirst("h2.one");
             String title;
@@ -575,25 +581,25 @@ public final class PobreFlix extends MainAPI {
         private /* synthetic */ Object L$0;
         int label;
 
-        AnonymousClass2(String str, String str2, Integer num, List<String> list, Integer num2, Double d, List<Pair<Actor, String>> list2, Continuation<? super AnonymousClass2> continuation) {
-            super(2, continuation);
+        AnonymousClass2(String str, String str2, Integer num, List<String> list, Integer num2, Double d, List<Pair<Actor, String>> list2, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$plot = str2;
             this.$duration = num;
             this.$tags = list;
             this.$year = num2;
             this.$score = d;
-            this.$actors = list2;
+            this.$actors = (java.util.List) list2;
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass2 = new AnonymousClass2(this.$poster, this.$plot, this.$duration, this.$tags, this.$year, this.$score, this.$actors, continuation);
+            AnonymousClass2 anonymousClass2 = new AnonymousClass2(this.$poster, this.$plot, this.$duration, this.$tags, this.$year, this.$score, this.$actors, continuation);
             anonymousClass2.L$0 = obj;
-            return anonymousClass2;
+            return (Continuation<Unit>) (Object) anonymousClass2;
         }
 
         public final Object invoke(TvSeriesLoadResponse tvSeriesLoadResponse, Continuation<? super Unit> continuation) {
-            return create(tvSeriesLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass2) (Object) create(tvSeriesLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -628,25 +634,25 @@ public final class PobreFlix extends MainAPI {
         private /* synthetic */ Object L$0;
         int label;
 
-        AnonymousClass3(String str, String str2, Integer num, List<String> list, Integer num2, Double d, List<Pair<Actor, String>> list2, Continuation<? super AnonymousClass3> continuation) {
-            super(2, continuation);
+        AnonymousClass3(String str, String str2, Integer num, List<String> list, Integer num2, Double d, List<Pair<Actor, String>> list2, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$plot = str2;
             this.$duration = num;
             this.$tags = list;
             this.$year = num2;
             this.$score = d;
-            this.$actors = list2;
+            this.$actors = (java.util.List) list2;
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass3 = new AnonymousClass3(this.$poster, this.$plot, this.$duration, this.$tags, this.$year, this.$score, this.$actors, continuation);
+            AnonymousClass3 anonymousClass3 = new AnonymousClass3(this.$poster, this.$plot, this.$duration, this.$tags, this.$year, this.$score, this.$actors, continuation);
             anonymousClass3.L$0 = obj;
-            return anonymousClass3;
+            return (Continuation<Unit>) (Object) anonymousClass3;
         }
 
         public final Object invoke(MovieLoadResponse movieLoadResponse, Continuation<? super Unit> continuation) {
-            return create(movieLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass3) (Object) create(movieLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -706,7 +712,7 @@ public final class PobreFlix extends MainAPI {
             Element descEl = li.selectFirst(".vbEpisodeCard__synopsis");
             final String fDesc = descEl != null ? descEl.text().trim() : null;
             Element img = li.selectFirst("img");
-            final String fPoster = img != null ? StringsKt.replace$default(img.attr("src"), "w185", "original", false, 4, (Object) null) : null;
+            final String fPoster = img != null ? StringsKt.replace(img.attr("src"), "w185", "original", false) : null;
             out.add(MainAPIKt.newEpisode(this, "ep|" + epId, new Function1() {
                 public final Object invoke(Object obj) {
                     return PobreFlix.applyEpisode(fName, fSeason, fEp, fDesc, fPoster, (Episode) obj);

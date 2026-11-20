@@ -66,7 +66,7 @@ public final class OverFlix extends MainAPI {
 
     @NotNull
     private static final String LANG = "pt-br";
-    private final boolean hasQuickSearch;
+    private boolean hasQuickSearch = true;
 
     @NotNull
     private static final Map<String, String> UA_HEADERS = MapsKt.mapOf(TuplesKt.to("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"));
@@ -91,14 +91,14 @@ public final class OverFlix extends MainAPI {
     /* JADX INFO: compiled from: OverFlix.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlix", f = "OverFlix.kt", i = {0, 0}, l = {57}, m = "getMainPage", n = {"this", "request"}, s = {"L$0", "L$1"})
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -113,7 +113,7 @@ public final class OverFlix extends MainAPI {
     /* JADX INFO: compiled from: OverFlix.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlix", f = "OverFlix.kt", i = {0, 0, 0, 1, 1, 1, 1, 1, 1}, l = {107, 119, 156, 188}, m = "load", n = {"this", "realUrl", "forcedBackdrop", "this", "realUrl", "forcedBackdrop", "document", "title", "isMovie"}, s = {"L$0", "L$1", "L$2", "L$0", "L$1", "L$2", "L$3", "L$4", "Z$0"})
-    static final class C00001 extends ContinuationImpl {
+    final class C00001 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
@@ -123,8 +123,8 @@ public final class OverFlix extends MainAPI {
         int label;
         /* synthetic */ Object result;
 
-        C00001(Continuation<? super C00001> continuation) {
-            super(continuation);
+        C00001(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -139,13 +139,13 @@ public final class OverFlix extends MainAPI {
     /* JADX INFO: compiled from: OverFlix.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlix", f = "OverFlix.kt", i = {0}, l = {79}, m = "search", n = {"this"}, s = {"L$0"})
-    static final class C00011 extends ContinuationImpl {
+    final class C00011 extends ContinuationImpl {
         Object L$0;
         int label;
         /* synthetic */ Object result;
 
-        C00011(Continuation<? super C00011> continuation) {
-            super(continuation);
+        C00011(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -207,7 +207,7 @@ public final class OverFlix extends MainAPI {
             return "";
         }
         String src = img.attr("src");
-        return (StringsKt.contains$default(src, "transparent", false, 2, (Object) null) || StringsKt.isBlank(src)) ? img.attr("data-src") : src;
+        return (StringsKt.contains(src, "transparent", false) || StringsKt.isBlank(src)) ? img.attr("data-src") : src;
     }
 
     private final String backdropUrl(Element $this$backdropUrl) {
@@ -217,10 +217,10 @@ public final class OverFlix extends MainAPI {
             strAttr = null;
         }
         String str = strAttr;
-        if (str == null || (strReplace$default = StringsKt.replace$default(str, "/w300/", "/original/", false, 4, (Object) null)) == null) {
+        if (str == null || (strReplace$default = StringsKt.replace(str, "/w300/", "/original/", false)) == null) {
             return null;
         }
-        return StringsKt.replace$default(strReplace$default, "/w1280/", "/original/", false, 4, (Object) null);
+        return StringsKt.replace(strReplace$default, "/w1280/", "/original/", false);
     }
 
     private final String buildData(String link, String backdrop) {
@@ -238,8 +238,8 @@ public final class OverFlix extends MainAPI {
         MovieSearchResponse movieSearchResponseNewMovieSearchResponse$default;
         String link;
         String strAttr;
-        String title;
-        String strText;
+        String title = null;
+        String strText = null;
         if (continuation instanceof AnonymousClass1) {
             anonymousClass1 = (AnonymousClass1) continuation;
             if ((anonymousClass1.label & Integer.MIN_VALUE) != 0) {
@@ -268,13 +268,12 @@ public final class OverFlix extends MainAPI {
                 anonymousClass1.L$0 = this;
                 anonymousClass1.L$1 = request;
                 anonymousClass1.label = 1;
-                $result = Requests.get$default(app, url, map, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, anonymousClass1, 4092, (Object) null);
+                $result = app.get(url, map, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), anonymousClass1);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 overFlix = this;
                 request2 = request;
-                break;
                 break;
             case 1:
                 request2 = (MainPageRequest) anonymousClass1.L$1;
@@ -300,21 +299,21 @@ public final class OverFlix extends MainAPI {
                         anonymousClass1 = anonymousClass1;
                         movieSearchResponseNewMovieSearchResponse$default = null;
                     } else {
-                        title = StringsKt.replace$default(strAttr, " poster", "", false, 4, (Object) null);
+                        title = StringsKt.replace(strAttr, " poster", "", false);
                     }
                 } else {
                     title = strText;
                 }
                 anonymousClass1 = anonymousClass1;
-                boolean isMovie = StringsKt.contains$default(link, "/filme/", false, 2, (Object) null);
+                boolean isMovie = StringsKt.contains(link, "/filme/", false);
                 TvType type = isMovie ? TvType.Movie : TvType.TvSeries;
                 String backdrop = isMovie ? overFlix.backdropUrl(item) : null;
                 String data = overFlix.buildData(link, backdrop);
-                movieSearchResponseNewMovieSearchResponse$default = MainAPIKt.newMovieSearchResponse$default(overFlix, title, data, type, false, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda2
+                movieSearchResponseNewMovieSearchResponse$default = MainAPIKt.newMovieSearchResponse(overFlix, title, data, type, false, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda2
                     public final Object invoke(Object obj) {
-                        return OverFlix.getMainPage$lambda$2$lambda$1(this.f$0, item, (MovieSearchResponse) obj);
+                        return OverFlix.getMainPage$lambda$2$lambda$1(OverFlix.this, item, (MovieSearchResponse) obj);
                     }
-                }, 8, (Object) null);
+                });
             }
             if (movieSearchResponseNewMovieSearchResponse$default != null) {
                 destination$iv$iv.add(movieSearchResponseNewMovieSearchResponse$default);
@@ -322,7 +321,7 @@ public final class OverFlix extends MainAPI {
             anonymousClass1 = anonymousClass1;
         }
         List items = (List) destination$iv$iv;
-        return MainAPIKt.newHomePageResponse$default(request2.getName(), items, (Boolean) null, 4, (Object) null);
+        return MainAPIKt.newHomePageResponse(request2.getName(), items, (Boolean) null);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -344,7 +343,7 @@ public final class OverFlix extends MainAPI {
         final OverFlix overFlix;
         MovieSearchResponse movieSearchResponseNewMovieSearchResponse$default;
         String link;
-        String title;
+        String title = null;
         boolean isMovie;
         TvType tvType;
         String strBackdropUrl;
@@ -367,12 +366,11 @@ public final class OverFlix extends MainAPI {
                 String str = getMainUrl() + "/pesquisa?s=" + query;
                 c00011.L$0 = this;
                 c00011.label = 1;
-                $result = Requests.get$default(app, str, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00011, 4094, (Object) null);
+                $result = app.get(str, java.util.Collections.emptyMap(), (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), c00011);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
                 overFlix = this;
-                break;
                 break;
             case 1:
                 overFlix = (OverFlix) c00011.L$0;
@@ -400,7 +398,7 @@ public final class OverFlix extends MainAPI {
                         movieSearchResponseNewMovieSearchResponse$default = null;
                     } else {
                         c00011 = c00011;
-                        isMovie = StringsKt.contains$default(link, "/filme/", false, 2, (Object) null);
+                        isMovie = StringsKt.contains(link, "/filme/", false);
                         if (isMovie) {
                             tvType = TvType.Movie;
                         } else {
@@ -414,15 +412,15 @@ public final class OverFlix extends MainAPI {
                         }
                         String backdrop = strBackdropUrl;
                         String data = overFlix.buildData(link, backdrop);
-                        movieSearchResponseNewMovieSearchResponse$default = MainAPIKt.newMovieSearchResponse$default(overFlix, StringsKt.trim(title).toString(), data, type, false, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda1
+                        movieSearchResponseNewMovieSearchResponse$default = MainAPIKt.newMovieSearchResponse(overFlix, StringsKt.trim(title).toString(), data, type, false, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda1
                             public final Object invoke(Object obj) {
-                                return OverFlix.search$lambda$5$lambda$4(this.f$0, item, (MovieSearchResponse) obj);
+                                return OverFlix.search$lambda$5$lambda$4(OverFlix.this, item, (MovieSearchResponse) obj);
                             }
-                        }, 8, (Object) null);
+                        });
                     }
                 } else {
                     c00011 = c00011;
-                    isMovie = StringsKt.contains$default(link, "/filme/", false, 2, (Object) null);
+                    isMovie = StringsKt.contains(link, "/filme/", false);
                     if (isMovie) {
                         tvType = TvType.Movie;
                     } else {
@@ -436,11 +434,11 @@ public final class OverFlix extends MainAPI {
                     }
                     String backdrop2 = strBackdropUrl;
                     String data2 = overFlix.buildData(link, backdrop2);
-                    movieSearchResponseNewMovieSearchResponse$default = MainAPIKt.newMovieSearchResponse$default(overFlix, StringsKt.trim(title).toString(), data2, type2, false, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda1
+                    movieSearchResponseNewMovieSearchResponse$default = MainAPIKt.newMovieSearchResponse(overFlix, StringsKt.trim(title).toString(), data2, type2, false, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda1
                         public final Object invoke(Object obj) {
-                            return OverFlix.search$lambda$5$lambda$4(this.f$0, item, (MovieSearchResponse) obj);
+                            return OverFlix.search$lambda$5$lambda$4(OverFlix.this, item, (MovieSearchResponse) obj);
                         }
-                    }, 8, (Object) null);
+                    });
                 }
             }
             if (movieSearchResponseNewMovieSearchResponse$default != null) {
@@ -455,7 +453,7 @@ public final class OverFlix extends MainAPI {
     public static final Unit search$lambda$5$lambda$4(OverFlix this$0, Element $item, MovieSearchResponse $this$newMovieSearchResponse) {
         Integer intOrNull;
         Object element$iv;
-        String strText;
+        String strText = null;
         Element it;
         $this$newMovieSearchResponse.setPosterUrl(this$0.posterUrl($item));
         Iterable $this$firstOrNull$iv = $item.select("div.text-subs span");
@@ -550,7 +548,7 @@ public final class OverFlix extends MainAPI {
         boolean isMovie;
         Element elementSelectFirst;
         String string;
-        String title;
+        String title = null;
         Element elementSelectFirst2;
         String str;
         String strAttr;
@@ -576,10 +574,10 @@ public final class OverFlix extends MainAPI {
         OverFlix overFlix4;
         String realUrl4;
         Collection destination$iv$iv;
-        String str5;
+        String str5 = null;
         Element elementSelectFirst3;
-        ActorData actorData;
-        String strText;
+        ActorData actorData = null;
+        String strText = null;
         String name;
         String strAttr2;
         String strText2;
@@ -613,7 +611,7 @@ public final class OverFlix extends MainAPI {
         int $i$f$flatMapTo;
         Iterator it4;
         Integer intOrNull2;
-        final int seasonNumber;
+        int seasonNumber = 0;
         int $i$f$map;
         Collection destination$iv$iv3;
         Element elementSelectFirst9;
@@ -633,7 +631,7 @@ public final class OverFlix extends MainAPI {
         String string2;
         Collection destination$iv$iv4;
         Element elementSelectFirst11;
-        ActorData actorData2;
+        ActorData actorData2 = null;
         String strText8;
         String name2;
         String image;
@@ -654,7 +652,7 @@ public final class OverFlix extends MainAPI {
         switch (c00001.label) {
             case 0:
                 ResultKt.throwOnFailure($result);
-                List parts = StringsKt.split$default(url, new String[]{"|BACKDROP|"}, false, 0, 6, (Object) null);
+                List parts = StringsKt.split(url, new String[]{"|BACKDROP|"}, false, 0);
                 String realUrl5 = (String) parts.get(0);
                 String forcedBackdrop5 = (String) CollectionsKt.getOrNull(parts, 1);
                 Requests app = MainActivityKt.getApp();
@@ -662,7 +660,7 @@ public final class OverFlix extends MainAPI {
                 c00001.L$1 = realUrl5;
                 c00001.L$2 = forcedBackdrop5;
                 c00001.label = 1;
-                Object obj5 = Requests.get$default(app, realUrl5, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001, 4094, (Object) null);
+                Object obj5 = app.get(realUrl5, (Map) null, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), c00001);
                 obj = coroutine_suspended;
                 if (obj5 == obj) {
                     return obj;
@@ -672,7 +670,7 @@ public final class OverFlix extends MainAPI {
                 overFlix = this;
                 forcedBackdrop = forcedBackdrop5;
                 document = ((NiceResponse) obj2).getDocument();
-                isMovie = StringsKt.contains$default(realUrl, "/filme/", false, 2, (Object) null);
+                isMovie = StringsKt.contains(realUrl, "/filme/", false);
                 elementSelectFirst = document.selectFirst("h1.text-3xl, h2.text-3xl");
                 if (elementSelectFirst != null || (strText2 = elementSelectFirst.text()) == null) {
                     string = null;
@@ -702,7 +700,7 @@ public final class OverFlix extends MainAPI {
                                 strAttr2 = null;
                             }
                             String image2 = strAttr2;
-                            actorData = new ActorData(new Actor(name, image2), (ActorRole) null, (String) null, (Actor) null, 14, (DefaultConstructorMarker) null);
+                            actorData = new ActorData(new Actor(name, image2), (ActorRole) null, (String) null, (Actor) null);
                         }
                         if (actorData != null) {
                             destination$iv$iv.add(actorData);
@@ -721,10 +719,10 @@ public final class OverFlix extends MainAPI {
                 } else {
                     elementSelectFirst2 = document.selectFirst("div[id^=season-] article a");
                     if (elementSelectFirst2 != null) {
-                        str = r13;
+                        str = "href";
                         strAttr = elementSelectFirst2.attr(str);
                     } else {
-                        str = r13;
+                        str = "href";
                         strAttr = null;
                     }
                     firstEpUrl = strAttr;
@@ -744,7 +742,7 @@ public final class OverFlix extends MainAPI {
                         forcedBackdrop3 = forcedBackdrop;
                         overFlix3 = overFlix;
                         realUrl3 = realUrl;
-                        $result = Requests.get$default(app2, firstEpUrl, map, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001, 4092, (Object) null);
+                        $result = app2.get(firstEpUrl, map, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app2.getDefaultCacheTime(), app2.getDefaultCacheTimeUnit(), app2.getDefaultTimeOut(), (Interceptor) null, true, app2.getResponseParser(), c00001);
                         obj3 = obj;
                         if ($result == obj3) {
                             return obj3;
@@ -776,7 +774,7 @@ public final class OverFlix extends MainAPI {
                                 }
                                 str9 = str12;
                                 title3 = title3;
-                                actorData2 = new ActorData(new Actor(name2, image), (ActorRole) null, (String) null, (Actor) null, 14, (DefaultConstructorMarker) null);
+                                actorData2 = new ActorData(new Actor(name2, image), (ActorRole) null, (String) null, (Actor) null);
                             }
                             if (actorData2 != null) {
                                 destination$iv$iv4.add(actorData2);
@@ -808,7 +806,7 @@ public final class OverFlix extends MainAPI {
                 }
                 if (isMovie || forcedBackdrop2 == null) {
                     elementSelectFirst4 = document2.selectFirst("img[src*=w1280]");
-                    if (elementSelectFirst4 != null || (strAttr3 = elementSelectFirst4.attr(firstEpUrl2)) == null || (strReplace$default = StringsKt.replace$default(strAttr3, "w1280", "original", false, 4, (Object) null)) == null) {
+                    if (elementSelectFirst4 != null || (strAttr3 = elementSelectFirst4.attr(firstEpUrl2)) == null || (strReplace$default = StringsKt.replace(strAttr3, "w1280", "original", false)) == null) {
                         elementSelectFirst5 = document2.selectFirst("article img");
                         if (elementSelectFirst5 != null) {
                             poster = elementSelectFirst5.attr(firstEpUrl2);
@@ -839,9 +837,11 @@ public final class OverFlix extends MainAPI {
                         element$iv2 = it.next();
                         if (new Regex("\\d{4}").matches(((Element) element$iv2).text())) {
                             obj4 = element$iv2;
+                                break;
                         }
                     } else {
                         obj4 = null;
+                    break;
                     }
                 }
                 element = (Element) obj4;
@@ -864,129 +864,10 @@ public final class OverFlix extends MainAPI {
                         i2 = 0;
                         element$iv = null;
                     }
-                    it3 = (Element) element$iv;
-                    if (it3 != null) {
-                        matchResultFind$default = Regex.find$default(new Regex("(\\d+)"), it3.text(), i2, i, num);
-                        if (matchResultFind$default != null || (groupValues2 = matchResultFind$default.getGroupValues()) == null) {
-                            i3 = 1;
-                        } else {
-                            i3 = 1;
-                            String str13 = (String) groupValues2.get(1);
-                            if (str13 != null) {
-                                intOrNull = StringsKt.toIntOrNull(str13);
-                            }
-                        }
-                        intOrNull = num;
-                    } else {
-                        i3 = 1;
-                        intOrNull = num;
-                    }
-                    duration = intOrNull;
-                    str6 = "span.text-main";
-                    elementSelectFirst8 = document2.selectFirst("span.text-main");
-                    if (elementSelectFirst8 != null || (strText5 = elementSelectFirst8.text()) == null) {
-                        doubleOrNull = num;
-                    } else {
-                        doubleOrNull = StringsKt.toDoubleOrNull(strText5);
-                    }
-                    if (isMovie) {
-                        TvType tvType = TvType.Movie;
-                        AnonymousClass2 anonymousClass2 = new AnonymousClass2(poster, plot, year, duration, doubleOrNull, actors, null);
-                        c00001.L$0 = num;
-                        c00001.L$1 = num;
-                        c00001.L$2 = num;
-                        c00001.L$3 = num;
-                        c00001.L$4 = num;
-                        c00001.label = 3;
-                        $result = MainAPIKt.newMovieLoadResponse(overFlix2, title2, realUrl2, tvType, realUrl2, anonymousClass2, c00001);
-                        if ($result == obj3) {
-                            return obj3;
-                        }
-                        return (LoadResponse) $result;
-                    }
-                    Iterable $this$flatMapTo$iv$iv = document2.select("div[id^=season-]");
-                    $i$f$flatMap = 0;
-                    destination$iv$iv2 = new ArrayList();
-                    $i$f$flatMapTo = 0;
-                    it4 = $this$flatMapTo$iv$iv.iterator();
-                    while (it4.hasNext()) {
-                        Object element$iv$iv3 = it4.next();
-                        Element seasonEl = (Element) element$iv$iv3;
-                        intOrNull2 = StringsKt.toIntOrNull(StringsKt.removePrefix(seasonEl.attr("id"), "season-"));
-                        if (intOrNull2 != null) {
-                            seasonNumber = intOrNull2.intValue() + i3;
-                        } else {
-                            seasonNumber = 1;
-                        }
-                        Iterable $this$map$iv = seasonEl.select("article");
-                        $i$f$map = 0;
-                        destination$iv$iv3 = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv, 10));
-                        for (Object item$iv$iv : $this$map$iv) {
-                            int $i$f$map2 = $i$f$map;
-                            final Element ep = (Element) item$iv$iv;
-                            int $i$f$flatMap2 = $i$f$flatMap;
-                            Regex regex = new Regex("E(\\d+)");
-                            elementSelectFirst9 = ep.selectFirst(str6);
-                            if (elementSelectFirst9 != null) {
-                                strText4 = elementSelectFirst9.text();
-                            } else {
-                                strText4 = null;
-                            }
-                            if (strText4 == null) {
-                                strText4 = "";
-                            }
-                            String str14 = str6;
-                            int $i$f$flatMapTo2 = $i$f$flatMapTo;
-                            Iterator it7 = it4;
-                            MatchResult matchResultFind$default2 = Regex.find$default(regex, strText4, 0, 2, (Object) null);
-                            final int epNum = (matchResultFind$default2 != null || (groupValues = matchResultFind$default2.getGroupValues()) == null || (str8 = (String) groupValues.get(1)) == null || (intOrNull3 = StringsKt.toIntOrNull(str8)) == null) ? 1 : intOrNull3.intValue();
-                            OverFlix overFlix5 = overFlix2;
-                            elementSelectFirst10 = ep.selectFirst("a");
-                            if (elementSelectFirst10 != null) {
-                                str7 = str2;
-                                strAttr4 = elementSelectFirst10.attr(str7);
-                            } else {
-                                str7 = str2;
-                                strAttr4 = null;
-                            }
-                            if (strAttr4 == null) {
-                                strAttr4 = "";
-                            }
-                            destination$iv$iv3.add(MainAPIKt.newEpisode(overFlix5, strAttr4, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda0
-                                public final Object invoke(Object obj6) {
-                                    return OverFlix.load$lambda$13$lambda$12$lambda$11(ep, seasonNumber, epNum, (Episode) obj6);
-                                }
-                            }));
-                            $i$f$map = $i$f$map2;
-                            str2 = str7;
-                            $i$f$flatMap = $i$f$flatMap2;
-                            str6 = str14;
-                            $i$f$flatMapTo = $i$f$flatMapTo2;
-                            it4 = it7;
-                        }
-                        Iterable list$iv$iv = (List) destination$iv$iv3;
-                        CollectionsKt.addAll(destination$iv$iv2, list$iv$iv);
-                        $i$f$flatMap = $i$f$flatMap;
-                        i3 = 1;
-                    }
-                    List episodes = (List) destination$iv$iv2;
-                    TvType tvType2 = TvType.TvSeries;
-                    AnonymousClass3 anonymousClass3 = new AnonymousClass3(poster, plot, year, duration, doubleOrNull, actors, null);
-                    c00001.L$0 = null;
-                    c00001.L$1 = null;
-                    c00001.L$2 = null;
-                    c00001.L$3 = null;
-                    c00001.L$4 = null;
-                    c00001.label = 4;
-                    $result = MainAPIKt.newTvSeriesLoadResponse(overFlix2, title2, realUrl2, tvType2, episodes, anonymousClass3, c00001);
-                    if ($result == obj3) {
-                        return obj3;
-                    }
-                    return (LoadResponse) $result;
-                } while (!StringsKt.contains$default(((Element) element$iv).text(), "minutos", false, 2, (Object) null));
+                } while (!StringsKt.contains(((Element) element$iv).text(), "minutos", false));
                 it3 = (Element) element$iv;
                 if (it3 != null) {
-                    matchResultFind$default = Regex.find$default(new Regex("(\\d+)"), it3.text(), i2, i, num);
+                    matchResultFind$default = new Regex("(\\d+)").find(it3.text(), i2);
                     if (matchResultFind$default != null) {
                         i3 = 1;
                         intOrNull = num;
@@ -1002,9 +883,9 @@ public final class OverFlix extends MainAPI {
                 str6 = "span.text-main";
                 elementSelectFirst8 = document2.selectFirst("span.text-main");
                 if (elementSelectFirst8 != null) {
-                    doubleOrNull = num;
+                    doubleOrNull = num != null ? Double.valueOf(num.doubleValue()) : null;
                 } else {
-                    doubleOrNull = num;
+                    doubleOrNull = num != null ? Double.valueOf(num.doubleValue()) : null;
                 }
                 if (isMovie) {
                     TvType tvType3 = TvType.Movie;
@@ -1038,9 +919,10 @@ public final class OverFlix extends MainAPI {
                     Iterable $this$map$iv2 = seasonEl2.select("article");
                     $i$f$map = 0;
                     destination$iv$iv3 = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv2, 10));
-                    while (r21.hasNext()) {
+                    Iterator<? extends Element> ep2$iv = $this$map$iv2.iterator();
+                    while (ep2$iv.hasNext()) {
                         int $i$f$map3 = $i$f$map;
-                        final Element ep2 = (Element) item$iv$iv;
+                        final Element ep2 = ep2$iv.next();
                         int $i$f$flatMap3 = $i$f$flatMap;
                         Regex regex2 = new Regex("E(\\d+)");
                         elementSelectFirst9 = ep2.selectFirst(str6);
@@ -1055,9 +937,8 @@ public final class OverFlix extends MainAPI {
                         String str15 = str6;
                         int $i$f$flatMapTo3 = $i$f$flatMapTo;
                         Iterator it8 = it4;
-                        MatchResult matchResultFind$default3 = Regex.find$default(regex2, strText4, 0, 2, (Object) null);
-                        if (matchResultFind$default3 != null) {
-                        }
+                        MatchResult matchResultFind$default3 = regex2.find(strText4, 0);
+                        final Integer epNum = matchResultFind$default3 != null ? StringsKt.toIntOrNull((String) matchResultFind$default3.getGroupValues().get(1)) : null;
                         OverFlix overFlix6 = overFlix2;
                         elementSelectFirst10 = ep2.selectFirst("a");
                         if (elementSelectFirst10 != null) {
@@ -1070,9 +951,10 @@ public final class OverFlix extends MainAPI {
                         if (strAttr4 == null) {
                             strAttr4 = "";
                         }
+                        final int fSeasonN = seasonNumber;
                         destination$iv$iv3.add(MainAPIKt.newEpisode(overFlix6, strAttr4, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda0
                             public final Object invoke(Object obj6) {
-                                return OverFlix.load$lambda$13$lambda$12$lambda$11(ep2, seasonNumber, epNum, (Episode) obj6);
+                                return OverFlix.load$lambda$13$lambda$12$lambda$11(ep2, fSeasonN, epNum != null ? epNum : 0, (Episode) obj6);
                             }
                         }));
                         $i$f$map = $i$f$map3;
@@ -1112,7 +994,7 @@ public final class OverFlix extends MainAPI {
                 obj = coroutine_suspended;
                 overFlix = overFlix7;
                 document = ((NiceResponse) obj2).getDocument();
-                isMovie = StringsKt.contains$default(realUrl, "/filme/", false, 2, (Object) null);
+                isMovie = StringsKt.contains(realUrl, "/filme/", false);
                 elementSelectFirst = document.selectFirst("h1.text-3xl, h2.text-3xl");
                 if (elementSelectFirst != null) {
                     string = null;
@@ -1126,8 +1008,9 @@ public final class OverFlix extends MainAPI {
                 if (isMovie) {
                     Iterable $this$forEach$iv$iv$iv3 = document.select("div.group\\/item");
                     destination$iv$iv = new ArrayList();
-                    while (r18.hasNext()) {
-                        Element it9 = (Element) element$iv$iv;
+                    Iterator<? extends Element> it9$iv = $this$forEach$iv$iv$iv3.iterator();
+                    while (it9$iv.hasNext()) {
+                        Element it9 = it9$iv.next();
                         str10 = str10;
                         elementSelectFirst3 = it9.selectFirst(str10);
                         actorData = elementSelectFirst3 == null ? null : null;
@@ -1148,10 +1031,10 @@ public final class OverFlix extends MainAPI {
                 } else {
                     elementSelectFirst2 = document.selectFirst("div[id^=season-] article a");
                     if (elementSelectFirst2 != null) {
-                        str = r13;
+                        str = "href";
                         strAttr = elementSelectFirst2.attr(str);
                     } else {
-                        str = r13;
+                        str = "href";
                         strAttr = null;
                     }
                     firstEpUrl = strAttr;
@@ -1171,7 +1054,7 @@ public final class OverFlix extends MainAPI {
                         forcedBackdrop3 = forcedBackdrop;
                         overFlix3 = overFlix;
                         realUrl3 = realUrl;
-                        $result = Requests.get$default(app3, firstEpUrl, map2, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001, 4092, (Object) null);
+                        $result = app3.get(firstEpUrl, map2, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001);
                         obj3 = obj;
                         if ($result == obj3) {
                             return obj3;
@@ -1185,8 +1068,9 @@ public final class OverFlix extends MainAPI {
                         Document epDoc2 = ((NiceResponse) $result).getDocument();
                         Iterable $this$forEach$iv$iv$iv4 = epDoc2.select(str3);
                         destination$iv$iv4 = new ArrayList();
-                        while (r14.hasNext()) {
-                            Element it10 = (Element) element$iv$iv2;
+                        Iterator<?> it_r14 = $this$forEach$iv$iv$iv4.iterator();
+                            while (it_r14.hasNext()) {
+                                Element it10 = (Element) it_r14.next();
                             String str16 = str10;
                             elementSelectFirst11 = it10.selectFirst(str16);
                             actorData2 = elementSelectFirst11 == null ? null : null;
@@ -1276,9 +1160,11 @@ public final class OverFlix extends MainAPI {
                         element$iv2 = it.next();
                         if (new Regex("\\d{4}").matches(((Element) element$iv2).text())) {
                             obj4 = element$iv2;
+                                break;
                         }
                     } else {
                         obj4 = null;
+                    break;
                     }
                 }
                 element = (Element) obj4;
@@ -1301,127 +1187,10 @@ public final class OverFlix extends MainAPI {
                         i2 = 0;
                         element$iv = null;
                     }
-                    it3 = (Element) element$iv;
-                    if (it3 != null) {
-                        matchResultFind$default = Regex.find$default(new Regex("(\\d+)"), it3.text(), i2, i, num);
-                        if (matchResultFind$default != null) {
-                            i3 = 1;
-                            intOrNull = num;
-                        } else {
-                            i3 = 1;
-                            intOrNull = num;
-                        }
-                    } else {
-                        i3 = 1;
-                        intOrNull = num;
-                    }
-                    duration = intOrNull;
-                    str6 = "span.text-main";
-                    elementSelectFirst8 = document2.selectFirst("span.text-main");
-                    if (elementSelectFirst8 != null) {
-                        doubleOrNull = num;
-                    } else {
-                        doubleOrNull = num;
-                    }
-                    if (isMovie) {
-                        TvType tvType5 = TvType.Movie;
-                        AnonymousClass2 anonymousClass6 = new AnonymousClass2(poster, plot, year, duration, doubleOrNull, actors, null);
-                        c00001.L$0 = num;
-                        c00001.L$1 = num;
-                        c00001.L$2 = num;
-                        c00001.L$3 = num;
-                        c00001.L$4 = num;
-                        c00001.label = 3;
-                        $result = MainAPIKt.newMovieLoadResponse(overFlix2, title2, realUrl2, tvType5, realUrl2, anonymousClass6, c00001);
-                        if ($result == obj3) {
-                            return obj3;
-                        }
-                        return (LoadResponse) $result;
-                    }
-                    Iterable $this$flatMapTo$iv$iv3 = document2.select("div[id^=season-]");
-                    $i$f$flatMap = 0;
-                    destination$iv$iv2 = new ArrayList();
-                    $i$f$flatMapTo = 0;
-                    it4 = $this$flatMapTo$iv$iv3.iterator();
-                    while (it4.hasNext()) {
-                        Object element$iv$iv5 = it4.next();
-                        Element seasonEl3 = (Element) element$iv$iv5;
-                        intOrNull2 = StringsKt.toIntOrNull(StringsKt.removePrefix(seasonEl3.attr("id"), "season-"));
-                        if (intOrNull2 != null) {
-                            seasonNumber = intOrNull2.intValue() + i3;
-                        } else {
-                            seasonNumber = 1;
-                        }
-                        Iterable $this$map$iv3 = seasonEl3.select("article");
-                        $i$f$map = 0;
-                        destination$iv$iv3 = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv3, 10));
-                        while (r21.hasNext()) {
-                            int $i$f$map4 = $i$f$map;
-                            final Element ep3 = (Element) item$iv$iv;
-                            int $i$f$flatMap4 = $i$f$flatMap;
-                            Regex regex3 = new Regex("E(\\d+)");
-                            elementSelectFirst9 = ep3.selectFirst(str6);
-                            if (elementSelectFirst9 != null) {
-                                strText4 = elementSelectFirst9.text();
-                            } else {
-                                strText4 = null;
-                            }
-                            if (strText4 == null) {
-                                strText4 = "";
-                            }
-                            String str17 = str6;
-                            int $i$f$flatMapTo4 = $i$f$flatMapTo;
-                            Iterator it11 = it4;
-                            MatchResult matchResultFind$default4 = Regex.find$default(regex3, strText4, 0, 2, (Object) null);
-                            if (matchResultFind$default4 != null) {
-                            }
-                            OverFlix overFlix8 = overFlix2;
-                            elementSelectFirst10 = ep3.selectFirst("a");
-                            if (elementSelectFirst10 != null) {
-                                str7 = str2;
-                                strAttr4 = elementSelectFirst10.attr(str7);
-                            } else {
-                                str7 = str2;
-                                strAttr4 = null;
-                            }
-                            if (strAttr4 == null) {
-                                strAttr4 = "";
-                            }
-                            destination$iv$iv3.add(MainAPIKt.newEpisode(overFlix8, strAttr4, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda0
-                                public final Object invoke(Object obj6) {
-                                    return OverFlix.load$lambda$13$lambda$12$lambda$11(ep3, seasonNumber, epNum, (Episode) obj6);
-                                }
-                            }));
-                            $i$f$map = $i$f$map4;
-                            str2 = str7;
-                            $i$f$flatMap = $i$f$flatMap4;
-                            str6 = str17;
-                            $i$f$flatMapTo = $i$f$flatMapTo4;
-                            it4 = it11;
-                        }
-                        Iterable list$iv$iv3 = (List) destination$iv$iv3;
-                        CollectionsKt.addAll(destination$iv$iv2, list$iv$iv3);
-                        $i$f$flatMap = $i$f$flatMap;
-                        i3 = 1;
-                    }
-                    List episodes3 = (List) destination$iv$iv2;
-                    TvType tvType6 = TvType.TvSeries;
-                    AnonymousClass3 anonymousClass7 = new AnonymousClass3(poster, plot, year, duration, doubleOrNull, actors, null);
-                    c00001.L$0 = null;
-                    c00001.L$1 = null;
-                    c00001.L$2 = null;
-                    c00001.L$3 = null;
-                    c00001.L$4 = null;
-                    c00001.label = 4;
-                    $result = MainAPIKt.newTvSeriesLoadResponse(overFlix2, title2, realUrl2, tvType6, episodes3, anonymousClass7, c00001);
-                    if ($result == obj3) {
-                        return obj3;
-                    }
-                    return (LoadResponse) $result;
-                } while (!StringsKt.contains$default(((Element) element$iv).text(), "minutos", false, 2, (Object) null));
+                } while (!StringsKt.contains(((Element) element$iv).text(), "minutos", false));
                 it3 = (Element) element$iv;
                 if (it3 != null) {
-                    matchResultFind$default = Regex.find$default(new Regex("(\\d+)"), it3.text(), i2, i, num);
+                    matchResultFind$default = new Regex("(\\d+)").find(it3.text(), i2);
                     if (matchResultFind$default != null) {
                         i3 = 1;
                         intOrNull = num;
@@ -1437,9 +1206,9 @@ public final class OverFlix extends MainAPI {
                 str6 = "span.text-main";
                 elementSelectFirst8 = document2.selectFirst("span.text-main");
                 if (elementSelectFirst8 != null) {
-                    doubleOrNull = num;
+                    doubleOrNull = num != null ? Double.valueOf(num.doubleValue()) : null;
                 } else {
-                    doubleOrNull = num;
+                    doubleOrNull = num != null ? Double.valueOf(num.doubleValue()) : null;
                 }
                 if (isMovie) {
                     TvType tvType7 = TvType.Movie;
@@ -1473,9 +1242,10 @@ public final class OverFlix extends MainAPI {
                     Iterable $this$map$iv4 = seasonEl4.select("article");
                     $i$f$map = 0;
                     destination$iv$iv3 = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv4, 10));
-                    while (r21.hasNext()) {
+                    Iterator<? extends Element> ep2$iv = $this$map$iv4.iterator();
+                    while (ep2$iv.hasNext()) {
                         int $i$f$map5 = $i$f$map;
-                        final Element ep4 = (Element) item$iv$iv;
+                        final Element ep4 = (Element) ep2$iv.next();
                         int $i$f$flatMap5 = $i$f$flatMap;
                         Regex regex4 = new Regex("E(\\d+)");
                         elementSelectFirst9 = ep4.selectFirst(str6);
@@ -1490,9 +1260,8 @@ public final class OverFlix extends MainAPI {
                         String str18 = str6;
                         int $i$f$flatMapTo5 = $i$f$flatMapTo;
                         Iterator it12 = it4;
-                        MatchResult matchResultFind$default5 = Regex.find$default(regex4, strText4, 0, 2, (Object) null);
-                        if (matchResultFind$default5 != null) {
-                        }
+                        MatchResult matchResultFind$default5 = regex4.find(strText4, 0);
+                        final Integer epNum = matchResultFind$default5 != null ? StringsKt.toIntOrNull((String) matchResultFind$default5.getGroupValues().get(1)) : null;
                         OverFlix overFlix9 = overFlix2;
                         elementSelectFirst10 = ep4.selectFirst("a");
                         if (elementSelectFirst10 != null) {
@@ -1505,9 +1274,10 @@ public final class OverFlix extends MainAPI {
                         if (strAttr4 == null) {
                             strAttr4 = "";
                         }
+                        final int fSeasonN = seasonNumber;
                         destination$iv$iv3.add(MainAPIKt.newEpisode(overFlix9, strAttr4, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda0
                             public final Object invoke(Object obj6) {
-                                return OverFlix.load$lambda$13$lambda$12$lambda$11(ep4, seasonNumber, epNum, (Episode) obj6);
+                                return OverFlix.load$lambda$13$lambda$12$lambda$11(ep4, fSeasonN, epNum != null ? epNum : 0, (Episode) obj6);
                             }
                         }));
                         $i$f$map = $i$f$map5;
@@ -1551,8 +1321,9 @@ public final class OverFlix extends MainAPI {
                 Document epDoc3 = ((NiceResponse) $result).getDocument();
                 Iterable $this$forEach$iv$iv$iv5 = epDoc3.select(str3);
                 destination$iv$iv4 = new ArrayList();
-                while (r14.hasNext()) {
-                    Element it13 = (Element) element$iv$iv2;
+                Iterator<?> it_r14 = $this$forEach$iv$iv$iv5.iterator();
+                    while (it_r14.hasNext()) {
+                        Element it13 = (Element) it_r14.next();
                     String str19 = str10;
                     elementSelectFirst11 = it13.selectFirst(str19);
                     if (elementSelectFirst11 == null) {
@@ -1631,9 +1402,11 @@ public final class OverFlix extends MainAPI {
                         element$iv2 = it.next();
                         if (new Regex("\\d{4}").matches(((Element) element$iv2).text())) {
                             obj4 = element$iv2;
+                                break;
                         }
                     } else {
                         obj4 = null;
+                    break;
                     }
                 }
                 element = (Element) obj4;
@@ -1656,127 +1429,10 @@ public final class OverFlix extends MainAPI {
                         i2 = 0;
                         element$iv = null;
                     }
-                    it3 = (Element) element$iv;
-                    if (it3 != null) {
-                        matchResultFind$default = Regex.find$default(new Regex("(\\d+)"), it3.text(), i2, i, num);
-                        if (matchResultFind$default != null) {
-                            i3 = 1;
-                            intOrNull = num;
-                        } else {
-                            i3 = 1;
-                            intOrNull = num;
-                        }
-                    } else {
-                        i3 = 1;
-                        intOrNull = num;
-                    }
-                    duration = intOrNull;
-                    str6 = "span.text-main";
-                    elementSelectFirst8 = document2.selectFirst("span.text-main");
-                    if (elementSelectFirst8 != null) {
-                        doubleOrNull = num;
-                    } else {
-                        doubleOrNull = num;
-                    }
-                    if (isMovie) {
-                        TvType tvType9 = TvType.Movie;
-                        AnonymousClass2 anonymousClass10 = new AnonymousClass2(poster, plot, year, duration, doubleOrNull, actors, null);
-                        c00001.L$0 = num;
-                        c00001.L$1 = num;
-                        c00001.L$2 = num;
-                        c00001.L$3 = num;
-                        c00001.L$4 = num;
-                        c00001.label = 3;
-                        $result = MainAPIKt.newMovieLoadResponse(overFlix2, title2, realUrl2, tvType9, realUrl2, anonymousClass10, c00001);
-                        if ($result == obj3) {
-                            return obj3;
-                        }
-                        return (LoadResponse) $result;
-                    }
-                    Iterable $this$flatMapTo$iv$iv5 = document2.select("div[id^=season-]");
-                    $i$f$flatMap = 0;
-                    destination$iv$iv2 = new ArrayList();
-                    $i$f$flatMapTo = 0;
-                    it4 = $this$flatMapTo$iv$iv5.iterator();
-                    while (it4.hasNext()) {
-                        Object element$iv$iv7 = it4.next();
-                        Element seasonEl5 = (Element) element$iv$iv7;
-                        intOrNull2 = StringsKt.toIntOrNull(StringsKt.removePrefix(seasonEl5.attr("id"), "season-"));
-                        if (intOrNull2 != null) {
-                            seasonNumber = intOrNull2.intValue() + i3;
-                        } else {
-                            seasonNumber = 1;
-                        }
-                        Iterable $this$map$iv5 = seasonEl5.select("article");
-                        $i$f$map = 0;
-                        destination$iv$iv3 = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv5, 10));
-                        while (r21.hasNext()) {
-                            int $i$f$map6 = $i$f$map;
-                            final Element ep5 = (Element) item$iv$iv;
-                            int $i$f$flatMap6 = $i$f$flatMap;
-                            Regex regex5 = new Regex("E(\\d+)");
-                            elementSelectFirst9 = ep5.selectFirst(str6);
-                            if (elementSelectFirst9 != null) {
-                                strText4 = elementSelectFirst9.text();
-                            } else {
-                                strText4 = null;
-                            }
-                            if (strText4 == null) {
-                                strText4 = "";
-                            }
-                            String str110 = str6;
-                            int $i$f$flatMapTo6 = $i$f$flatMapTo;
-                            Iterator it14 = it4;
-                            MatchResult matchResultFind$default6 = Regex.find$default(regex5, strText4, 0, 2, (Object) null);
-                            if (matchResultFind$default6 != null) {
-                            }
-                            OverFlix overFlix10 = overFlix2;
-                            elementSelectFirst10 = ep5.selectFirst("a");
-                            if (elementSelectFirst10 != null) {
-                                str7 = str2;
-                                strAttr4 = elementSelectFirst10.attr(str7);
-                            } else {
-                                str7 = str2;
-                                strAttr4 = null;
-                            }
-                            if (strAttr4 == null) {
-                                strAttr4 = "";
-                            }
-                            destination$iv$iv3.add(MainAPIKt.newEpisode(overFlix10, strAttr4, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda0
-                                public final Object invoke(Object obj6) {
-                                    return OverFlix.load$lambda$13$lambda$12$lambda$11(ep5, seasonNumber, epNum, (Episode) obj6);
-                                }
-                            }));
-                            $i$f$map = $i$f$map6;
-                            str2 = str7;
-                            $i$f$flatMap = $i$f$flatMap6;
-                            str6 = str110;
-                            $i$f$flatMapTo = $i$f$flatMapTo6;
-                            it4 = it14;
-                        }
-                        Iterable list$iv$iv5 = (List) destination$iv$iv3;
-                        CollectionsKt.addAll(destination$iv$iv2, list$iv$iv5);
-                        $i$f$flatMap = $i$f$flatMap;
-                        i3 = 1;
-                    }
-                    List episodes5 = (List) destination$iv$iv2;
-                    TvType tvType10 = TvType.TvSeries;
-                    AnonymousClass3 anonymousClass11 = new AnonymousClass3(poster, plot, year, duration, doubleOrNull, actors, null);
-                    c00001.L$0 = null;
-                    c00001.L$1 = null;
-                    c00001.L$2 = null;
-                    c00001.L$3 = null;
-                    c00001.L$4 = null;
-                    c00001.label = 4;
-                    $result = MainAPIKt.newTvSeriesLoadResponse(overFlix2, title2, realUrl2, tvType10, episodes5, anonymousClass11, c00001);
-                    if ($result == obj3) {
-                        return obj3;
-                    }
-                    return (LoadResponse) $result;
-                } while (!StringsKt.contains$default(((Element) element$iv).text(), "minutos", false, 2, (Object) null));
+                } while (!StringsKt.contains(((Element) element$iv).text(), "minutos", false));
                 it3 = (Element) element$iv;
                 if (it3 != null) {
-                    matchResultFind$default = Regex.find$default(new Regex("(\\d+)"), it3.text(), i2, i, num);
+                    matchResultFind$default = new Regex("(\\d+)").find(it3.text(), i2);
                     if (matchResultFind$default != null) {
                         i3 = 1;
                         intOrNull = num;
@@ -1792,9 +1448,9 @@ public final class OverFlix extends MainAPI {
                 str6 = "span.text-main";
                 elementSelectFirst8 = document2.selectFirst("span.text-main");
                 if (elementSelectFirst8 != null) {
-                    doubleOrNull = num;
+                    doubleOrNull = num != null ? Double.valueOf(num.doubleValue()) : null;
                 } else {
-                    doubleOrNull = num;
+                    doubleOrNull = num != null ? Double.valueOf(num.doubleValue()) : null;
                 }
                 if (isMovie) {
                     TvType tvType11 = TvType.Movie;
@@ -1828,9 +1484,10 @@ public final class OverFlix extends MainAPI {
                     Iterable $this$map$iv6 = seasonEl6.select("article");
                     $i$f$map = 0;
                     destination$iv$iv3 = new ArrayList(CollectionsKt.collectionSizeOrDefault($this$map$iv6, 10));
-                    while (r21.hasNext()) {
+                    Iterator<? extends Element> ep2$iv = $this$map$iv6.iterator();
+                    while (ep2$iv.hasNext()) {
                         int $i$f$map7 = $i$f$map;
-                        final Element ep6 = (Element) item$iv$iv;
+                        final Element ep6 = (Element) ep2$iv.next();
                         int $i$f$flatMap7 = $i$f$flatMap;
                         Regex regex6 = new Regex("E(\\d+)");
                         elementSelectFirst9 = ep6.selectFirst(str6);
@@ -1845,9 +1502,8 @@ public final class OverFlix extends MainAPI {
                         String str111 = str6;
                         int $i$f$flatMapTo7 = $i$f$flatMapTo;
                         Iterator it15 = it4;
-                        MatchResult matchResultFind$default7 = Regex.find$default(regex6, strText4, 0, 2, (Object) null);
-                        if (matchResultFind$default7 != null) {
-                        }
+                        MatchResult matchResultFind$default7 = regex6.find(strText4, 0);
+                        final Integer epNum = matchResultFind$default7 != null ? StringsKt.toIntOrNull((String) matchResultFind$default7.getGroupValues().get(1)) : null;
                         OverFlix overFlix11 = overFlix2;
                         elementSelectFirst10 = ep6.selectFirst("a");
                         if (elementSelectFirst10 != null) {
@@ -1860,9 +1516,10 @@ public final class OverFlix extends MainAPI {
                         if (strAttr4 == null) {
                             strAttr4 = "";
                         }
+                        final int fSeasonN = seasonNumber;
                         destination$iv$iv3.add(MainAPIKt.newEpisode(overFlix11, strAttr4, new Function1() { // from class: com.OverFlix.OverFlix$$ExternalSyntheticLambda0
                             public final Object invoke(Object obj6) {
-                                return OverFlix.load$lambda$13$lambda$12$lambda$11(ep6, seasonNumber, epNum, (Episode) obj6);
+                                return OverFlix.load$lambda$13$lambda$12$lambda$11(ep6, fSeasonN, epNum != null ? epNum : 0, (Episode) obj6);
                             }
                         }));
                         $i$f$map = $i$f$map7;
@@ -1917,8 +1574,8 @@ public final class OverFlix extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass2(String str, String str2, Integer num, Integer num2, Double d, List<ActorData> list, Continuation<? super AnonymousClass2> continuation) {
-            super(2, continuation);
+        AnonymousClass2(String str, String str2, Integer num, Integer num2, Double d, List<ActorData> list, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$plot = str2;
             this.$year = num;
@@ -1928,13 +1585,13 @@ public final class OverFlix extends MainAPI {
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass2 = new AnonymousClass2(this.$poster, this.$plot, this.$year, this.$duration, this.$score, this.$actors, continuation);
+            AnonymousClass2 anonymousClass2 = new AnonymousClass2(this.$poster, this.$plot, this.$year, this.$duration, this.$score, this.$actors, continuation);
             anonymousClass2.L$0 = obj;
-            return anonymousClass2;
+            return (Continuation<Unit>) (Object) anonymousClass2;
         }
 
         public final Object invoke(MovieLoadResponse movieLoadResponse, Continuation<? super Unit> continuation) {
-            return create(movieLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass2) (Object) create(movieLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -1958,7 +1615,7 @@ public final class OverFlix extends MainAPI {
 
     /* JADX INFO: Access modifiers changed from: private */
     public static final Unit load$lambda$13$lambda$12$lambda$11(Element $ep, int $seasonNumber, int $epNum, Episode $this$newEpisode) {
-        String strText;
+        String strText = null;
         Element elementSelectFirst = $ep.selectFirst("h2");
         $this$newEpisode.setName(elementSelectFirst != null ? elementSelectFirst.text() : null);
         $this$newEpisode.setSeason(Integer.valueOf($seasonNumber));
@@ -1985,8 +1642,8 @@ public final class OverFlix extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass3(String str, String str2, Integer num, Integer num2, Double d, List<ActorData> list, Continuation<? super AnonymousClass3> continuation) {
-            super(2, continuation);
+        AnonymousClass3(String str, String str2, Integer num, Integer num2, Double d, List<ActorData> list, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$plot = str2;
             this.$year = num;
@@ -1996,13 +1653,13 @@ public final class OverFlix extends MainAPI {
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass3 = new AnonymousClass3(this.$poster, this.$plot, this.$year, this.$duration, this.$score, this.$actors, continuation);
+            AnonymousClass3 anonymousClass3 = new AnonymousClass3(this.$poster, this.$plot, this.$year, this.$duration, this.$score, this.$actors, continuation);
             anonymousClass3.L$0 = obj;
-            return anonymousClass3;
+            return (Continuation<Unit>) (Object) anonymousClass3;
         }
 
         public final Object invoke(TvSeriesLoadResponse tvSeriesLoadResponse, Continuation<? super Unit> continuation) {
-            return create(tvSeriesLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass3) (Object) create(tvSeriesLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {

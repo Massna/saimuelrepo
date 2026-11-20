@@ -94,26 +94,13 @@ public final /* data */ class AjaxResponse {
     }
 
     @NotNull
-    public final String getMensagem() {
-        return this.mensagem;
-    }
-
-    public final int getPage() {
-        return this.page;
-    }
-
-    @NotNull
     public final List<String> getResults() {
         return this.results;
     }
 
-    public final int getTotal_page() {
-        return this.total_page;
-    }
+    
 
-    public final int getTotal_results() {
-        return this.total_results;
-    }
+    
 
     public int hashCode() {
         return (((((((this.page * 31) + this.total_results) * 31) + this.mensagem.hashCode()) * 31) + this.total_page) * 31) + this.results.hashCode();

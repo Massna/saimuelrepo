@@ -17,6 +17,7 @@ import kotlin.coroutines.intrinsics.IntrinsicsKt;
 import kotlin.coroutines.jvm.internal.ContinuationImpl;
 import kotlin.coroutines.jvm.internal.DebugMetadata;
 import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 import kotlin.jvm.internal.SourceDebugExtension;
 import kotlin.text.StringsKt;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ public final class AnimesCloudExtractor {
     /* JADX INFO: compiled from: AnimesCloudExtractor.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.AnimesCloud.AnimesCloudExtractor", f = "AnimesCloudExtractor.kt", i = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3}, l = {36, 58, 108, 109}, m = "extractVideoLinks", n = {"url", "mainUrl", "callback", "url", "mainUrl", "callback", "hasValidLinks", "priorityLinks", "lateLinks", "title", "hasValidLinks", "lateLinks", "hasValidLinks"}, s = {"L$0", "L$1", "L$2", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$7", "L$0", "L$1", "L$0"})
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
@@ -56,8 +57,8 @@ public final class AnimesCloudExtractor {
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -124,12 +125,12 @@ public final class AnimesCloudExtractor {
         switch (anonymousClass1.label) {
             case 0:
                 ResultKt.throwOnFailure($result);
-                String refererRoot = StringsKt.endsWith$default(mainUrl, "/", false, 2, (Object) null) ? mainUrl : mainUrl + "/";
+                String refererRoot = StringsKt.endsWith(mainUrl, "/", false) ? mainUrl : mainUrl + "/";
                 List media = new ArrayList();
                 try {
                     String post = null;
                     List<Integer> sourceIdx = new ArrayList();
-                    if (StringsKt.contains$default(url, "http", false, 2, (Object) null)) {
+                    if (StringsKt.contains(url, "http", false)) {
                         Document doc = Jsoup.connect(url).userAgent(USER_AGENT).header("Referer", refererRoot).ignoreHttpErrors(true).timeout(15000).get();
                         Element postEl = doc.selectFirst("[data-post-id]");
                         if (postEl != null) {
@@ -161,14 +162,14 @@ public final class AnimesCloudExtractor {
                         for (Integer num : sourceIdx) {
                             try {
                                 String api = refererRoot + "wp-json/dooplayer/v2/" + post + "/tv/" + (num.intValue() + 1);
-                                String body = Jsoup.connect(api).userAgent(USER_AGENT).header("Referer", refererRoot).header("Accept", "application/json").ignoreContentType(true).ignoreHttpErrors(true).timeout(15000).execute().getBody();
+                                String body = Jsoup.connect(api).userAgent(USER_AGENT).header("Referer", refererRoot).header("Accept", "application/json").ignoreContentType(true).ignoreHttpErrors(true).timeout(15000).execute().body();
                                 Matcher embedMatcher = Pattern.compile("\"embed_url\"\\s*:\\s*\"([^\"]+)\"").matcher(body);
                                 if (embedMatcher.find()) {
                                     String embedUrl = embedMatcher.group(1).replace("\\/", "/").replace("\\u0026", "&");
                                     Matcher srcMatcher = Pattern.compile("source=([^&\"]+)").matcher(embedUrl);
                                     if (srcMatcher.find()) {
-                                        String decoded = URLDecoder.decode(srcMatcher.group(1), "UTF-8");
-                                        if ((StringsKt.contains$default(decoded, ".mp4", false, 2, (Object) null) || StringsKt.contains$default(decoded, ".m3u8", false, 2, (Object) null)) && !media.contains(decoded)) {
+                                        String decoded = URLDecoder.decode(srcMatcher.group(1), java.nio.charset.StandardCharsets.UTF_8);
+                                        if ((StringsKt.contains(decoded, ".mp4", false) || StringsKt.contains(decoded, ".m3u8", false)) && !media.contains(decoded)) {
                                             media.add(decoded);
                                         }
                                     }
@@ -201,14 +202,14 @@ public final class AnimesCloudExtractor {
         while (i < rows.size()) {
             String mediaUrl = (String) rows.get(i);
             final String ref = referer;
-            ExtractorLinkType extractorLinkType = StringsKt.contains$default(mediaUrl, ".m3u8", false, 2, (Object) null) ? ExtractorLinkType.M3U8 : ExtractorLinkType.VIDEO;
+            ExtractorLinkType extractorLinkType = StringsKt.contains(mediaUrl, ".m3u8", false) ? ExtractorLinkType.M3U8 : ExtractorLinkType.VIDEO;
             anonymousClass1.L$0 = rows;
             anonymousClass1.L$1 = cb;
             anonymousClass1.L$2 = Integer.valueOf(i);
             anonymousClass1.L$3 = referer;
             anonymousClass1.label = 1;
-            $result = ExtractorApiKt.newExtractorLink(name, name, mediaUrl, extractorLinkType, new Function1() {
-                public final Object invoke(Object obj) {
+            $result = ExtractorApiKt.newExtractorLink(name, name, mediaUrl, extractorLinkType, new Function2() {
+                public final Object invoke(Object obj, Object cont) {
                     ((ExtractorLink) obj).setReferer(ref);
                     return Unit.INSTANCE;
                 }

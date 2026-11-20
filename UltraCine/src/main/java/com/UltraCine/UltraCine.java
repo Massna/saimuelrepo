@@ -104,25 +104,25 @@ public final class UltraCine extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass2(String str, Integer num, String str2, List<String> list, Double d, List<? extends Pair<Actor, ? extends ActorRole>> list2, String str3, Continuation<? super AnonymousClass2> continuation) {
-            super(2, continuation);
+        AnonymousClass2(String str, Integer num, String str2, List<String> list, Double d, List<? extends Pair<Actor, ? extends ActorRole>> list2, String str3, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$year = num;
             this.$plot = str2;
             this.$genres = list;
             this.$score = d;
-            this.$actors = list2;
+            this.$actors = (java.util.List) list2;
             this.$trailer = str3;
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass2 = new AnonymousClass2(this.$poster, this.$year, this.$plot, this.$genres, this.$score, this.$actors, this.$trailer, continuation);
+            AnonymousClass2 anonymousClass2 = new AnonymousClass2(this.$poster, this.$year, this.$plot, this.$genres, this.$score, this.$actors, this.$trailer, continuation);
             anonymousClass2.L$0 = obj;
-            return anonymousClass2;
+            return (Continuation<Unit>) (Object) anonymousClass2;
         }
 
         public final Object invoke(TvSeriesLoadResponse tvSeriesLoadResponse, Continuation<? super Unit> continuation) {
-            return create(tvSeriesLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass2) (Object) create(tvSeriesLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object $result) {
@@ -141,8 +141,8 @@ public final class UltraCine extends MainAPI {
                         LoadResponse.Companion.addActorsRole(loadResponse, this.$actors);
                     }
                     this.label = 1;
-                    if (LoadResponse.Companion.addTrailer$default(LoadResponse.Companion, loadResponse, this.$trailer, (String) null, false, (Continuation) this, 6, (Object) null) == coroutine_suspended) {
-                        return coroutine_suspended;
+                    if (LoadResponse.Companion.addTrailer(loadResponse, this.$trailer, (String) null, false, (Continuation) this) == coroutine_suspended) {
+                        return (Continuation<Unit>) (Object) coroutine_suspended;
                     }
                     break;
                 case 1:
@@ -171,8 +171,8 @@ public final class UltraCine extends MainAPI {
         final /* synthetic */ UltraCine this$0;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass3(String str, Integer num, String str2, List<String> list, UltraCine ultraCine, String str3, Double d, List<? extends Pair<Actor, ? extends ActorRole>> list2, String str4, Continuation<? super AnonymousClass3> continuation) {
-            super(2, continuation);
+        AnonymousClass3(String str, Integer num, String str2, List<String> list, UltraCine ultraCine, String str3, Double d, List<? extends Pair<Actor, ? extends ActorRole>> list2, String str4, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$year = num;
             this.$plot = str2;
@@ -180,18 +180,18 @@ public final class UltraCine extends MainAPI {
             this.this$0 = ultraCine;
             this.$durationText = str3;
             this.$score = d;
-            this.$actors = list2;
+            this.$actors = (java.util.List) list2;
             this.$trailer = str4;
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass3 = new AnonymousClass3(this.$poster, this.$year, this.$plot, this.$genres, this.this$0, this.$durationText, this.$score, this.$actors, this.$trailer, continuation);
+            AnonymousClass3 anonymousClass3 = new AnonymousClass3(this.$poster, this.$year, this.$plot, this.$genres, this.this$0, this.$durationText, this.$score, this.$actors, this.$trailer, continuation);
             anonymousClass3.L$0 = obj;
-            return anonymousClass3;
+            return (Continuation<Unit>) (Object) anonymousClass3;
         }
 
         public final Object invoke(MovieLoadResponse movieLoadResponse, Continuation<? super Unit> continuation) {
-            return create(movieLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass3) (Object) create(movieLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object $result) {
@@ -211,8 +211,8 @@ public final class UltraCine extends MainAPI {
                         LoadResponse.Companion.addActorsRole(loadResponse, this.$actors);
                     }
                     this.label = 1;
-                    if (LoadResponse.Companion.addTrailer$default(LoadResponse.Companion, loadResponse, this.$trailer, (String) null, false, (Continuation) this, 6, (Object) null) == coroutine_suspended) {
-                        return coroutine_suspended;
+                    if (LoadResponse.Companion.addTrailer(loadResponse, this.$trailer, (String) null, false, (Continuation) this) == coroutine_suspended) {
+                        return (Continuation<Unit>) (Object) coroutine_suspended;
                     }
                     break;
                 case 1:
@@ -283,7 +283,7 @@ public final class UltraCine extends MainAPI {
                 }
             }
             List home = (List) destination;
-            return MainAPIKt.newHomePageResponse$default(request.getName(), home, (Boolean) null, 4, (Object) null);
+            return MainAPIKt.newHomePageResponse(request.getName(), home, (Boolean) null);
         } catch (Throwable th) {
             continuation.resumeWith(ResultKt.createFailure(th));
             return IntrinsicsKt.getCOROUTINE_SUSPENDED();
@@ -330,12 +330,12 @@ public final class UltraCine extends MainAPI {
         final SearchQuality quality = MainAPIKt.getQualityFromString(qualityEl != null ? qualityEl.text() : null);
         Element voteEl = el.selectFirst("span.vote, .nota, .rating");
         final String ratingText = voteEl != null ? voteEl.text() : null;
-        final boolean isSerie = StringsKt.contains$default(href, "/serie/", false, 2, (Object) null) || StringsKt.contains$default(href, "/episodio/", false, 2, (Object) null);
-        return MainAPIKt.newMovieSearchResponse$default(this, StringsKt.trim(title).toString(), href, isSerie ? TvType.TvSeries : TvType.Movie, false, new Function1() { // from class: com.UltraCine.UltraCine$$ExternalSyntheticLambda1
+        final boolean isSerie = StringsKt.contains(href, "/serie/", false) || StringsKt.contains(href, "/episodio/", false);
+        return MainAPIKt.newMovieSearchResponse(this, StringsKt.trim(title).toString(), href, isSerie ? TvType.TvSeries : TvType.Movie, false, new Function1() { // from class: com.UltraCine.UltraCine$$ExternalSyntheticLambda1
             public final Object invoke(Object obj) {
                 return UltraCine.toSearchResult$lambda$2(poster, year, quality, ratingText, (MovieSearchResponse) obj);
             }
-        }, 8, (Object) null);
+        });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -348,14 +348,14 @@ public final class UltraCine extends MainAPI {
     }
 
     @Nullable
-    public Object load(@NotNull String url, @NotNull Continuation<? super LoadResponse> continuation) throws IOException {
+    public Object load(@NotNull String url, @NotNull Continuation<? super LoadResponse> continuation) {
         try {
             Document document = Jsoup.connect(url).userAgent(UA).timeout(20000).execute().parse();
             /* Metadados TMDB-like do <title>: "Título (ANO) — assistir online | UltraCine" */
             String title = null;
             Integer year = null;
             String headTitle = document.title();
-            MatchResult m = headTitle == null ? null : Regex.find$default(TITLE_YEAR, headTitle, 0, 2, (Object) null);
+            MatchResult m = headTitle == null ? null : TITLE_YEAR.find(headTitle, 0);
             if (m != null) {
                 title = StringsKt.trim((String) m.getGroupValues().get(1)).toString();
                 year = StringsKt.toIntOrNull((String) m.getGroupValues().get(2));
@@ -363,7 +363,7 @@ public final class UltraCine extends MainAPI {
             if (StringsKt.isBlank(title)) {
                 Element titleEl = document.selectFirst(".titulo-page");
                 String raw = titleEl != null ? titleEl.text() : null;
-                title = raw == null ? null : StringsKt.trim(StringsKt.replace$default(raw, "Online", "", false, 4, (Object) null)).toString();
+                title = raw == null ? null : StringsKt.trim(StringsKt.replace(raw, "Online", "", false)).toString();
             }
             if (StringsKt.isBlank(title)) {
                 return null;
@@ -375,11 +375,11 @@ public final class UltraCine extends MainAPI {
             if (poster == null) {
                 Element tmdb = document.selectFirst("link[href*='image.tmdb.org/t/p/'], img[src*='image.tmdb.org/t/p/'], img[data-src*='image.tmdb.org/t/p/']");
                 String rawPoster = tmdb != null ? (StringsKt.isBlank(tmdb.attr("href")) ? (StringsKt.isBlank(tmdb.attr("data-src")) ? tmdb.attr("src") : tmdb.attr("data-src")) : tmdb.attr("href")) : null;
-                poster = rawPoster == null ? null : StringsKt.replace$default(rawPoster, "/w300/", "/original/", false, 4, (Object) null);
+                poster = rawPoster == null ? null : StringsKt.replace(rawPoster, "/w300/", "/original/", false);
             }
             if (poster != null) {
-                poster = StringsKt.replace$default(poster, "/w500/", "/original/", false, 4, (Object) null);
-                poster = StringsKt.replace$default(poster, "/w1280/", "/original/", false, 4, (Object) null);
+                poster = StringsKt.replace(poster, "/w500/", "/original/", false);
+                poster = StringsKt.replace(poster, "/w1280/", "/original/", false);
             }
             String durationText = extractText(document, "span.duration, .duration, .ano-estudio");
             Element scoreEl = document.selectFirst("span.vote span.num, span.vote, .nota, .rating");
@@ -393,7 +393,7 @@ public final class UltraCine extends MainAPI {
             List<Pair<Actor, ActorRole>> listSelectActors = selectActors(document);
             Element trailerEl = document.selectFirst("iframe[src*='youtube.com'], iframe[src*='youtu.be']");
             String trailer = trailerEl != null ? trailerEl.attr("src") : null;
-            boolean isSerie = StringsKt.contains$default(url, "/serie/", false, 2, (Object) null);
+            boolean isSerie = StringsKt.contains(url, "/serie/", false);
             if (!isSerie) {
                 return MainAPIKt.newMovieLoadResponse(this, title, url, TvType.Movie, url, new AnonymousClass3(poster, year, plot, genres, this, durationText, score, listSelectActors, trailer, null), continuation);
             }
@@ -459,7 +459,7 @@ public final class UltraCine extends MainAPI {
         List<Episode> episodes = new ArrayList<>();
         for (Element a : doc.select("a[href*='/episodio/online/']")) {
             String href = a.attr("href");
-            MatchResult m = Regex.find$default(SEASON_EPISODE, href, 0, 2, (Object) null);
+            MatchResult m = SEASON_EPISODE.find(href, 0);
             if (m == null) {
                 continue;
             }
@@ -501,7 +501,7 @@ public final class UltraCine extends MainAPI {
         for (Element it : doc.select("[data-iframe]")) {
             String strAttr = it.attr("data-iframe");
             if (!StringsKt.isBlank(strAttr)) {
-                out.add(StringsKt.startsWith$default(strAttr, "//", false, 2, (Object) null) ? "https:" + strAttr : strAttr);
+                out.add(StringsKt.startsWith(strAttr, "//", false) ? "https:" + strAttr : strAttr);
             }
         }
         for (Element it2 : doc.select("div#players iframe, div.tab-video iframe, div.player-video-filme iframe, iframe[src*='fshd.link']")) {
@@ -510,8 +510,8 @@ public final class UltraCine extends MainAPI {
                 strAttr2 = it2.attr("data-src");
             }
             if (!StringsKt.isBlank(strAttr2)) {
-                String src = StringsKt.startsWith$default(strAttr2, "//", false, 2, (Object) null) ? "https:" + strAttr2 : strAttr2;
-                if (!StringsKt.contains$default(src, "youtube", false, 2, (Object) null) && !StringsKt.contains$default(src, "youtu.be", false, 2, (Object) null)) {
+                String src = StringsKt.startsWith(strAttr2, "//", false) ? "https:" + strAttr2 : strAttr2;
+                if (!StringsKt.contains(src, "youtube", false) && !StringsKt.contains(src, "youtu.be", false)) {
                     out.add(src);
                 }
             }
@@ -525,7 +525,7 @@ public final class UltraCine extends MainAPI {
             Element el = (Element) it;
             String name = el.text();
             if (!StringsKt.isBlank(name)) {
-                actors.add(TuplesKt.to(new Actor(name, el.attr("href")), (Object) null));
+                actors.add(TuplesKt.to(new Actor(name, el.attr("href")), (ActorRole) null));
             }
         }
         if (!actors.isEmpty()) {
@@ -548,9 +548,9 @@ public final class UltraCine extends MainAPI {
         if (it == null) {
             return null;
         }
-        String str = StringsKt.startsWith$default(it, "//", false, 2, (Object) null) ? "https:" + it : it;
+        String str = StringsKt.startsWith(it, "//", false) ? "https:" + it : it;
         if (str != null) {
-            return StringsKt.replace$default(str, replace, "/original/", false, 4, (Object) null);
+            return StringsKt.replace(str, replace, "/original/", false);
         }
         return null;
     }
@@ -569,9 +569,9 @@ public final class UltraCine extends MainAPI {
         if (it == null) {
             return null;
         }
-        String str = StringsKt.startsWith$default(it, "//", false, 2, (Object) null) ? "https:" + it : it;
+        String str = StringsKt.startsWith(it, "//", false) ? "https:" + it : it;
         if (str != null) {
-            return StringsKt.replace$default(str, replace, "/original/", false, 4, (Object) null);
+            return StringsKt.replace(str, replace, "/original/", false);
         }
         return null;
     }
@@ -612,9 +612,9 @@ public final class UltraCine extends MainAPI {
         if (text == null) {
             return null;
         }
-        MatchResult it = Regex.find$default(new Regex("(\\d+)h\\s*(\\d+)m"), text, 0, 2, (Object) null);
+        MatchResult it = new Regex("(\\d+)h\\s*(\\d+)m").find(text, 0);
         if (it == null) {
-            MatchResult matchResultFind$default = Regex.find$default(new Regex("(\\d+)m"), text, 0, 2, (Object) null);
+            MatchResult matchResultFind$default = new Regex("(\\d+)m").find(text, 0);
             if (matchResultFind$default == null || (groupValues = matchResultFind$default.getGroupValues()) == null || (str = (String) groupValues.get(1)) == null) {
                 return null;
             }
@@ -630,7 +630,7 @@ public final class UltraCine extends MainAPI {
         if (text == null) {
             return null;
         }
-        MatchResult m = Regex.find$default(new Regex("(\\d{4})"), text, 0, 2, (Object) null);
+        MatchResult m = new Regex("(\\d{4})").find(text, 0);
         return m == null ? null : StringsKt.toIntOrNull(m.getValue());
     }
 }

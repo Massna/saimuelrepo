@@ -10,6 +10,7 @@ import com.lagradost.nicehttp.Requests;
 import com.lagradost.nicehttp.ResponseParser;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -60,12 +61,12 @@ public final class OverFlixExtractor {
     /* JADX INFO: compiled from: OverFlixExtractor.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlixExtractor", f = "OverFlixExtractor.kt", i = {}, l = {62}, m = "extractIframe", n = {}, s = {})
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -80,14 +81,14 @@ public final class OverFlixExtractor {
     /* JADX INFO: compiled from: OverFlixExtractor.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlixExtractor", f = "OverFlixExtractor.kt", i = {0, 0}, l = {170, 206}, m = "extractInternalPlayer", n = {"finalUrl", "callback"}, s = {"L$0", "L$1"})
-    static final class C00021 extends ContinuationImpl {
+    final class C00021 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        C00021(Continuation<? super C00021> continuation) {
-            super(continuation);
+        C00021(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -102,7 +103,7 @@ public final class OverFlixExtractor {
     /* JADX INFO: compiled from: OverFlixExtractor.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlixExtractor", f = "OverFlixExtractor.kt", i = {0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6}, l = {24, 26, 35, 42, 49, 52, 54}, m = "extractLinks", n = {"this", "url", "subtitleCallback", "callback", "this", "url", "subtitleCallback", "callback", "iframeUrl", "this", "subtitleCallback", "callback", "iframeUrl", "contentType", "contentInfo", "this", "subtitleCallback", "callback", "iframeUrl", "contentType", "contentInfo", "$this$extractLinks_u24lambda_u241_u24lambda_u240", "this", "subtitleCallback", "callback", "iframeUrl", "contentType", "contentInfo", "$this$extractLinks_u24lambda_u241_u24lambda_u240", "playerUrl", "this", "subtitleCallback", "callback", "iframeUrl", "contentType", "contentInfo", "this", "subtitleCallback", "callback", "iframeUrl", "contentType", "contentInfo"}, s = {"L$0", "L$1", "L$2", "L$3", "L$0", "L$1", "L$2", "L$3", "L$4", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$7", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$7", "L$8", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5"})
-    static final class C00031 extends ContinuationImpl {
+    final class C00031 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
@@ -115,8 +116,8 @@ public final class OverFlixExtractor {
         int label;
         /* synthetic */ Object result;
 
-        C00031(Continuation<? super C00031> continuation) {
-            super(continuation);
+        C00031(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -131,12 +132,12 @@ public final class OverFlixExtractor {
     /* JADX INFO: compiled from: OverFlixExtractor.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlixExtractor", f = "OverFlixExtractor.kt", i = {}, l = {132}, m = "fetchPlayerUrl", n = {}, s = {})
-    static final class C00041 extends ContinuationImpl {
+    final class C00041 extends ContinuationImpl {
         int label;
         /* synthetic */ Object result;
 
-        C00041(Continuation<? super C00041> continuation) {
-            super(continuation);
+        C00041(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -151,12 +152,12 @@ public final class OverFlixExtractor {
     /* JADX INFO: compiled from: OverFlixExtractor.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlixExtractor", f = "OverFlixExtractor.kt", i = {}, l = {103}, m = "fetchSeriesServerIds", n = {}, s = {})
-    static final class C00051 extends ContinuationImpl {
+    final class C00051 extends ContinuationImpl {
         int label;
         /* synthetic */ Object result;
 
-        C00051(Continuation<? super C00051> continuation) {
-            super(continuation);
+        C00051(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -171,12 +172,12 @@ public final class OverFlixExtractor {
     /* JADX INFO: compiled from: OverFlixExtractor.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.OverFlix.OverFlixExtractor", f = "OverFlixExtractor.kt", i = {}, l = {154}, m = "resolveRedirect", n = {}, s = {})
-    static final class C00061 extends ContinuationImpl {
+    final class C00061 extends ContinuationImpl {
         int label;
         /* synthetic */ Object result;
 
-        C00061(Continuation<? super C00061> continuation) {
-            super(continuation);
+        C00061(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -216,11 +217,266 @@ public final class OverFlixExtractor {
         */
     @org.jetbrains.annotations.Nullable
     public final java.lang.Object extractLinks(@org.jetbrains.annotations.NotNull java.lang.String r30, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.SubtitleFile, kotlin.Unit> r31, @org.jetbrains.annotations.NotNull kotlin.jvm.functions.Function1<? super com.lagradost.cloudstream3.utils.ExtractorLink, kotlin.Unit> r32, @org.jetbrains.annotations.NotNull kotlin.coroutines.Continuation<? super java.lang.Boolean> r33) {
-        /*
-            Method dump skipped, instruction units count: 1064
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.OverFlix.OverFlixExtractor.extractLinks(java.lang.String, kotlin.jvm.functions.Function1, kotlin.jvm.functions.Function1, kotlin.coroutines.Continuation):java.lang.Object");
+        C00031 c00031;
+        if (r33 instanceof C00031) {
+            c00031 = (C00031) r33;
+            if ((c00031.label & Integer.MIN_VALUE) != 0) {
+                c00031.label -= Integer.MIN_VALUE;
+            } else {
+                c00031 = new C00031(r33);
+            }
+        } else {
+            c00031 = new C00031(r33);
+        }
+        Object $result = c00031.result;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        String url = r30;
+        Function1 subtitleCallback = r31;
+        Function1 callback = r32;
+        OverFlixExtractor extractor = this;
+        String iframeUrl = null;
+        String contentType = null;
+        String contentInfo = null;
+        Iterator iterator = null;
+        String playerUrl = null;
+        int state = c00031.label;
+        while (true) {
+            switch (state) {
+                case 0: {
+                    ResultKt.throwOnFailure($result);
+                    c00031.L$0 = extractor;
+                    c00031.L$1 = url;
+                    c00031.L$2 = subtitleCallback;
+                    c00031.L$3 = callback;
+                    c00031.label = 1;
+                    $result = extractor.extractIframe(url, c00031);
+                    if ($result == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                    state = 1;
+                    break;
+                }
+                case 1: {
+                    callback = (Function1) c00031.L$3;
+                    subtitleCallback = (Function1) c00031.L$2;
+                    url = (String) c00031.L$1;
+                    extractor = (OverFlixExtractor) c00031.L$0;
+                    ResultKt.throwOnFailure($result);
+                    iframeUrl = (String) $result;
+                    if (iframeUrl == null) {
+                        return Boxing.boxBoolean(false);
+                    }
+                    c00031.L$0 = extractor;
+                    c00031.L$1 = url;
+                    c00031.L$2 = subtitleCallback;
+                    c00031.L$3 = callback;
+                    c00031.L$4 = iframeUrl;
+                    c00031.label = 2;
+                    $result = MainActivityKt.getApp().get(iframeUrl, (Map) null, url, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00031);
+                    if ($result == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                    state = 2;
+                    break;
+                }
+                case 2: {
+                    iframeUrl = (String) c00031.L$4;
+                    callback = (Function1) c00031.L$3;
+                    subtitleCallback = (Function1) c00031.L$2;
+                    url = (String) c00031.L$1;
+                    extractor = (OverFlixExtractor) c00031.L$0;
+                    ResultKt.throwOnFailure($result);
+                    NiceResponse embedResponse = (NiceResponse) $result;
+                    Document embedDoc = embedResponse.getDocument();
+                    String embedHtml = embedResponse.getText();
+                    boolean isTv = extractor.isTvContent(url, iframeUrl);
+                    contentType = isTv ? "2" : "1";
+                    contentInfo = extractor.extractContentInfo(isTv, iframeUrl, embedDoc, embedHtml);
+                    if (isTv) {
+                        c00031.L$0 = extractor;
+                        c00031.L$1 = subtitleCallback;
+                        c00031.L$2 = callback;
+                        c00031.L$3 = iframeUrl;
+                        c00031.L$4 = contentType;
+                        c00031.L$5 = contentInfo;
+                        c00031.label = 3;
+                        $result = extractor.fetchSeriesServerIds(contentInfo, iframeUrl, c00031);
+                        if ($result == coroutine_suspended) {
+                            return coroutine_suspended;
+                        }
+                        state = 3;
+                        break;
+                    }
+                    iterator = CollectionsKt.distinct(extractor.fetchMovieServerIds(embedDoc)).iterator();
+                    state = 8;
+                    break;
+                }
+                case 3: {
+                    contentInfo = (String) c00031.L$5;
+                    contentType = (String) c00031.L$4;
+                    iframeUrl = (String) c00031.L$3;
+                    callback = (Function1) c00031.L$2;
+                    subtitleCallback = (Function1) c00031.L$1;
+                    extractor = (OverFlixExtractor) c00031.L$0;
+                    ResultKt.throwOnFailure($result);
+                    iterator = CollectionsKt.distinct((List) $result).iterator();
+                    state = 8;
+                    break;
+                }
+                case 4: {
+                    try {
+                        extractor = (OverFlixExtractor) c00031.L$7;
+                        iterator = (Iterator) c00031.L$6;
+                        contentInfo = (String) c00031.L$5;
+                        contentType = (String) c00031.L$4;
+                        iframeUrl = (String) c00031.L$3;
+                        callback = (Function1) c00031.L$2;
+                        subtitleCallback = (Function1) c00031.L$1;
+                        extractor = (OverFlixExtractor) c00031.L$0;
+                        ResultKt.throwOnFailure($result);
+                        playerUrl = (String) $result;
+                        if (playerUrl == null) {
+                            state = 8;
+                            break;
+                        }
+                        c00031.L$0 = extractor;
+                        c00031.L$1 = subtitleCallback;
+                        c00031.L$2 = callback;
+                        c00031.L$3 = iframeUrl;
+                        c00031.L$4 = contentType;
+                        c00031.L$5 = contentInfo;
+                        c00031.L$6 = iterator;
+                        c00031.L$7 = extractor;
+                        c00031.L$8 = playerUrl;
+                        c00031.label = 5;
+                        $result = extractor.resolveRedirect(playerUrl, iframeUrl, c00031);
+                        if ($result == coroutine_suspended) {
+                            return coroutine_suspended;
+                        }
+                        state = 5;
+                        break;
+                    } catch (Throwable th) {
+                        state = 8;
+                        break;
+                    }
+                }
+                case 5: {
+                    try {
+                        playerUrl = (String) c00031.L$8;
+                        extractor = (OverFlixExtractor) c00031.L$7;
+                        iterator = (Iterator) c00031.L$6;
+                        contentInfo = (String) c00031.L$5;
+                        contentType = (String) c00031.L$4;
+                        iframeUrl = (String) c00031.L$3;
+                        callback = (Function1) c00031.L$2;
+                        subtitleCallback = (Function1) c00031.L$1;
+                        extractor = (OverFlixExtractor) c00031.L$0;
+                        ResultKt.throwOnFailure($result);
+                        String finalUrl = (String) $result;
+                        if (finalUrl == null) {
+                            state = 8;
+                            break;
+                        }
+                        if (extractor.isInternalPlayer(finalUrl)) {
+                            c00031.L$0 = extractor;
+                            c00031.L$1 = subtitleCallback;
+                            c00031.L$2 = callback;
+                            c00031.L$3 = iframeUrl;
+                            c00031.L$4 = contentType;
+                            c00031.L$5 = contentInfo;
+                            c00031.L$6 = iterator;
+                            c00031.L$7 = null;
+                            c00031.L$8 = null;
+                            c00031.label = 6;
+                            $result = extractor.extractInternalPlayer(finalUrl, playerUrl, callback, c00031);
+                            if ($result == coroutine_suspended) {
+                                return coroutine_suspended;
+                            }
+                            state = 6;
+                            break;
+                        }
+                        c00031.L$0 = extractor;
+                        c00031.L$1 = subtitleCallback;
+                        c00031.L$2 = callback;
+                        c00031.L$3 = iframeUrl;
+                        c00031.L$4 = contentType;
+                        c00031.L$5 = contentInfo;
+                        c00031.L$6 = iterator;
+                        c00031.L$7 = null;
+                        c00031.L$8 = null;
+                        c00031.label = 7;
+                        $result = ExtractorApiKt.loadExtractor(finalUrl, playerUrl, subtitleCallback, callback, c00031);
+                        if ($result == coroutine_suspended) {
+                            return coroutine_suspended;
+                        }
+                        state = 7;
+                        break;
+                    } catch (Throwable th2) {
+                        state = 8;
+                        break;
+                    }
+                }
+                case 6: {
+                    try {
+                        iterator = (Iterator) c00031.L$6;
+                        contentInfo = (String) c00031.L$5;
+                        contentType = (String) c00031.L$4;
+                        iframeUrl = (String) c00031.L$3;
+                        callback = (Function1) c00031.L$2;
+                        subtitleCallback = (Function1) c00031.L$1;
+                        extractor = (OverFlixExtractor) c00031.L$0;
+                        ResultKt.throwOnFailure($result);
+                    } catch (Throwable th3) {
+                    }
+                    state = 8;
+                    break;
+                }
+                case 7: {
+                    try {
+                        iterator = (Iterator) c00031.L$6;
+                        contentInfo = (String) c00031.L$5;
+                        contentType = (String) c00031.L$4;
+                        iframeUrl = (String) c00031.L$3;
+                        callback = (Function1) c00031.L$2;
+                        subtitleCallback = (Function1) c00031.L$1;
+                        extractor = (OverFlixExtractor) c00031.L$0;
+                        ResultKt.throwOnFailure($result);
+                    } catch (Throwable th4) {
+                    }
+                    state = 8;
+                    break;
+                }
+                case 8: {
+                    if (!iterator.hasNext()) {
+                        return Boxing.boxBoolean(true);
+                    }
+                    String videoId = (String) iterator.next();
+                    try {
+                        c00031.L$0 = extractor;
+                        c00031.L$1 = subtitleCallback;
+                        c00031.L$2 = callback;
+                        c00031.L$3 = iframeUrl;
+                        c00031.L$4 = contentType;
+                        c00031.L$5 = contentInfo;
+                        c00031.L$6 = iterator;
+                        c00031.L$7 = extractor;
+                        c00031.L$8 = null;
+                        c00031.label = 4;
+                        $result = extractor.fetchPlayerUrl(contentInfo, contentType, videoId, iframeUrl, c00031);
+                        if ($result == coroutine_suspended) {
+                            return coroutine_suspended;
+                        }
+                        state = 4;
+                        break;
+                    } catch (Throwable th5) {
+                        state = 8;
+                        break;
+                    }
+                }
+                default:
+                    throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+            }
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -245,7 +501,7 @@ public final class OverFlixExtractor {
                 ResultKt.throwOnFailure($result);
                 Requests app = MainActivityKt.getApp();
                 anonymousClass1.label = 1;
-                $result = Requests.get$default(app, url, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, anonymousClass1, 4094, (Object) null);
+                $result = app.get(url, java.util.Collections.emptyMap(), (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), anonymousClass1);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -264,13 +520,13 @@ public final class OverFlixExtractor {
         }
         String src = strAttr;
         if (src != null) {
-            return StringsKt.startsWith$default(src, "//", false, 2, (Object) null) ? "https:" + src : src;
+            return StringsKt.startsWith(src, "//", false) ? "https:" + src : src;
         }
         return null;
     }
 
     private final boolean isTvContent(String pageUrl, String iframeUrl) {
-        return StringsKt.contains$default(pageUrl, "/episodio/", false, 2, (Object) null) || StringsKt.contains$default(iframeUrl, "/serie/", false, 2, (Object) null);
+        return StringsKt.contains(pageUrl, "/episodio/", false) || StringsKt.contains(iframeUrl, "/serie/", false);
     }
 
     private final String extractContentInfo(boolean isTv, String iframeUrl, Document embedDoc, String embedHtml) {
@@ -282,18 +538,18 @@ public final class OverFlixExtractor {
         if (isTv) {
             Element elementSelectFirst = embedDoc.selectFirst(".episodeOption.active");
             if (elementSelectFirst == null || (strAttr = elementSelectFirst.attr("data-contentid")) == null) {
-                MatchResult matchResultFind$default = Regex.find$default(new Regex("var CONTENT_INFO = '(\\d+)';"), embedHtml, 0, 2, (Object) null);
+                MatchResult matchResultFind$default = new Regex("var CONTENT_INFO = '(\\d+)';").find(embedHtml, 0);
                 strAttr = (matchResultFind$default == null || (groupValues2 = matchResultFind$default.getGroupValues()) == null) ? null : (String) groupValues2.get(1);
             }
         } else {
-            MatchResult matchResultFind$default2 = Regex.find$default(new Regex("var CONTENT_INFO = '(\\d+)';"), embedHtml, 0, 2, (Object) null);
+            MatchResult matchResultFind$default2 = new Regex("var CONTENT_INFO = '(\\d+)';").find(embedHtml, 0);
             strAttr = (matchResultFind$default2 == null || (groupValues = matchResultFind$default2.getGroupValues()) == null) ? null : (String) groupValues.get(1);
         }
         if (strAttr != null) {
             return strAttr;
         }
-        String str2 = (String) CollectionsKt.lastOrNull(StringsKt.split$default(iframeUrl, new String[]{"/"}, false, 0, 6, (Object) null));
-        if (str2 != null && (listSplit$default = StringsKt.split$default(str2, new String[]{"?"}, false, 0, 6, (Object) null)) != null) {
+        String str2 = (String) CollectionsKt.lastOrNull(StringsKt.split(iframeUrl, new String[]{"/"}, false, 0));
+        if (str2 != null && (listSplit$default = StringsKt.split(str2, new String[]{"?"}, false, 0)) != null) {
             str = (String) CollectionsKt.firstOrNull(listSplit$default);
         }
         return str == null ? "" : str;
@@ -326,7 +582,7 @@ public final class OverFlixExtractor {
                 pairArr[1] = TuplesKt.to("content_type", "2");
                 Map mapMapOf = MapsKt.mapOf(pairArr);
                 c00051.label = 1;
-                $result = Requests.post$default(app, OPTIONS_API, map, str, (Map) null, (Map) null, (Map) null, (List) null, mapMapOf, (RequestBody) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00051, 65400, (Object) null);
+                $result = app.post(OPTIONS_API, map, str, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), app.getDefaultData(), (List) null, mapMapOf, (RequestBody) null, true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), c00051);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -338,7 +594,7 @@ public final class OverFlixExtractor {
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
         String response = ((NiceResponse) $result).getText();
-        return SequencesKt.toList(SequencesKt.map(Regex.findAll$default(new Regex("[\"']ID[\"']\\s*:\\s*(\\d+)"), response, 0, 2, (Object) null), new Function1() { // from class: com.OverFlix.OverFlixExtractor$$ExternalSyntheticLambda0
+        return SequencesKt.toList(SequencesKt.map(new Regex("[\"']ID[\"']\\s*:\\s*(\\d+)").findAll(response, 0), new Function1() { // from class: com.OverFlix.OverFlixExtractor$$ExternalSyntheticLambda0
             public final Object invoke(Object obj) {
                 return OverFlixExtractor.fetchSeriesServerIds$lambda$3((MatchResult) obj);
             }
@@ -397,7 +653,7 @@ public final class OverFlixExtractor {
                 pairArr[2] = TuplesKt.to("video_id", Boxing.boxInt(intOrNull2 != null ? intOrNull2.intValue() : 0));
                 Map mapMapOf2 = MapsKt.mapOf(pairArr);
                 c00041.label = 1;
-                $result = Requests.post$default(app, PLAYER_API, mapMapOf, str, (Map) null, (Map) null, (Map) null, (List) null, mapMapOf2, (RequestBody) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00041, 65400, (Object) null);
+                $result = app.post(PLAYER_API, mapMapOf, str, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), app.getDefaultData(), (List) null, mapMapOf2, (RequestBody) null, true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), c00041);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -409,11 +665,11 @@ public final class OverFlixExtractor {
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
         String response = ((NiceResponse) $result).getText();
-        MatchResult matchResultFind$default = Regex.find$default(new Regex("[\"']video_url[\"']\\s*:\\s*[\"'](.*?)[\"']"), response, 0, 2, (Object) null);
+        MatchResult matchResultFind$default = new Regex("[\"']video_url[\"']\\s*:\\s*[\"'](.*?)[\"']").find(response, 0);
         if (matchResultFind$default == null || (groupValues = matchResultFind$default.getGroupValues()) == null || (str2 = (String) groupValues.get(1)) == null) {
             return null;
         }
-        return StringsKt.replace$default(str2, "\\/", "/", false, 4, (Object) null);
+        return StringsKt.replace(str2, "\\/", "/", false);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -438,7 +694,7 @@ public final class OverFlixExtractor {
                 ResultKt.throwOnFailure($result);
                 Requests app = MainActivityKt.getApp();
                 c00061.label = 1;
-                $result = Requests.get$default(app, playerUrl, (Map) null, referer, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00061, 4090, (Object) null);
+                $result = app.get(playerUrl, (Map) null, referer, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00061);
                 if ($result == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -450,7 +706,7 @@ public final class OverFlixExtractor {
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
         String page = ((NiceResponse) $result).getText();
-        MatchResult matchResultFind$default = Regex.find$default(new Regex("window\\.location\\.href\\s*=\\s*\"([^\"]+)"), page, 0, 2, (Object) null);
+        MatchResult matchResultFind$default = new Regex("window\\.location\\.href\\s*=\\s*\"([^\"]+)").find(page, 0);
         if (matchResultFind$default == null || (groupValues = matchResultFind$default.getGroupValues()) == null) {
             return null;
         }
@@ -458,7 +714,7 @@ public final class OverFlixExtractor {
     }
 
     private final boolean isInternalPlayer(String url) {
-        return StringsKt.contains$default(url, "112234152.xyz", false, 2, (Object) null) || StringsKt.contains$default(url, "/player/", false, 2, (Object) null);
+        return StringsKt.contains(url, "112234152.xyz", false) || StringsKt.contains(url, "/player/", false);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -490,11 +746,11 @@ public final class OverFlixExtractor {
         Function1<? super ExtractorLink, Unit> function2;
         String finalUrl2;
         MatchResult matchResultFind$default;
-        int i;
+        int i = 1;
         String baseUrl;
         MatchResult matchResultFind$default2;
         String packedJs;
-        boolean z;
+        boolean z = false;
         String packedJs2;
         boolean z2;
         MatchResult matchResultFind$default3;
@@ -528,7 +784,7 @@ public final class OverFlixExtractor {
                 c00021.L$0 = finalUrl;
                 c00021.L$1 = function1;
                 c00021.label = 1;
-                $result = Requests.get$default(app, finalUrl, (Map) null, referer, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00021, 4090, (Object) null);
+                $result = app.get(finalUrl, (Map) null, referer, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00021);
                 obj = coroutine_suspended;
                 if ($result == obj) {
                     return obj;
@@ -536,7 +792,7 @@ public final class OverFlixExtractor {
                 function2 = function1;
                 finalUrl2 = finalUrl;
                 String html = ((NiceResponse) $result).getText();
-                matchResultFind$default = Regex.find$default(new Regex("var player_base_url\\s*=\\s*\"([^\"]+)"), html, 0, 2, (Object) null);
+                matchResultFind$default = new Regex("var player_base_url\\s*=\\s*\"([^\"]+)").find(html, 0);
                 if (matchResultFind$default != null || (groupValues4 = matchResultFind$default.getGroupValues()) == null) {
                     baseUrl = null;
                 } else {
@@ -546,11 +802,12 @@ public final class OverFlixExtractor {
                 if (baseUrl == null) {
                     baseUrl = "";
                 }
-                matchResultFind$default2 = Regex.find$default(new Regex("eval\\s*\\((function\\(p,a,c,k,e,d\\).+?)\\)\\s*;?\\s*</script>", RegexOption.DOT_MATCHES_ALL), html, 0, 2, (Object) null);
+                matchResultFind$default2 = new Regex("eval\\s*\\((function\\(p,a,c,k,e,d\\).+?)\\)\\s*;?\\s*</script>", RegexOption.DOT_MATCHES_ALL).find(html, 0);
                 if (matchResultFind$default2 != null || (groupValues3 = matchResultFind$default2.getGroupValues()) == null) {
                     packedJs = null;
                 } else {
-                    packedJs = (String) groupValues3.get(i);
+                    i = 1;
+                packedJs = (String) groupValues3.get(1);
                 }
                 if (packedJs == null) {
                     packedJs = "";
@@ -573,13 +830,13 @@ public final class OverFlixExtractor {
                 if (z2) {
                     return Unit.INSTANCE;
                 }
-                matchResultFind$default3 = Regex.find$default(new Regex("videoUrl\\s*[:=]\\s*[\"'](.*?)[\"']"), packedJs2, 0, 2, (Object) null);
+                matchResultFind$default3 = new Regex("videoUrl\\s*[:=]\\s*[\"'](.*?)[\"']").find(packedJs2, 0);
                 if (matchResultFind$default3 != null || (groupValues2 = matchResultFind$default3.getGroupValues()) == null || (str = (String) groupValues2.get(i)) == null) {
-                    matchResultFind$default4 = Regex.find$default(new Regex("[\"']([^\"']+\\.(?:m3u8|hls|txt)[^\"']*)[\"']"), packedJs2, 0, 2, (Object) null);
+                    matchResultFind$default4 = new Regex("[\"']([^\"']+\\.(?:m3u8|hls|txt)[^\"']*)[\"']").find(packedJs2, 0);
                     if (matchResultFind$default4 != null || (groupValues = matchResultFind$default4.getGroupValues()) == null) {
                         str = null;
                     } else {
-                        str = (String) groupValues.get(i);
+                        str = (String) groupValues.get(1);
                     }
                 }
                 m3u8Path = str;
@@ -590,8 +847,8 @@ public final class OverFlixExtractor {
                 if (i != 0) {
                     return Unit.INSTANCE;
                 }
-                m3u8Path2 = StringsKt.replace$default(m3u8Path, "\\/", "/", false, 4, (Object) null);
-                if (StringsKt.startsWith$default(m3u8Path2, "http", false, 2, (Object) null)) {
+                m3u8Path2 = StringsKt.replace(m3u8Path, "\\/", "/", false);
+                if (StringsKt.startsWith(m3u8Path2, "http", false)) {
                     str3 = m3u8Path2;
                 } else {
                     str3 = StringsKt.removeSuffix(baseUrl, "/") + '/' + StringsKt.removePrefix(m3u8Path2, "/");
@@ -606,7 +863,7 @@ public final class OverFlixExtractor {
                     return obj;
                 }
                 function3 = function2;
-                function3.invoke($result);
+                function3.invoke((ExtractorLink) $result);
                 return Unit.INSTANCE;
             case 1:
                 Function1<? super ExtractorLink, Unit> function4 = (Function1) c00021.L$1;
@@ -616,13 +873,13 @@ public final class OverFlixExtractor {
                 finalUrl2 = finalUrl3;
                 obj = coroutine_suspended;
                 String html2 = ((NiceResponse) $result).getText();
-                matchResultFind$default = Regex.find$default(new Regex("var player_base_url\\s*=\\s*\"([^\"]+)"), html2, 0, 2, (Object) null);
+                matchResultFind$default = new Regex("var player_base_url\\s*=\\s*\"([^\"]+)").find(html2, 0);
                 i = matchResultFind$default != null ? 1 : 1;
                 baseUrl = null;
                 if (baseUrl == null) {
                     baseUrl = "";
                 }
-                matchResultFind$default2 = Regex.find$default(new Regex("eval\\s*\\((function\\(p,a,c,k,e,d\\).+?)\\)\\s*;?\\s*</script>", RegexOption.DOT_MATCHES_ALL), html2, 0, 2, (Object) null);
+                matchResultFind$default2 = new Regex("eval\\s*\\((function\\(p,a,c,k,e,d\\).+?)\\)\\s*;?\\s*</script>", RegexOption.DOT_MATCHES_ALL).find(html2, 0);
                 if (matchResultFind$default2 != null) {
                     packedJs = null;
                 } else {
@@ -649,16 +906,16 @@ public final class OverFlixExtractor {
                 if (z2) {
                     return Unit.INSTANCE;
                 }
-                matchResultFind$default3 = Regex.find$default(new Regex("videoUrl\\s*[:=]\\s*[\"'](.*?)[\"']"), packedJs2, 0, 2, (Object) null);
+                matchResultFind$default3 = new Regex("videoUrl\\s*[:=]\\s*[\"'](.*?)[\"']").find(packedJs2, 0);
                 if (matchResultFind$default3 != null) {
-                    matchResultFind$default4 = Regex.find$default(new Regex("[\"']([^\"']+\\.(?:m3u8|hls|txt)[^\"']*)[\"']"), packedJs2, 0, 2, (Object) null);
+                    matchResultFind$default4 = new Regex("[\"']([^\"']+\\.(?:m3u8|hls|txt)[^\"']*)[\"']").find(packedJs2, 0);
                     if (matchResultFind$default4 != null) {
                         str = null;
                     } else {
                         str = null;
                     }
                 } else {
-                    matchResultFind$default4 = Regex.find$default(new Regex("[\"']([^\"']+\\.(?:m3u8|hls|txt)[^\"']*)[\"']"), packedJs2, 0, 2, (Object) null);
+                    matchResultFind$default4 = new Regex("[\"']([^\"']+\\.(?:m3u8|hls|txt)[^\"']*)[\"']").find(packedJs2, 0);
                     if (matchResultFind$default4 != null) {
                         str = null;
                     } else {
@@ -673,8 +930,8 @@ public final class OverFlixExtractor {
                 if (i != 0) {
                     return Unit.INSTANCE;
                 }
-                m3u8Path2 = StringsKt.replace$default(m3u8Path, "\\/", "/", false, 4, (Object) null);
-                if (StringsKt.startsWith$default(m3u8Path2, "http", false, 2, (Object) null)) {
+                m3u8Path2 = StringsKt.replace(m3u8Path, "\\/", "/", false);
+                if (StringsKt.startsWith(m3u8Path2, "http", false)) {
                     str3 = m3u8Path2;
                 } else {
                     str3 = StringsKt.removeSuffix(baseUrl, "/") + '/' + StringsKt.removePrefix(m3u8Path2, "/");
@@ -689,12 +946,12 @@ public final class OverFlixExtractor {
                     return obj;
                 }
                 function3 = function2;
-                function3.invoke($result);
+                function3.invoke((ExtractorLink) $result);
                 return Unit.INSTANCE;
             case 2:
                 function3 = (Function1) c00021.L$0;
                 ResultKt.throwOnFailure($result);
-                function3.invoke($result);
+                function3.invoke((ExtractorLink) $result);
                 return Unit.INSTANCE;
             default:
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
@@ -711,19 +968,19 @@ public final class OverFlixExtractor {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass2(String str, Continuation<? super AnonymousClass2> continuation) {
-            super(2, continuation);
+        AnonymousClass2(String str, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$finalUrl = str;
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass2 = new AnonymousClass2(this.$finalUrl, continuation);
+            AnonymousClass2 anonymousClass2 = new AnonymousClass2(this.$finalUrl, continuation);
             anonymousClass2.L$0 = obj;
-            return anonymousClass2;
+            return (Continuation<Unit>) (Object) anonymousClass2;
         }
 
         public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-            return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass2) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {

@@ -20,19 +20,19 @@ final class AnimesCloudExtractor$extractVideoLinks$action$1$1$1 extends SuspendL
     int label;
 
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-    AnimesCloudExtractor$extractVideoLinks$action$1$1$1(String str, Continuation<? super AnimesCloudExtractor$extractVideoLinks$action$1$1$1> continuation) {
-        super(2, continuation);
+    AnimesCloudExtractor$extractVideoLinks$action$1$1$1(String str, Continuation<?> continuation) {
+        super(2, (Continuation) continuation);
         this.$mainUrl = str;
     }
 
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        Continuation<Unit> animesCloudExtractor$extractVideoLinks$action$1$1$1 = new AnimesCloudExtractor$extractVideoLinks$action$1$1$1(this.$mainUrl, continuation);
+        AnimesCloudExtractor$extractVideoLinks$action$1$1$1 animesCloudExtractor$extractVideoLinks$action$1$1$1 = new AnimesCloudExtractor$extractVideoLinks$action$1$1$1(this.$mainUrl, continuation);
         animesCloudExtractor$extractVideoLinks$action$1$1$1.L$0 = obj;
-        return animesCloudExtractor$extractVideoLinks$action$1$1$1;
+        return (Continuation<Unit>) (Object) animesCloudExtractor$extractVideoLinks$action$1$1$1;
     }
 
     public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-        return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+        return ((AnimesCloudExtractor$extractVideoLinks$action$1$1$1) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     public final Object invokeSuspend(Object obj) {

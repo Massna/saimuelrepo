@@ -109,14 +109,14 @@ public final class DonghuaNoSekai extends MainAPI {
     /* JADX INFO: compiled from: DonghuaNoSekai.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.DonghuaNoSekai.DonghuaNoSekai", f = "DonghuaNoSekai.kt", i = {0, 0}, l = {75}, m = "getMainPage", n = {"this", "request"}, s = {"L$0", "L$1"})
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -131,7 +131,7 @@ public final class DonghuaNoSekai extends MainAPI {
     /* JADX INFO: compiled from: DonghuaNoSekai.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.DonghuaNoSekai.DonghuaNoSekai", f = "DonghuaNoSekai.kt", i = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1}, l = {130, 148, 149, 158}, m = "load", n = {"this", "url", "this", "url", "title", "description", "year", "duration", "genres", "poster", "type"}, s = {"L$0", "L$1", "L$0", "L$1", "L$2", "L$3", "L$4", "L$5", "L$6", "L$7", "L$8"})
-    static final class C00001 extends ContinuationImpl {
+    final class C00001 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
@@ -144,8 +144,8 @@ public final class DonghuaNoSekai extends MainAPI {
         int label;
         /* synthetic */ Object result;
 
-        C00001(Continuation<? super C00001> continuation) {
-            super(continuation);
+        C00001(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -171,8 +171,8 @@ public final class DonghuaNoSekai extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass2(String str, String str2, Integer num, Integer num2, List<String> list, List<Episode> list2, Continuation<? super AnonymousClass2> continuation) {
-            super(2, continuation);
+        AnonymousClass2(String str, String str2, Integer num, Integer num2, List<String> list, List<Episode> list2, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$description = str2;
             this.$year = num;
@@ -182,13 +182,13 @@ public final class DonghuaNoSekai extends MainAPI {
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass2 = new AnonymousClass2(this.$poster, this.$description, this.$year, this.$duration, this.$genres, this.$episodes, continuation);
+            AnonymousClass2 anonymousClass2 = new AnonymousClass2(this.$poster, this.$description, this.$year, this.$duration, this.$genres, this.$episodes, continuation);
             anonymousClass2.L$0 = obj;
-            return anonymousClass2;
+            return (Continuation<Unit>) (Object) anonymousClass2;
         }
 
         public final Object invoke(AnimeLoadResponse animeLoadResponse, Continuation<? super Unit> continuation) {
-            return create(animeLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass2) (Object) create(animeLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -204,7 +204,7 @@ public final class DonghuaNoSekai extends MainAPI {
                         LoadResponse.Companion.addDuration(loadResponse, this.$duration.toString());
                     }
                     loadResponse.setTags(this.$genres);
-                    MainAPIKt.addEpisodes(loadResponse, DubStatus.Subbed, this.$episodes);
+                    MainAPIKt.addEpisodes((AnimeLoadResponse) loadResponse, DubStatus.Subbed, this.$episodes);
                     return Unit.INSTANCE;
                 default:
                     throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
@@ -226,8 +226,8 @@ public final class DonghuaNoSekai extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass3(String str, String str2, Integer num, Integer num2, List<String> list, Continuation<? super AnonymousClass3> continuation) {
-            super(2, continuation);
+        AnonymousClass3(String str, String str2, Integer num, Integer num2, List<String> list, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$description = str2;
             this.$year = num;
@@ -236,13 +236,13 @@ public final class DonghuaNoSekai extends MainAPI {
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass3 = new AnonymousClass3(this.$poster, this.$description, this.$year, this.$duration, this.$genres, continuation);
+            AnonymousClass3 anonymousClass3 = new AnonymousClass3(this.$poster, this.$description, this.$year, this.$duration, this.$genres, continuation);
             anonymousClass3.L$0 = obj;
-            return anonymousClass3;
+            return (Continuation<Unit>) (Object) anonymousClass3;
         }
 
         public final Object invoke(MovieLoadResponse movieLoadResponse, Continuation<? super Unit> continuation) {
-            return create(movieLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass3) (Object) create(movieLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object obj) {
@@ -269,13 +269,13 @@ public final class DonghuaNoSekai extends MainAPI {
     /* JADX INFO: compiled from: DonghuaNoSekai.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.DonghuaNoSekai.DonghuaNoSekai", f = "DonghuaNoSekai.kt", i = {0}, l = {123}, m = "search", n = {"this"}, s = {"L$0"})
-    static final class C00011 extends ContinuationImpl {
+    final class C00011 extends ContinuationImpl {
         Object L$0;
         int label;
         /* synthetic */ Object result;
 
-        C00011(Continuation<? super C00011> continuation) {
-            super(continuation);
+        C00011(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -310,7 +310,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 arrayList3.add(next);
             }
         }
-        String strJoinToString$default = CollectionsKt.joinToString$default(arrayList3, "\n\n", (CharSequence) null, (CharSequence) null, 0, (CharSequence) null, (Function1) null, 62, (Object) null);
+        String strJoinToString$default = CollectionsKt.joinToString(arrayList3, "\n\n", "", "", -1, "...", (Function1) null);
         if (strJoinToString$default.length() > 0) {
             return strJoinToString$default;
         }
@@ -320,7 +320,7 @@ public final class DonghuaNoSekai extends MainAPI {
     private final Integer extractDuration(Document document) {
         int iIntValue;
         Object next;
-        String strText;
+        String strText = null;
         MatchResult matchResultFind$default;
         List groupValues;
         String str;
@@ -335,18 +335,18 @@ public final class DonghuaNoSekai extends MainAPI {
                 break;
             }
             next = it.next();
-        } while (!StringsKt.contains$default(((Element) next).text(), "Duração:", false, 2, (Object) null));
+        } while (!StringsKt.contains(((Element) next).text(), "Duração:", false));
         Element element = (Element) next;
         if (element == null || (strText = element.text()) == null) {
             return null;
         }
-        if (!StringsKt.contains$default(strText, "1h", false, 2, (Object) null)) {
-            if (!StringsKt.contains$default(strText, "min", false, 2, (Object) null) || (matchResultFind$default = Regex.find$default(DURATION_MINUTES_REGEX, strText, 0, 2, (Object) null)) == null || (groupValues = matchResultFind$default.getGroupValues()) == null || (str = (String) groupValues.get(1)) == null) {
+        if (!StringsKt.contains(strText, "1h", false)) {
+            if (!StringsKt.contains(strText, "min", false) || (matchResultFind$default = DURATION_MINUTES_REGEX.find(strText, 0)) == null || (groupValues = matchResultFind$default.getGroupValues()) == null || (str = (String) groupValues.get(1)) == null) {
                 return null;
             }
             return StringsKt.toIntOrNull(str);
         }
-        MatchResult matchResultFind$default2 = Regex.find$default(DURATION_HOURS_REGEX, strText, 0, 2, (Object) null);
+        MatchResult matchResultFind$default2 = DURATION_HOURS_REGEX.find(strText, 0);
         if (matchResultFind$default2 != null && (groupValues2 = matchResultFind$default2.getGroupValues()) != null && (str2 = (String) groupValues2.get(1)) != null && (intOrNull = StringsKt.toIntOrNull(str2)) != null) {
             iIntValue = intOrNull.intValue();
         }
@@ -361,7 +361,7 @@ public final class DonghuaNoSekai extends MainAPI {
         int iIntValue;
         ArrayList arrayList = new ArrayList();
         int iIntValue2 = 0;
-        MatchResult matchResultFind$default = Regex.find$default(EPISODE_RANGE_REGEX, text, 0, 2, (Object) null);
+        MatchResult matchResultFind$default = EPISODE_RANGE_REGEX.find(text, 0);
         if (matchResultFind$default != null) {
             Integer intOrNull2 = StringsKt.toIntOrNull((String) matchResultFind$default.getGroupValues().get(1));
             int iIntValue3 = intOrNull2 != null ? intOrNull2.intValue() : 0;
@@ -381,7 +381,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 }
             }
         } else {
-            MatchResult matchResultFind$default2 = Regex.find$default(EPISODE_SIMPLE_REGEX, text, 0, 2, (Object) null);
+            MatchResult matchResultFind$default2 = EPISODE_SIMPLE_REGEX.find(text, 0);
             if (matchResultFind$default2 != null && (groupValues = matchResultFind$default2.getGroupValues()) != null && (str = (String) groupValues.get(1)) != null && (intOrNull = StringsKt.toIntOrNull(str)) != null) {
                 iIntValue2 = intOrNull.intValue();
             }
@@ -415,7 +415,7 @@ public final class DonghuaNoSekai extends MainAPI {
         MatchResult matchResultFind$default;
         List groupValues;
         Element elementSelectFirst = document.selectFirst("div.mew");
-        if (elementSelectFirst == null || (strAttr = elementSelectFirst.attr("style")) == null || (matchResultFind$default = Regex.find$default(POSTER_REGEX, strAttr, 0, 2, (Object) null)) == null || (groupValues = matchResultFind$default.getGroupValues()) == null) {
+        if (elementSelectFirst == null || (strAttr = elementSelectFirst.attr("style")) == null || (matchResultFind$default = POSTER_REGEX.find(strAttr, 0)) == null || (groupValues = matchResultFind$default.getGroupValues()) == null) {
             return null;
         }
         return (String) groupValues.get(1);
@@ -425,7 +425,7 @@ public final class DonghuaNoSekai extends MainAPI {
         List groupValues;
         String str;
         Integer intOrNull;
-        MatchResult matchResultFind$default = Regex.find$default(SEASON_REGEX, text, 0, 2, (Object) null);
+        MatchResult matchResultFind$default = SEASON_REGEX.find(text, 0);
         if (matchResultFind$default == null || (groupValues = matchResultFind$default.getGroupValues()) == null || (str = (String) groupValues.get(1)) == null || (intOrNull = StringsKt.toIntOrNull(str)) == null) {
             return 1;
         }
@@ -434,7 +434,7 @@ public final class DonghuaNoSekai extends MainAPI {
 
     private final Integer extractYear(Document document) {
         Object next;
-        String strText;
+        String strText = null;
         MatchResult matchResultFind$default;
         List groupValues;
         String str;
@@ -445,9 +445,9 @@ public final class DonghuaNoSekai extends MainAPI {
                 break;
             }
             next = it.next();
-        } while (!StringsKt.contains$default(((Element) next).text(), "Ano:", false, 2, (Object) null));
+        } while (!StringsKt.contains(((Element) next).text(), "Ano:", false));
         Element element = (Element) next;
-        if (element == null || (strText = element.text()) == null || (matchResultFind$default = Regex.find$default(YEAR_REGEX, strText, 0, 2, (Object) null)) == null || (groupValues = matchResultFind$default.getGroupValues()) == null || (str = (String) groupValues.get(1)) == null) {
+        if (element == null || (strText = element.text()) == null || (matchResultFind$default = YEAR_REGEX.find(strText, 0)) == null || (groupValues = matchResultFind$default.getGroupValues()) == null || (str = (String) groupValues.get(1)) == null) {
             return null;
         }
         return StringsKt.toIntOrNull(str);
@@ -469,7 +469,7 @@ public final class DonghuaNoSekai extends MainAPI {
             boolean z3 = z;
             final int iExtractSeasonNumber = extractSeasonNumber(string);
             ArrayList arrayList2 = new ArrayList();
-            Iterator<T> it = listExtractEpisodeNumbers.iterator();
+            Iterator<? extends Number> it = listExtractEpisodeNumbers.iterator();
             while (it.hasNext()) {
                 Iterable iterable3 = iterable;
                 final int iIntValue = ((Number) it.next()).intValue();
@@ -481,7 +481,6 @@ public final class DonghuaNoSekai extends MainAPI {
                 if (episodeNewEpisode != null) {
                     arrayList2.add(episodeNewEpisode);
                 }
-                this = this;
                 iterable = iterable3;
                 z2 = z2;
             }
@@ -524,11 +523,11 @@ public final class DonghuaNoSekai extends MainAPI {
         final String strAttr = element.select("div.thumb img").attr("src");
         StringsKt.trim(element.select("div.status").text()).toString();
         String strAttr2 = element.select("div.selos").attr("data-ona");
-        return MainAPIKt.newAnimeSearchResponse$default(this, string, strFixUrl, Intrinsics.areEqual(strAttr2, "Movie") || Intrinsics.areEqual(strAttr2, "Special") ? TvType.AnimeMovie : TvType.Anime, false, new Function1() { // from class: com.DonghuaNoSekai.DonghuaNoSekai$$ExternalSyntheticLambda3
+        return MainAPIKt.newAnimeSearchResponse(this, string, strFixUrl, Intrinsics.areEqual(strAttr2, "Movie") || Intrinsics.areEqual(strAttr2, "Special") ? TvType.AnimeMovie : TvType.Anime, false, new Function1() { // from class: com.DonghuaNoSekai.DonghuaNoSekai$$ExternalSyntheticLambda3
             public final Object invoke(Object obj) {
                 return DonghuaNoSekai.toSearchResult$lambda$2(strAttr, (AnimeSearchResponse) obj);
             }
-        }, 8, (Object) null);
+        });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -595,7 +594,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 anonymousClass2.L$1 = mainPageRequest;
                 anonymousClass2.label = 1;
                 mainPageRequest2 = mainPageRequest;
-                objPost$default = Requests.post$default(app, str2, mapMapOf2, (String) null, (Map) null, (Map) null, mapMapOf, (List) null, (Object) null, (RequestBody) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, anonymousClass2, 65500, (Object) null);
+                objPost$default = app.post(str2, mapMapOf2, (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), mapMapOf, (List) null, (Object) null, (RequestBody) null, true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), (Interceptor) null, true, app.getResponseParser(), anonymousClass2);
                 if (objPost$default == coroutine_suspended) {
                     return coroutine_suspended;
                 }
@@ -621,7 +620,7 @@ public final class DonghuaNoSekai extends MainAPI {
         }
         AjaxResponse ajaxResponse = (AjaxResponse) safe;
         String str3 = "";
-        if (ajaxResponse != null && (results = ajaxResponse.getResults()) != null && (strJoinToString$default = CollectionsKt.joinToString$default(results, "", (CharSequence) null, (CharSequence) null, 0, (CharSequence) null, (Function1) null, 62, (Object) null)) != null) {
+        if (ajaxResponse != null && (results = ajaxResponse.getResults()) != null && (strJoinToString$default = CollectionsKt.joinToString(results, "", "", "", -1, "...", (Function1) null)) != null) {
             str3 = strJoinToString$default;
         }
         Iterable iterableSelect = Jsoup.parse(str3).select("div.itemE.capa");
@@ -698,7 +697,7 @@ public final class DonghuaNoSekai extends MainAPI {
         String string2;
         Document document2;
         Object obj3;
-        boolean z;
+        boolean z = false;
         boolean z2;
         TvType tvType;
         TvType tvType2;
@@ -714,7 +713,7 @@ public final class DonghuaNoSekai extends MainAPI {
         Object obj6;
         String str8;
         List<String> list;
-        String strText;
+        String strText = null;
         Object next;
         Iterator it2;
         String strText2;
@@ -737,7 +736,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 c00001.L$0 = this;
                 c00001.L$1 = str;
                 c00001.label = 1;
-                objNewMovieLoadResponse = Requests.get$default(app, str, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001, 4094, (Object) null);
+                objNewMovieLoadResponse = app.get(str, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00001);
                 obj = coroutine_suspended;
                 if (objNewMovieLoadResponse == obj) {
                     return obj;
@@ -762,12 +761,14 @@ public final class DonghuaNoSekai extends MainAPI {
                         it2 = it;
                         obj2 = next;
                         str4 = null;
-                        if (StringsKt.contains$default(((Element) next).text(), "Tipo:", false, 2, (Object) null)) {
+                        if (StringsKt.contains(((Element) next).text(), "Tipo:", false)) {
                             it = it2;
+                            break;
                         }
                     } else {
                         str4 = null;
                         obj2 = null;
+                        break;
                     }
                 }
                 element = (Element) obj2;
@@ -780,7 +781,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 if (string2 != null) {
                     document2 = document;
                     obj3 = obj;
-                    z = StringsKt.contains$default(string2, "Movie", false, 2, str4);
+                    z = StringsKt.contains(string2, "Movie", false);
                     if (z && z3) {
                         z2 = false;
                     } else {
@@ -840,7 +841,7 @@ public final class DonghuaNoSekai extends MainAPI {
                     c00001.L$7 = str4;
                     c00001.L$8 = str4;
                     c00001.label = 3;
-                    objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse$default(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass2, c00001, 8, (Object) null);
+                    objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass2, c00001);
                     if (objNewMovieLoadResponse == obj5) {
                         return obj5;
                     }
@@ -907,7 +908,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 c00001.L$7 = str4;
                 c00001.L$8 = str4;
                 c00001.label = 3;
-                objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse$default(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass5, c00001, 8, (Object) null);
+                objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass5, c00001);
                 if (objNewMovieLoadResponse == obj5) {
                     return obj5;
                 }
@@ -939,12 +940,14 @@ public final class DonghuaNoSekai extends MainAPI {
                         it2 = it;
                         obj2 = next;
                         str4 = null;
-                        if (StringsKt.contains$default(((Element) next).text(), "Tipo:", false, 2, (Object) null)) {
+                        if (StringsKt.contains(((Element) next).text(), "Tipo:", false)) {
                             it = it2;
+                            break;
                         }
                     } else {
                         str4 = null;
                         obj2 = null;
+                        break;
                     }
                 }
                 element = (Element) obj2;
@@ -957,7 +960,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 if (string2 != null) {
                     document2 = document;
                     obj3 = obj;
-                    if (StringsKt.contains$default(string2, "Movie", false, 2, str4)) {
+                    if (StringsKt.contains(string2, "Movie", false)) {
                     }
                     if (z) {
                         z2 = true;
@@ -1018,7 +1021,7 @@ public final class DonghuaNoSekai extends MainAPI {
                     c00001.L$7 = str4;
                     c00001.L$8 = str4;
                     c00001.label = 3;
-                    objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse$default(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass7, c00001, 8, (Object) null);
+                    objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass7, c00001);
                     if (objNewMovieLoadResponse == obj5) {
                         return obj5;
                     }
@@ -1085,7 +1088,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 c00001.L$7 = str4;
                 c00001.L$8 = str4;
                 c00001.label = 3;
-                objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse$default(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass9, c00001, 8, (Object) null);
+                objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass9, c00001);
                 if (objNewMovieLoadResponse == obj5) {
                     return obj5;
                 }
@@ -1124,7 +1127,7 @@ public final class DonghuaNoSekai extends MainAPI {
                 c00001.L$7 = str4;
                 c00001.L$8 = str4;
                 c00001.label = 3;
-                objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse$default(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass10, c00001, 8, (Object) null);
+                objNewMovieLoadResponse = MainAPIKt.newAnimeLoadResponse(donghuaNoSekai2, str7, str6, tvType2, false, anonymousClass10, c00001);
                 if (objNewMovieLoadResponse == obj5) {
                     return obj5;
                 }
@@ -1165,11 +1168,11 @@ public final class DonghuaNoSekai extends MainAPI {
         switch (c00011.label) {
             case 0:
                 ResultKt.throwOnFailure(obj);
-                String str2 = getMainUrl() + "/?s=" + StringsKt.replace$default(str, " ", "+", false, 4, (Object) null);
+                String str2 = getMainUrl() + "/?s=" + StringsKt.replace(str, " ", "+", false);
                 Requests app = MainActivityKt.getApp();
                 c00011.L$0 = this;
                 c00011.label = 1;
-                obj = Requests.get$default(app, str2, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00011, 4094, (Object) null);
+                obj = app.get(str2, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, (Interceptor) null, false, (ResponseParser) null, c00011);
                 if (obj == coroutine_suspended) {
                     return coroutine_suspended;
                 }

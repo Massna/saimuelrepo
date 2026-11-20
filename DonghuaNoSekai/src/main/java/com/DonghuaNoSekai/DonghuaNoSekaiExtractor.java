@@ -46,7 +46,7 @@ public final class DonghuaNoSekaiExtractor {
     /* JADX INFO: compiled from: DonghuaNoSekaiExtractor.kt */
     @Metadata(k = 3, mv = {2, 1, 0}, xi = 48)
     @DebugMetadata(c = "com.DonghuaNoSekai.DonghuaNoSekaiExtractor", f = "DonghuaNoSekaiExtractor.kt", i = {0, 0, 0, 0, 1}, l = {25, 46}, m = "extractVideoLinks", n = {"url", "mainUrl", "name", "callback", "callback"}, s = {"L$0", "L$1", "L$2", "L$3", "L$0"})
-    static final class AnonymousClass1 extends ContinuationImpl {
+    final class AnonymousClass1 extends ContinuationImpl {
         Object L$0;
         Object L$1;
         Object L$2;
@@ -54,8 +54,8 @@ public final class DonghuaNoSekaiExtractor {
         int label;
         /* synthetic */ Object result;
 
-        AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(continuation);
+        AnonymousClass1(Continuation<?> continuation) {
+            super((Continuation) continuation);
         }
 
         @Nullable
@@ -83,7 +83,7 @@ public final class DonghuaNoSekaiExtractor {
     @Nullable
     public final Object extractVideoLinks(@NotNull String str, @NotNull String str2, @NotNull String str3, @NotNull Function1<? super ExtractorLink, Unit> function1, @NotNull Continuation<? super Boolean> continuation) {
         AnonymousClass1 anonymousClass1;
-        boolean z;
+        boolean z = false;
         Object obj;
         String str4;
         String str5;
@@ -91,7 +91,7 @@ public final class DonghuaNoSekaiExtractor {
         String str6;
         String url;
         boolean z2;
-        boolean z3;
+        boolean z3 = false;
         char c;
         Object objGenerateM3u8$default;
         Function1<? super ExtractorLink, Unit> function3;
@@ -115,7 +115,7 @@ public final class DonghuaNoSekaiExtractor {
                 case 0:
                     ResultKt.throwOnFailure(obj2);
                     try {
-                        Interceptor webViewResolver = new WebViewResolver(new Regex("m3u8"), CollectionsKt.listOf(new Regex("m3u8")), (String) null, false, (String) null, (Function1) null, 15000L, 52, (DefaultConstructorMarker) null);
+                        Interceptor webViewResolver = new com.lagradost.cloudstream3.network.WebViewResolver(new Regex("m3u8"), CollectionsKt.listOf(new Regex("m3u8")), (String) null, false, (String) null, (Function1) null, 15000L);
                         Requests app = MainActivityKt.getApp();
                         Interceptor interceptor = webViewResolver;
                         anonymousClass1.L$0 = str;
@@ -124,7 +124,7 @@ public final class DonghuaNoSekaiExtractor {
                         anonymousClass1.L$3 = function1;
                         anonymousClass1.label = 1;
                         try {
-                            obj2 = Requests.get$default(app, str, (Map) null, (String) null, (Map) null, (Map) null, false, 0, (TimeUnit) null, 0L, interceptor, false, (ResponseParser) null, anonymousClass1, 3582, (Object) null);
+                            obj2 = app.get(str, java.util.Collections.emptyMap(), (String) null, java.util.Collections.emptyMap(), java.util.Collections.emptyMap(), true, app.getDefaultCacheTime(), app.getDefaultCacheTimeUnit(), app.getDefaultTimeOut(), interceptor, true, app.getResponseParser(), anonymousClass1);
                             obj = coroutine_suspended;
                             if (obj2 == obj) {
                                 return obj;
@@ -141,9 +141,9 @@ public final class DonghuaNoSekaiExtractor {
                             }
                             if (z2) {
                                 try {
-                                    if (StringsKt.contains$default(url, ".m3u8", false, 2, (Object) null)) {
-                                        if (StringsKt.contains$default(url, "player-nativov2.php?v=", false, 2, (Object) null)) {
-                                            matchResultFind$default = Regex.find$default(new Regex("v=([^&]+)"), url, 0, 2, (Object) null);
+                                    if (StringsKt.contains(url, ".m3u8", false)) {
+                                        if (StringsKt.contains(url, "player-nativov2.php?v=", false)) {
+                                            matchResultFind$default = new Regex("v=([^&]+)").find(url, 0);
                                             if (matchResultFind$default == null && (groupValues = matchResultFind$default.getGroupValues()) != null) {
                                                 c = 1;
                                                 String str7 = (String) groupValues.get(1);
@@ -151,12 +151,10 @@ public final class DonghuaNoSekaiExtractor {
                                                     url = str7;
                                                 }
                                             }
-                                        } else {
-                                            c = 1;
                                         }
                                         Pair[] pairArr = new Pair[8];
                                         pairArr[0] = TuplesKt.to("Accept", "*/*");
-                                        pairArr[c] = TuplesKt.to("Connection", "keep-alive");
+                                        pairArr[1] = TuplesKt.to("Connection", "keep-alive");
                                         pairArr[2] = TuplesKt.to("Sec-Fetch-Dest", "empty");
                                         pairArr[3] = TuplesKt.to("Sec-Fetch-Mode", "cors");
                                         pairArr[4] = TuplesKt.to("Sec-Fetch-Site", "cross-site");
@@ -170,14 +168,14 @@ public final class DonghuaNoSekaiExtractor {
                                         anonymousClass1.L$2 = null;
                                         anonymousClass1.L$3 = null;
                                         anonymousClass1.label = 2;
-                                        objGenerateM3u8$default = M3u8Helper.Companion.generateM3u8$default(companion, str4, url, str6, (Integer) null, mapMapOf, (String) null, anonymousClass1, 40, (Object) null);
+                                        objGenerateM3u8$default = companion.generateM3u8(str4, url, str6, (Integer) null, mapMapOf, (String) null, anonymousClass1);
                                         if (objGenerateM3u8$default == obj) {
                                             return obj;
                                         }
                                         function3 = function2;
                                         it = ((Iterable) objGenerateM3u8$default).iterator();
                                         while (it.hasNext()) {
-                                            function3.invoke(it.next());
+                                            ((kotlin.jvm.functions.Function1) function3).invoke(it.next());
                                             break;
                                         }
                                         z3 = true;
@@ -216,16 +214,14 @@ public final class DonghuaNoSekaiExtractor {
                         z2 = false;
                     }
                     if (z2) {
-                        if (StringsKt.contains$default(url, ".m3u8", false, 2, (Object) null)) {
-                            if (StringsKt.contains$default(url, "player-nativov2.php?v=", false, 2, (Object) null)) {
-                                matchResultFind$default = Regex.find$default(new Regex("v=([^&]+)"), url, 0, 2, (Object) null);
-                                c = matchResultFind$default == null ? (char) 1 : (char) 1;
-                            } else {
+                        if (StringsKt.contains(url, ".m3u8", false)) {
+                            if (StringsKt.contains(url, "player-nativov2.php?v=", false)) {
+                                matchResultFind$default = new Regex("v=([^&]+)").find(url, 0);
                                 c = 1;
                             }
                             Pair[] pairArr2 = new Pair[8];
                             pairArr2[0] = TuplesKt.to("Accept", "*/*");
-                            pairArr2[c] = TuplesKt.to("Connection", "keep-alive");
+                            pairArr2[1] = TuplesKt.to("Connection", "keep-alive");
                             pairArr2[2] = TuplesKt.to("Sec-Fetch-Dest", "empty");
                             pairArr2[3] = TuplesKt.to("Sec-Fetch-Mode", "cors");
                             pairArr2[4] = TuplesKt.to("Sec-Fetch-Site", "cross-site");
@@ -239,14 +235,14 @@ public final class DonghuaNoSekaiExtractor {
                             anonymousClass1.L$2 = null;
                             anonymousClass1.L$3 = null;
                             anonymousClass1.label = 2;
-                            objGenerateM3u8$default = M3u8Helper.Companion.generateM3u8$default(companion2, str4, url, str6, (Integer) null, mapMapOf2, (String) null, anonymousClass1, 40, (Object) null);
+                            objGenerateM3u8$default = companion2.generateM3u8(str4, url, str6, (Integer) null, mapMapOf2, (String) null, anonymousClass1);
                             if (objGenerateM3u8$default == obj) {
                                 return obj;
                             }
                             function3 = function2;
                             it = ((Iterable) objGenerateM3u8$default).iterator();
                             while (it.hasNext()) {
-                                function3.invoke(it.next());
+                                ((kotlin.jvm.functions.Function1) function3).invoke(it.next());
                                 break;
                             }
                             z3 = true;
@@ -263,7 +259,7 @@ public final class DonghuaNoSekaiExtractor {
                     objGenerateM3u8$default = obj2;
                     it = ((Iterable) objGenerateM3u8$default).iterator();
                     while (it.hasNext()) {
-                        function3.invoke(it.next());
+                        ((kotlin.jvm.functions.Function1) function3).invoke(it.next());
                         break;
                     }
                     z3 = true;
@@ -274,5 +270,6 @@ public final class DonghuaNoSekaiExtractor {
             }
         } catch (Exception e4) {
         }
+        return null;
     }
 }

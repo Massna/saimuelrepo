@@ -120,25 +120,25 @@ public final class Doramas extends MainAPI {
         int label;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass2(String str, Integer num, String str2, List<String> list, Double d, List<? extends Pair<Actor, ? extends ActorRole>> list2, String str3, Continuation<? super AnonymousClass2> continuation) {
-            super(2, continuation);
+        AnonymousClass2(String str, Integer num, String str2, List<String> list, Double d, List<? extends Pair<Actor, ? extends ActorRole>> list2, String str3, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$year = num;
             this.$plot = str2;
             this.$genres = list;
             this.$score = d;
-            this.$actors = list2;
+            this.$actors = (java.util.List) list2;
             this.$trailer = str3;
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass2 = new AnonymousClass2(this.$poster, this.$year, this.$plot, this.$genres, this.$score, this.$actors, this.$trailer, continuation);
+            AnonymousClass2 anonymousClass2 = new AnonymousClass2(this.$poster, this.$year, this.$plot, this.$genres, this.$score, this.$actors, this.$trailer, continuation);
             anonymousClass2.L$0 = obj;
-            return anonymousClass2;
+            return (Continuation<Unit>) (Object) anonymousClass2;
         }
 
         public final Object invoke(TvSeriesLoadResponse tvSeriesLoadResponse, Continuation<? super Unit> continuation) {
-            return create(tvSeriesLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass2) (Object) create(tvSeriesLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object $result) {
@@ -157,8 +157,8 @@ public final class Doramas extends MainAPI {
                         LoadResponse.Companion.addActorsRole(loadResponse, this.$actors);
                     }
                     this.label = 1;
-                    if (LoadResponse.Companion.addTrailer$default(LoadResponse.Companion, loadResponse, this.$trailer, (String) null, false, (Continuation) this, 6, (Object) null) == coroutine_suspended) {
-                        return coroutine_suspended;
+                    if (LoadResponse.Companion.addTrailer(loadResponse, this.$trailer, (String) null, false, (Continuation) this) == coroutine_suspended) {
+                        return (Continuation<Unit>) (Object) coroutine_suspended;
                     }
                     break;
                 case 1:
@@ -187,8 +187,8 @@ public final class Doramas extends MainAPI {
         final /* synthetic */ Doramas this$0;
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass3(String str, Integer num, String str2, List<String> list, Doramas doramas, String str3, Double d, List<? extends Pair<Actor, ? extends ActorRole>> list2, String str4, Continuation<? super AnonymousClass3> continuation) {
-            super(2, continuation);
+        AnonymousClass3(String str, Integer num, String str2, List<String> list, Doramas doramas, String str3, Double d, List<? extends Pair<Actor, ? extends ActorRole>> list2, String str4, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$poster = str;
             this.$year = num;
             this.$plot = str2;
@@ -196,18 +196,18 @@ public final class Doramas extends MainAPI {
             this.this$0 = doramas;
             this.$durationText = str3;
             this.$score = d;
-            this.$actors = list2;
+            this.$actors = (java.util.List) list2;
             this.$trailer = str4;
         }
 
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            Continuation<Unit> anonymousClass3 = new AnonymousClass3(this.$poster, this.$year, this.$plot, this.$genres, this.this$0, this.$durationText, this.$score, this.$actors, this.$trailer, continuation);
+            AnonymousClass3 anonymousClass3 = new AnonymousClass3(this.$poster, this.$year, this.$plot, this.$genres, this.this$0, this.$durationText, this.$score, this.$actors, this.$trailer, continuation);
             anonymousClass3.L$0 = obj;
-            return anonymousClass3;
+            return (Continuation<Unit>) (Object) anonymousClass3;
         }
 
         public final Object invoke(MovieLoadResponse movieLoadResponse, Continuation<? super Unit> continuation) {
-            return create(movieLoadResponse, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass3) (Object) create(movieLoadResponse, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object $result) {
@@ -227,8 +227,8 @@ public final class Doramas extends MainAPI {
                         LoadResponse.Companion.addActorsRole(loadResponse, this.$actors);
                     }
                     this.label = 1;
-                    if (LoadResponse.Companion.addTrailer$default(LoadResponse.Companion, loadResponse, this.$trailer, (String) null, false, (Continuation) this, 6, (Object) null) == coroutine_suspended) {
-                        return coroutine_suspended;
+                    if (LoadResponse.Companion.addTrailer(loadResponse, this.$trailer, (String) null, false, (Continuation) this) == coroutine_suspended) {
+                        return (Continuation<Unit>) (Object) coroutine_suspended;
                     }
                     break;
                 case 1:
@@ -248,8 +248,8 @@ public final class Doramas extends MainAPI {
         private /* synthetic */ Object L$0;
         int label;
 
-        LinkInit(String str, int i, Continuation<? super LinkInit> continuation) {
-            super(2, continuation);
+        LinkInit(String str, int i, Continuation<?> continuation) {
+            super(2, (Continuation) continuation);
             this.$referer = str;
             this.$quality = i;
         }
@@ -257,11 +257,11 @@ public final class Doramas extends MainAPI {
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
             LinkInit linkInit = new LinkInit(this.$referer, this.$quality, continuation);
             linkInit.L$0 = obj;
-            return linkInit;
+            return (Continuation<Unit>) (Object) linkInit;
         }
 
         public final Object invoke(ExtractorLink extractorLink, Continuation<? super Unit> continuation) {
-            return create(extractorLink, continuation).invokeSuspend(Unit.INSTANCE);
+            return ((LinkInit) (Object) create(extractorLink, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         public final Object invokeSuspend(Object $result) {
@@ -335,7 +335,7 @@ public final class Doramas extends MainAPI {
                 }
             }
             List home = (List) destination;
-            return MainAPIKt.newHomePageResponse$default(request.getName(), home, (Boolean) null, 4, (Object) null);
+            return MainAPIKt.newHomePageResponse(request.getName(), home, (Boolean) null);
         } catch (Throwable th) {
             continuation.resumeWith(ResultKt.createFailure(th));
             return IntrinsicsKt.getCOROUTINE_SUSPENDED();
@@ -395,12 +395,12 @@ public final class Doramas extends MainAPI {
         final Integer year = yearText == null ? null : yearOf(yearText);
         String ratingText = firstText(el, ".meta span.rating", "span.vote", ".rating");
         final String rating = ratingText;
-        final boolean isSerie = StringsKt.contains$default(href, "/br/series/", false, 2, (Object) null);
-        return MainAPIKt.newMovieSearchResponse$default(this, StringsKt.trim(title).toString(), href, isSerie ? TvType.TvSeries : TvType.Movie, false, new Function1() { // from class: com.Doramas.Doramas$$ExternalSyntheticLambda1
+        final boolean isSerie = StringsKt.contains(href, "/br/series/", false);
+        return MainAPIKt.newMovieSearchResponse(this, StringsKt.trim(title).toString(), href, isSerie ? TvType.TvSeries : TvType.Movie, false, new Function1() { // from class: com.Doramas.Doramas$$ExternalSyntheticLambda1
             public final Object invoke(Object obj) {
                 return Doramas.toSearchResult$lambda$1(poster, year, rating, (MovieSearchResponse) obj);
             }
-        }, 8, (Object) null);
+        });
     }
 
 
@@ -413,7 +413,7 @@ public final class Doramas extends MainAPI {
     }
 
     @Nullable
-    public Object load(@NotNull String url, @NotNull Continuation<? super LoadResponse> continuation) throws IOException {
+    public Object load(@NotNull String url, @NotNull Continuation<? super LoadResponse> continuation) {
         try {
             Document document = Jsoup.connect(url).userAgent(UA).timeout(20000).execute().parse();
             String title = firstText(document, ".sheader .data h1");
@@ -433,7 +433,7 @@ public final class Doramas extends MainAPI {
             List<Pair<Actor, ActorRole>> listSelectActors = selectActors(document);
             Element trailerEl = document.selectFirst("iframe[src*='youtube.com'], iframe[src*='youtu.be']");
             String trailer = trailerEl != null ? trailerEl.attr("src") : null;
-            boolean isSerie = StringsKt.contains$default(url, "/br/series/", false, 2, (Object) null);
+            boolean isSerie = StringsKt.contains(url, "/br/series/", false);
             if (!isSerie) {
                 return MainAPIKt.newMovieLoadResponse(this, title, url, TvType.Movie, url, new AnonymousClass3(poster, year, plot, genres, this, durationText, score, listSelectActors, trailer, null), continuation);
             }
@@ -511,7 +511,7 @@ public final class Doramas extends MainAPI {
         for (Element item : doc.select("li.dooplay_player_option")) {
             String nume = item.attr("data-nume");
             String label = firstText(item, ".title");
-            if (StringsKt.isBlank(nume) || (label != null && StringsKt.contains$default(label.toLowerCase(), "trailer", false, 2, (Object) null))) {
+            if (StringsKt.isBlank(nume) || (label != null && StringsKt.contains(label.toLowerCase(), "trailer", false))) {
                 continue;
             }
             Element container = doc.selectFirst("#source-player-" + nume);
@@ -536,7 +536,7 @@ public final class Doramas extends MainAPI {
     private final void resolveOption(String iframeUrl, String pageUrl, String label, List<String[]> jobs) throws Exception {
         String host = hostOf(iframeUrl);
         String path = pathOf(iframeUrl);
-        if (StringsKt.contains$default(host, "booonceivu", false, 2, (Object) null)) {
+        if (StringsKt.contains(host, "booonceivu", false)) {
             resolveJsonPlayer(iframeUrl, pageUrl, label, jobs);
             return;
         }
@@ -544,7 +544,7 @@ public final class Doramas extends MainAPI {
             resolveIncVideo(iframeUrl, pageUrl, label, jobs);
             return;
         }
-        if (StringsKt.contains$default(path, "/aviso", false, 2, (Object) null)) {
+        if (StringsKt.contains(path, "/aviso", false)) {
             resolveAviso(iframeUrl, pageUrl, label, jobs);
             return;
         }
@@ -555,7 +555,7 @@ public final class Doramas extends MainAPI {
      * legendas[] existe no contrato, mas não emitimos SubtitleFile direto (sem construtor comprovado);
      * legendas de hosts conhecidos seguem via loadExtractor. */
     private final void resolveJsonPlayer(String iframeUrl, String pageUrl, String label, List<String[]> jobs) throws Exception {
-        String requestUrl = StringsKt.contains$default(iframeUrl, "mode=", false, 2, (Object) null) ? iframeUrl : iframeUrl + (StringsKt.contains$default(iframeUrl, "?", false, 2, (Object) null) ? "&" : "?") + "mode=to-salvando-seu-ip";
+        String requestUrl = StringsKt.contains(iframeUrl, "mode=", false) ? iframeUrl : iframeUrl + (StringsKt.contains(iframeUrl, "?", false) ? "&" : "?") + "mode=to-salvando-seu-ip";
         String json = Jsoup.connect(requestUrl).userAgent(UA).referrer(pageUrl).header("Accept", "application/json").ignoreContentType(true).timeout(20000).execute().body();
         JsonObject root = new Gson().fromJson(json, JsonObject.class);
         if (root == null || !"success".equals(root.has("status") ? root.get("status").getAsString() : null) || !root.has("midias") || root.get("midias").isJsonNull()) {
@@ -568,7 +568,7 @@ public final class Doramas extends MainAPI {
                 continue;
             }
             String url = midia.get("url").getAsString();
-            if (!StringsKt.contains$default(url, ".m3u8", false, 2, (Object) null)) {
+            if (!StringsKt.contains(url, ".m3u8", false)) {
                 continue;
             }
             String qualidade = midia.has("qualidade") && !midia.get("qualidade").isJsonNull() ? midia.get("qualidade").getAsString() : null;
@@ -592,7 +592,7 @@ public final class Doramas extends MainAPI {
         }
         String value = raw;
         for (int i = 0; i < 2; i++) {
-            String decoded = URLDecoder.decode(value, "UTF-8");
+            String decoded = URLDecoder.decode(value, java.nio.charset.StandardCharsets.UTF_8);
             if (decoded.equals(value)) {
                 break;
             }
@@ -621,7 +621,7 @@ public final class Doramas extends MainAPI {
         Matcher srcMatcher = PLAYERJS_SOURCES.matcher(fileMatcher.group(1));
         while (srcMatcher.find()) {
             String url = srcMatcher.group(2);
-            if (url == null || !StringsKt.contains$default(url, "/get_file/", false, 2, (Object) null)) {
+            if (url == null || !StringsKt.contains(url, "/get_file/", false)) {
                 continue;
             }
             String qualityLabel = srcMatcher.group(1) != null ? srcMatcher.group(1).trim() : null;
@@ -647,7 +647,7 @@ public final class Doramas extends MainAPI {
             for (Element item : block.select("ul.episodios li")) {
                 Element num = item.selectFirst("div.numerando");
                 String numerando = num != null ? num.text() : "";
-                MatchResult m = Regex.find$default(SEASON_EPISODE, numerando, 0, 2, (Object) null);
+                MatchResult m = SEASON_EPISODE.find(numerando, 0);
                 Element a = item.selectFirst("div.episodiotitle a[href]");
                 if (a == null) {
                     continue;
@@ -692,7 +692,7 @@ public final class Doramas extends MainAPI {
             Element el = (Element) it;
             String name = el.text();
             if (!StringsKt.isBlank(name)) {
-                actors.add(TuplesKt.to(new Actor(name, el.attr("href")), (Object) null));
+                actors.add(TuplesKt.to(new Actor(name, el.attr("href")), (ActorRole) null));
             }
         }
         if (!actors.isEmpty()) {
@@ -706,9 +706,9 @@ public final class Doramas extends MainAPI {
         if (text == null) {
             return null;
         }
-        MatchResult it = Regex.find$default(new Regex("(\\d+)h\\s*(\\d+)m"), text, 0, 2, (Object) null);
+        MatchResult it = new Regex("(\\d+)h\\s*(\\d+)m").find(text, 0);
         if (it == null) {
-            MatchResult matchResultFind$default = Regex.find$default(new Regex("(\\d+)m"), text, 0, 2, (Object) null);
+            MatchResult matchResultFind$default = new Regex("(\\d+)m").find(text, 0);
             if (matchResultFind$default == null) {
                 return null;
             }
@@ -724,7 +724,7 @@ public final class Doramas extends MainAPI {
         if (text == null) {
             return null;
         }
-        MatchResult m = Regex.find$default(FOUR_DIGIT_YEAR, text, 0, 2, (Object) null);
+        MatchResult m = FOUR_DIGIT_YEAR.find(text, 0);
         return m == null ? null : StringsKt.toIntOrNull(m.getValue());
     }
 
@@ -752,7 +752,7 @@ public final class Doramas extends MainAPI {
         if (StringsKt.isBlank(src)) {
             return null;
         }
-        String str = StringsKt.startsWith$default(src, "//", false, 2, (Object) null) ? "https:" + src : src;
+        String str = StringsKt.startsWith(src, "//", false) ? "https:" + src : src;
         return str;
     }
 
@@ -760,13 +760,13 @@ public final class Doramas extends MainAPI {
         if (StringsKt.isBlank(href)) {
             return href;
         }
-        if (StringsKt.startsWith$default(href, "//", false, 2, (Object) null)) {
+        if (StringsKt.startsWith(href, "//", false)) {
             return "https:" + href;
         }
-        if (StringsKt.startsWith$default(href, "http", false, 2, (Object) null)) {
+        if (StringsKt.startsWith(href, "http", false)) {
             return href;
         }
-        if (StringsKt.startsWith$default(href, "/", false, 2, (Object) null)) {
+        if (StringsKt.startsWith(href, "/", false)) {
             return getMainUrl() + href;
         }
         return base + href;
@@ -795,16 +795,16 @@ public final class Doramas extends MainAPI {
             return 0;
         }
         String key = StringsKt.trim(label).toString().toUpperCase();
-        if (StringsKt.contains$default(key, "SD", false, 2, (Object) null) && !StringsKt.contains$default(key, "360", false, 2, (Object) null)) {
+        if (StringsKt.contains(key, "SD", false) && !StringsKt.contains(key, "360", false)) {
             return 1080;
         }
-        if (StringsKt.contains$default(key, "LD", false, 2, (Object) null)) {
+        if (StringsKt.contains(key, "LD", false)) {
             return 720;
         }
-        if (StringsKt.contains$default(key, "FD", false, 2, (Object) null)) {
+        if (StringsKt.contains(key, "FD", false)) {
             return 360;
         }
-        MatchResult m = Regex.find$default(new Regex("(\\d{3,4})"), key, 0, 2, (Object) null);
+        MatchResult m = new Regex("(\\d{3,4})").find(key, 0);
         Integer value = m == null ? null : StringsKt.toIntOrNull(m.getValue());
         return value != null ? value.intValue() : 0;
     }

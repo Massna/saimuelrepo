@@ -25,7 +25,7 @@ import kotlin.text.StringsKt;
 @Metadata(d1 = {"\u0000\u0006\n\u0000\n\u0002\u0010\u0002\u0010\u0000\u001a\u00020\u0001H\n"}, d2 = {"<anonymous>", ""}, k = 3, mv = {2, 1, 0}, xi = 48)
 @DebugMetadata(c = "com.AnimesCloud.AnimesCloudExtractor$extractVideoLinks$action$1", f = "AnimesCloudExtractor.kt", i = {}, l = {74, 86, 91}, m = "invokeSuspend", n = {}, s = {})
 final class AnimesCloudExtractor$extractVideoLinks$action$1 extends SuspendLambda implements Function1<Continuation<? super Unit>, Object> {
-    final /* synthetic */ Function1<ExtractorLink, Unit> $callback;
+    final /* synthetic */ Function1<? super ExtractorLink, Unit> $callback;
     final /* synthetic */ String $embedUrl;
     final /* synthetic */ Ref.BooleanRef $hasValidLinks;
     final /* synthetic */ String $mainUrl;
@@ -35,8 +35,8 @@ final class AnimesCloudExtractor$extractVideoLinks$action$1 extends SuspendLambd
     int label;
 
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-    AnimesCloudExtractor$extractVideoLinks$action$1(String str, String str2, String str3, Function1<? super ExtractorLink, Unit> function1, Ref.BooleanRef booleanRef, Continuation<? super AnimesCloudExtractor$extractVideoLinks$action$1> continuation) {
-        super(1, continuation);
+    AnimesCloudExtractor$extractVideoLinks$action$1(String str, String str2, String str3, Function1<? super ExtractorLink, Unit> function1, Ref.BooleanRef booleanRef, Continuation<?> continuation) {
+        super(1, (Continuation) continuation);
         this.$embedUrl = str;
         this.$title = str2;
         this.$mainUrl = str3;
@@ -45,33 +45,33 @@ final class AnimesCloudExtractor$extractVideoLinks$action$1 extends SuspendLambd
     }
 
     public final Continuation<Unit> create(Continuation<?> continuation) {
-        return new AnimesCloudExtractor$extractVideoLinks$action$1(this.$embedUrl, this.$title, this.$mainUrl, this.$callback, this.$hasValidLinks, continuation);
+        return (Continuation<Unit>) (Object) new AnimesCloudExtractor$extractVideoLinks$action$1(this.$embedUrl, this.$title, this.$mainUrl, this.$callback, this.$hasValidLinks, continuation);
     }
 
     public final Object invoke(Continuation<? super Unit> continuation) {
-        return create(continuation).invokeSuspend(Unit.INSTANCE);
+        return ((AnimesCloudExtractor$extractVideoLinks$action$1) (Object) create(continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
-    public final Object invokeSuspend(Object $result) throws UnsupportedEncodingException {
+    public final Object invokeSuspend(Object $result) {
         Object $result2;
         Object $result3;
         List groupValues;
         String it;
         Object $result4;
-        Function1<ExtractorLink, Unit> function1;
+        Function1<? super ExtractorLink, Unit> function1;
         Ref.BooleanRef booleanRef;
         Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
         switch (this.label) {
             case 0:
                 ResultKt.throwOnFailure($result);
-                if (StringsKt.contains$default(this.$embedUrl, "source=", false, 2, (Object) null) && (StringsKt.contains$default(this.$embedUrl, ".mp4", false, 2, (Object) null) || StringsKt.contains$default(this.$embedUrl, ".m3u8", false, 2, (Object) null))) {
-                    MatchResult matchResultFind$default = Regex.find$default(new Regex("source=([^&]+)"), this.$embedUrl, 0, 2, (Object) null);
+                if (StringsKt.contains(this.$embedUrl, "source=", false) && (StringsKt.contains(this.$embedUrl, ".mp4", false) || StringsKt.contains(this.$embedUrl, ".m3u8", false))) {
+                    MatchResult matchResultFind$default = new Regex("source=([^&]+)").find(this.$embedUrl, 0);
                     if (matchResultFind$default != null && (groupValues = matchResultFind$default.getGroupValues()) != null && (it = (String) groupValues.get(1)) != null) {
-                        Function1<ExtractorLink, Unit> function2 = this.$callback;
+                        Function1<? super ExtractorLink, Unit> function2 = this.$callback;
                         String str = this.$title;
                         Ref.BooleanRef booleanRef2 = this.$hasValidLinks;
                         String str2 = this.$mainUrl;
-                        String strDecode = URLDecoder.decode(it, "UTF-8");
+                        String strDecode = URLDecoder.decode(it, java.nio.charset.StandardCharsets.UTF_8);
                         ExtractorLinkType extractorLinkType = ExtractorLinkType.VIDEO;
                         AnimesCloudExtractor$extractVideoLinks$action$1$1$1 animesCloudExtractor$extractVideoLinks$action$1$1$1 = new AnimesCloudExtractor$extractVideoLinks$action$1$1$1(str2, null);
                         this.L$0 = booleanRef2;
@@ -79,14 +79,14 @@ final class AnimesCloudExtractor$extractVideoLinks$action$1 extends SuspendLambd
                         this.label = 1;
                         $result4 = ExtractorApiKt.newExtractorLink("AnimesCloud " + str, "AnimesCloud " + str, strDecode, extractorLinkType, animesCloudExtractor$extractVideoLinks$action$1$1$1, this);
                         if ($result4 == coroutine_suspended) {
-                            return coroutine_suspended;
+                            return (Continuation<Unit>) (Object) coroutine_suspended;
                         }
                         function1 = function2;
                         booleanRef = booleanRef2;
-                        function1.invoke($result4);
+                        function1.invoke((ExtractorLink) $result4);
                         booleanRef.element = true;
                     }
-                } else if (StringsKt.contains$default(this.$embedUrl, "animeshd.cloud", false, 2, (Object) null)) {
+                } else if (StringsKt.contains(this.$embedUrl, "animeshd.cloud", false)) {
                     AnimesHD extractor = new AnimesHD();
                     extractor.setName("AnimesCloud " + this.$title);
                     this.label = 2;
@@ -95,11 +95,11 @@ final class AnimesCloudExtractor$extractVideoLinks$action$1 extends SuspendLambd
                             return AnimesCloudExtractor$extractVideoLinks$action$1.invokeSuspend$lambda$1((SubtitleFile) obj);
                         }
                     }, this.$callback, (Continuation) this) == coroutine_suspended) {
-                        return coroutine_suspended;
+                        return (Continuation<Unit>) (Object) coroutine_suspended;
                     }
                     $result3 = $result;
                     this.$hasValidLinks.element = true;
-                } else if (StringsKt.contains$default((CharSequence) this.$embedUrl, "animes.strp2p.com", false, 2, (Object) null)) {
+                } else if (StringsKt.contains((CharSequence) this.$embedUrl, "animes.strp2p.com", false)) {
                     AnimesSTRP extractor2 = new AnimesSTRP();
                     extractor2.setName("AnimesCloud " + this.$title);
                     this.label = 3;
@@ -108,7 +108,7 @@ final class AnimesCloudExtractor$extractVideoLinks$action$1 extends SuspendLambd
                             return AnimesCloudExtractor$extractVideoLinks$action$1.invokeSuspend$lambda$2((SubtitleFile) obj);
                         }
                     }, this.$callback, (Continuation) this) == coroutine_suspended) {
-                        return coroutine_suspended;
+                        return (Continuation<Unit>) (Object) coroutine_suspended;
                     }
                     $result2 = $result;
                     this.$hasValidLinks.element = true;
@@ -119,7 +119,7 @@ final class AnimesCloudExtractor$extractVideoLinks$action$1 extends SuspendLambd
                 function1 = (Function1) this.L$1;
                 booleanRef = (Ref.BooleanRef) this.L$0;
                 ResultKt.throwOnFailure($result4);
-                function1.invoke($result4);
+                function1.invoke((ExtractorLink) $result4);
                 booleanRef.element = true;
                 return Unit.INSTANCE;
             case 2:
