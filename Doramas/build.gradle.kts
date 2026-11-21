@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 3
+    version = 4
     description = "Doramas - FHD."
     language = "pt-br"
     authors = listOf("TLN+", "saimuelbr")

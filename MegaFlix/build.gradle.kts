@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 5
+    version = 6
     description = "MegaFlix - HD e FHD."
     language = "pt-br"
     authors = listOf("saimuelbr")

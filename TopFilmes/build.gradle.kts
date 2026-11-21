@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 3
+    version = 4
     description = "TopFilmes - SD e HD."
     language = "pt-br"
     authors = listOf("saimuelbr")

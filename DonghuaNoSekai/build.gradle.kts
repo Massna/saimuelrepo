@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 2
+    version = 3
     description = "DonghuaNoSekai - Donghuas em FHD."
     language = "pt-br"
     authors = listOf("saimuelbr")

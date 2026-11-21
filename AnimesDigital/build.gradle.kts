@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 3
+    version = 4
     description = "AnimesDigital - FHD."
     language = "pt-br"
     authors = listOf("saimuelbr", "Sephiroth")

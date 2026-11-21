@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 8
+    version = 9
     description = "PobreFlix - FHD e HD."
     language = "pt-br"
     authors = listOf("saimuelbr")

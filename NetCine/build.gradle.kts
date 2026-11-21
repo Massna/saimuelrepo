@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 8
+    version = 9
     description = "NetCine - FHD."
     language = "pt-br"
     authors = listOf("Phisher98", "saimuelbr")

@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 5
+    version = 6
     description = "UltraCine - FHD."
     language = "pt-br"
     authors = listOf("saimuelbr")

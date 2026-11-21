@@ -3,7 +3,7 @@ plugins {
 }
 
 cloudstream {
-    version = 3
+    version = 4
     description = "OverFlix - HD+ e FHD."
     language = "pt-br"
     authors = listOf("saimuelbr")
