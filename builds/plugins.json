@@ -1,10 +1,10 @@
 [
     {
         "iconUrl": "https://i.imgur.com/tYNiHZN.png",
-        "fileHash": "sha256-ed02d851f831ae543e9addf75ea12b6d4a4393fef1ef5402407519810b0bc218",
+        "fileHash": "sha256-9a435386196ab9862a187d751daec81f01881078a164acf23c16873727bb68e8",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 24177,
+        "fileSize": 24244,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -14,7 +14,7 @@
             "Anime",
             "AnimeMovie"
         ],
-        "version": 5,
+        "version": 6,
         "internalName": "AnimesCloud",
         "description": "AnimesCloud - FHD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/AnimesCloud.cs3",
@@ -22,10 +22,10 @@
     },
     {
         "iconUrl": "https://animesdigital.org/wp-content/uploads/2025/03/cropped-logo-e1740827992823-192x192.png",
-        "fileHash": "sha256-4d5ecec9b63c83e74255db7e95efabd545a6819bd4413587e75b0502e68b97e9",
+        "fileHash": "sha256-01e194f251b6af6179756c5943d34899a22ca7118518db484a405542a2206d89",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 29604,
+        "fileSize": 29614,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -36,7 +36,7 @@
             "Anime",
             "AnimeMovie"
         ],
-        "version": 3,
+        "version": 4,
         "internalName": "AnimesDigital",
         "description": "AnimesDigital - FHD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/AnimesDigital.cs3",
@@ -44,10 +44,10 @@
     },
     {
         "iconUrl": "https://donghuanosekai.com/wp-content/uploads/2020/09/cropped-icon_dnsk.png",
-        "fileHash": "sha256-d0b10cafb8f4cad8ac03ebebe912df60fe9d136b018e251ea8105f6727edca10",
+        "fileHash": "sha256-092d36e655e34c08a2b44e38a7e27d972bb40fb7aae93729f730f611067ad56e",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 22852,
+        "fileSize": 22900,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -57,7 +57,7 @@
             "Anime",
             "AnimeMovie"
         ],
-        "version": 2,
+        "version": 3,
         "internalName": "DonghuaNoSekai",
         "description": "DonghuaNoSekai - Donghuas em FHD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/DonghuaNoSekai.cs3",
@@ -65,10 +65,10 @@
     },
     {
         "iconUrl": "https://doramasonline.co/wp-content/uploads/2025/07/cropped-doramas2-180x180.png",
-        "fileHash": "sha256-49ce13c3f96006665ad9f1e758480262a5842d9a3fd7cffa14d1aa05885cdff7",
+        "fileHash": "sha256-0ba8c52d987851e9703585d3af6e04f661aca70a8fb813cda7f572f7019e99f1",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 15970,
+        "fileSize": 15944,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -78,7 +78,7 @@
         "tvTypes": [
             "AsianDrama"
         ],
-        "version": 3,
+        "version": 4,
         "internalName": "Doramas",
         "description": "Doramas - FHD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/Doramas.cs3",
@@ -86,10 +86,10 @@
     },
     {
         "iconUrl": "https://i.imgur.com/Y7gXItF.png",
-        "fileHash": "sha256-eda89039a83010e9af28bcd9e38a68bea82d5f316864ad2bc3448c271f27a33a",
+        "fileHash": "sha256-03b5138894062c592f0af8c6295bed8ef5ac94f3c2cafb41d9b1cf13c8cd4a2c",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 16142,
+        "fileSize": 16194,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -99,7 +99,7 @@
             "Movie",
             "TvSeries"
         ],
-        "version": 5,
+        "version": 6,
         "internalName": "MegaFlix",
         "description": "MegaFlix - HD e FHD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/MegaFlix.cs3",
@@ -107,10 +107,10 @@
     },
     {
         "iconUrl": "https://cdn.bcdn.zip/wp-content/uploads/2017/04/nc-header-responsive.png",
-        "fileHash": "sha256-909a5b132e58203d3c14cd0fb24e8dedd512c58fa6c9b7b006fd9530770f7e30",
+        "fileHash": "sha256-e08ec646025ec524f0e755011922b09c3d9a014e077a3cfc356753fc01426341",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 18981,
+        "fileSize": 18988,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -123,7 +123,7 @@
             "Anime",
             "AnimeMovie"
         ],
-        "version": 8,
+        "version": 9,
         "internalName": "NetCine",
         "description": "NetCine - FHD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/NetCine.cs3",
@@ -131,10 +131,10 @@
     },
     {
         "iconUrl": "https://overflix.me/assets/img/android-chrome-192x192.png",
-        "fileHash": "sha256-cf0dfa58b6b5bd108fe3432cab7da14dd12a27c0e96bcfb1ad90800cdc463690",
+        "fileHash": "sha256-14ca4576a56fe249ed19554723f4f6ea5b7933a2650bb38d93ae323726a95ab2",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 31984,
+        "fileSize": 32027,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -144,7 +144,7 @@
             "Movie",
             "TvSeries"
         ],
-        "version": 3,
+        "version": 4,
         "internalName": "OverFlix",
         "description": "OverFlix - HD+ e FHD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/OverFlix.cs3",
@@ -152,10 +152,10 @@
     },
     {
         "iconUrl": "https://www.pobreflixtv.club/uploads/set_resources_14/a5bd102ac3b4e1362ac25aed38707f87_favicon.ico",
-        "fileHash": "sha256-14ee4a0f9bc5c2f5ca6d903c972cb1e21e3935056442708a0f12bf5bae494251",
+        "fileHash": "sha256-72ea24f82df7c59e47439418026e93d3561955594d475b528114a5bfc06b3e6f",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 17132,
+        "fileSize": 17064,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -167,7 +167,7 @@
             "Anime",
             "AnimeMovie"
         ],
-        "version": 8,
+        "version": 9,
         "internalName": "PobreFlix",
         "description": "PobreFlix - FHD e HD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/PobreFlix.cs3",
@@ -175,10 +175,10 @@
     },
     {
         "iconUrl": "https://www.topfilmes.biz/assets/theme/red/favicon/favicon-128.png",
-        "fileHash": "sha256-a6dc1713cec71f061a79b957a1813622da8199bd337eaa91ad9167476d109556",
+        "fileHash": "sha256-0afdbb46078da86d4035766a352547775d00583898363eb7b0da982b40209004",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 15226,
+        "fileSize": 15289,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -188,7 +188,7 @@
             "Movie",
             "TvSeries"
         ],
-        "version": 3,
+        "version": 4,
         "internalName": "TopFilmes",
         "description": "TopFilmes - SD e HD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/TopFilmes.cs3",
@@ -196,10 +196,10 @@
     },
     {
         "iconUrl": "https://ultracine.org/wp-content/uploads/2024/07/cropped-favicon-300x300.png",
-        "fileHash": "sha256-c40c1ede8371f5f1a2a62fa27f168a7dfc8e2f8e79e2853dca4b4425bcde1fb6",
+        "fileHash": "sha256-ebb20b69ef5332a9f4a980e7ac3e2b451fafe8a35e51fdcb7c0a44877b7f5718",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Massna/saimuelrepo",
-        "fileSize": 12874,
+        "fileSize": 12852,
         "status": 1,
         "language": "pt-br",
         "authors": [
@@ -209,7 +209,7 @@
             "Movie",
             "TvSeries"
         ],
-        "version": 5,
+        "version": 6,
         "internalName": "UltraCine",
         "description": "UltraCine - FHD.",
         "url": "https://github.com/Massna/saimuelrepo/raw/refs/heads/main/builds/UltraCine.cs3",
