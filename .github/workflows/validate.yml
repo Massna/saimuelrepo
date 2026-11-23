@@ -1,0 +1,22 @@
+name: Validate
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8,14,20 * * *'
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extrair links e metadados dos sites
+        run: python3 tools/extract_test.py
+
+      - name: Upload relatório
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extract-report
+          path: extract_report.json
